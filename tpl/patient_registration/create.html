@@ -1,0 +1,32 @@
+<div ng-controller="PatientRegisterController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Patient Register</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-7" ng-init="data = {};
+                            initForm();
+                            data.formtype = 'add';
+                            data.status = '1';
+                            data.PatPatient.patient_title_code = 'Mr.';
+                            data.PatPatient.patient_billing_type = 'N';
+                            data.PatPatient.patient_reg_mode = 'OP';
+                            matchings = [];
+                 ">
+                <div ng-include="'tpl/patient_registration/_form.html'">
+                    {% include 'tpl/patient_registration/_form.html' %}
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <form name="patientForm" class="form-horizontal form-validation" novalidate="">
+                    <div ng-include="'tpl/patient_registration/_matching_patients.html'">
+                        {% include 'tpl/patient_registration/_matching_patients.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

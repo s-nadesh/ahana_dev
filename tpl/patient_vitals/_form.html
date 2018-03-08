@@ -1,0 +1,151 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Encounter #</label>
+            <div class="col-sm-5" ng-if="all_encounters.length > 1">
+                <select class="form-control" ng-model="data.encounter_id" ng-options="all_encounter.encounter_id as all_encounter.encounter_id for all_encounter in all_encounters| orderBy: encounter_id">
+                </select>
+            </div>
+            <div class="col-sm-9" ng-if="all_encounters.length == 1">
+                {{encounter.encounter_id}}
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Date:   </label>
+            <div class="col-sm-9">
+                <p>  	{{data.vital_time}}  </p>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div ng-show="(vitalcong.Temperature == 1)">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Temperature </label>
+                <div class="col-sm-5">
+                    <input type="text" maxlength="5" class="form-control" placeholder="" ng-model="data.temperature" number-mask="" one-decimal-places>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row"> °C </div>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+        </div>
+
+        <div ng-show="(vitalcong.BP == 1)">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Blood Pressure </label>
+                <div class="col-sm-9">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input type="text" maxlength="3" class="form-control" placeholder="Systolic" ng-model="data.blood_pressure_systolic" number-mask="">
+                        </div>
+                        <div class="form-group">
+                            /
+                        </div>
+                        <div class="form-group">
+                            <input type="text" maxlength="3" class="form-control" placeholder="Diastolic" ng-model="data.blood_pressure_diastolic" number-mask="">
+                        </div>
+                        <div class="form-group">
+                            mmHg
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+        </div>
+
+        <div ng-show="(vitalcong.Pulse == 1)">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Pulse </label>
+                <div class="col-sm-5">
+                    <input type="text" maxlength="5" class="form-control" placeholder="" ng-model="data.pulse_rate" number-mask="">
+                </div>
+                <div class="col-sm-4">
+                    <div class="row"> <p> Beats</p> </div>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+        </div>
+
+        <div ng-show="(vitalcong.Weight == 1)">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Weight </label>
+                <div class="col-sm-5">
+                    <input type="text" maxlength="5" class="form-control" placeholder="" ng-model="data.weight" number-mask="" ng-blur="Calculatebmi()" two-decimal-places>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row"> Kg </div>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+        </div>
+        
+        <div ng-show="(vitalcong.Height == 1)">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Height </label>
+                <div class="col-sm-5">
+                    <input type="text" maxlength="5" class="form-control" placeholder="" ng-model="data.height" number-mask="" ng-blur="Calculatebmi()" two-decimal-places>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row"> Cm </div>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+        </div>
+        
+        <div ng-show="(vitalcong.SP02 == 1)">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">SP02 </label>
+                <div class="col-sm-5">
+                    <input type="text" maxlength="5" class="form-control" placeholder="" ng-model="data.sp02" number-mask="" two-decimal-places>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row">  </div>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+        </div>
+        
+        <div ng-show="(vitalcong.Pain_Score == 1)">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Pain Score </label>
+                <div class="col-sm-5">
+                    <input type="text" maxlength="5" class="form-control" placeholder="" ng-model="data.pain_score" number-mask="" two-decimal-places>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row">  </div>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+        </div>
+
+        <div ng-show="(vitalcong.BMI == 1)">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">BMI </label>
+                <div class="col-sm-5">
+                    <input type="text" maxlength="5" class="form-control" placeholder="" ng-model="data.bmi" readonly number-mask="" two-decimal-places>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row">  </div>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+        </div>
+        
+        <div class="form-group" ng-show="(vital_enable_count)">
+            <div class="col-sm-5">
+                Currently No fields are available
+            </div>
+        </div>
+
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-disabled="vital_enable_count" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.vitals', {id: $state.params.id})">
+            <i class="fa fa-times"></i> Cancel
+        </button>
+        &nbsp;
+    </footer>
+</div>

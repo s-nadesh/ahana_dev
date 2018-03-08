@@ -1,0 +1,74 @@
+<div ng-controller="VitalmanagementController" ng-init="initSettings()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Add Vitals</h1>
+    </div>
+
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+    </div>
+
+    <div class="wrapper-md tab-btn">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="btn-group op-btn-group">
+                    <button class="btn btn-info IP-op-patient" ng-click="loadIpVitals('IP')">
+                        <i class="fa fa-user-md"></i>&nbsp;&nbsp;In Patient
+                    </button>
+                    <button class="btn btn-info OP-op-patient" ng-click="loadIpVitals('OP')">
+                        <i class="fa fa-user-md"></i>&nbsp;&nbsp;Out Patient
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper-md">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <form name="vitalform" class="form-horizontal form-validation" id="vitalform">
+                            <div class="panel panel-default">
+                                <div class="panel-body" ng-if="current_type == 'IP'">
+                                    <div class="form-group">
+                                        <!--                                            <label class="col-sm-4 control-label">Inpatient Vitals *</label>-->
+                                        <div class="col-sm-8">
+                                            <div ng-repeat="share_data in config_inpatient">
+                                                <label class="i-checks">
+                                                    <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="share_data.value" ng-change='updateVital(share_data.value, share_data.config_id, share_data.key)'/> 
+                                                    <i></i> 
+                                                </label> 
+                                                <label for='{{share_data.code}}'>{{share_data.code}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body" ng-if="current_type == 'OP'">
+                                    <div class="form-group">
+                                        <!--                                            <label class="col-sm-4 control-label">Inpatient Vitals *</label>-->
+                                        <div class="col-sm-8">
+                                            <div ng-repeat="share_data in config_outpatient">
+                                                <label class="i-checks">
+                                                    <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="share_data.value" ng-change='updateVital(share_data.value, share_data.config_id, share_data.key)'/> 
+                                                    <i></i> 
+                                                </label> 
+                                                <label for='{{share_data.code}}'>{{share_data.code}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+<!--                                <footer class="panel-footer text-right bg-light lter">
+                                    <button class="btn m-b-xs  btn-success save-btn" ng-click="updateVitals()">Save</button>
+                                </footer>-->
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

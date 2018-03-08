@@ -1,0 +1,63 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <p> <h4 ng-show="show_loader">  <i class="fa fa-spin fa-refresh fa-lg"></i> &nbsp;&nbsp;Please Wait... Searching.... </h4></p>
+        <p> <h4 ng-show="matchings.length == 0 && !show_loader">  <i class="fa fa-exclamation-triangle"></i> No Matching Records!  </h4></p>
+        <p> <h4 ng-show="matchings.length > 0 && !show_loader">  <i class="fa fa-exclamation-triangle"></i> One or more particulars matching to existing patient records! </h4></p>
+        <div ng-show="!show_loader" class="search-patientcont-div">
+            <div class="search-patientcont" ng-repeat="(key, patient) in matchings">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-2 col-md-2">
+                        <img width="49" height="49" class="patient-image" src="img/man-icon.png" ng-attr-lazy-img="{{ patient.Patient.patient_img_url ? patient.Patient.patient_img_url : ($even ? 'img/man-icon.png' : 'img/man-icon2.png') }}" />
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-5">
+                        <div class="row">
+                            <a tooltip="{{patient.Patient.fullcurrentaddress|| patient.Patient.fullpermanentaddress}}"  ng-if="patient.same_branch == true" ng-bind-html="patient.Patient.fullname | highlight:data.PatPatient.patient_firstname" ui-sref="patient.view({id: patient.Patient.patient_guid})">
+                            </a>
+                            <a tooltip="{{patient.Patient.fullcurrentaddress|| patient.Patient.fullpermanentaddress}}"  ng-if="patient.same_branch == false" ng-bind-html="patient.Patient.fullname | highlight:data.PatPatient.patient_firstname" href="javascript:void(0)">
+                            </a>
+                            <b ng-if="patient.Patient.patient_age_ym">({{patient.Patient.patient_age_ym}}) </b> <br/>
+                            {{patient.Patient.patient_global_int_code}}
+                            <p class="m-t" ng-if="patient.same_branch == false">
+                                <span>
+                                    Organization: <b>{{patient.Patient.org_name}}</b> <br/>
+                                </span>
+                            </p>
+                            <p>
+                                <span>
+                                    <b>Contact No.s</b> <br/>
+                                </span>
+                                <span ng-bind-html="patient.Patient.patient_mobile | highlight:data.PatPatient.patient_mobile">
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-5" ng-if="patient.same_branch == true && patient.same_org == true">
+                        <p class="">
+                            <button class="btn m-b-xs w-xs btn-info" ng-show="patient.PatientActiveEncounter == null" ng-click="$state.go('patient.appointment', {'id': patient.Patient.patient_guid})">
+                                BOOK
+                            </button>
+                            <span class="label label-primary admission_details" ng-show="patient.PatientActiveEncounter != null && patient.PatientActiveEncounter.searchEncData.isAdmission != false">
+                                {{patient.PatientActiveEncounter.searchEncData.isAdmission.floor_name}} > {{patient.PatientActiveEncounter.searchEncData.isAdmission.room_name}} > {{patient.PatientActiveEncounter.searchEncData.isAdmission.room_type_name}}
+                            </span>
+                            <span class="label label-primary admission_details" ng-show="patient.PatientActiveEncounter != null && patient.PatientActiveEncounter.searchEncData.isAppointment == true">
+                                Booked
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-4" ng-if="patient.same_branch == false && patient.same_org == true">
+                        <button class="btn m-b-xs w-xs btn-info" id="import_book_{{key}}"  ng-click="importBookPatient(patient.Patient, key)">
+                            BOOK
+                        </button>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-5" ng-if="patient.same_branch == false && patient.same_org == false">
+                        <p class="">
+                            <button class="btn btn-primary" id="import_{{key}}" ng-click="importPatient(patient.Patient, key)">
+                                IMPORT DATA
+                            </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

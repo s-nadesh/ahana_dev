@@ -1,0 +1,133 @@
+<div ng-controller="ProcedureController" ng-init="initProcedureIndex(); loadProceduresList();">
+
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Procedures</h1>
+    </div>
+    <div class="wrapper-md tab-btn">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+    </div>
+    <div class="wrapper-md">
+
+        <div class="panel panel-default">
+            <div class="row wrapper">
+                <div class="col-sm-6">
+                    <button class="btn btn-sm btn-grey" ng-click="loadProceduresList()"> 
+                        &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+                    </button>
+                    <!--                    Hide by Nad Procedures for all OP and IP-->
+                    <!--&& enc.selected.encounter_type == 'IP'-->
+                    <button ng-show="enc.selected.status == '1'" class="btn btn-info" ng-click="$state.go('patient.add_procedure', {id: $state.params.id, enc_id: enc.selected.encounter_id})"><i class="fa fa-plus"></i> Add Procedure </button>
+                </div>
+
+                <div class="col-sm-6 text-right">
+                    <select class="form-control search-dropdown" ng-model="day" ng-options="day.value as day.label for day in days">
+                        <option value="">DD</option>
+                    </select>
+                    <select class="form-control search-dropdown" ng-model="month" ng-options="month.value as month.label for month in months">
+                        <option value="">MM</option>
+                    </select>
+                    <select class="form-control search-dropdown" ng-model="year" ng-options="year.value as year.label for year in years">
+                        <option value="">YYYY</option>
+                    </select>
+                    <button class="btn m-b-xs btn-grey"  ng-disabled=" (day && month && year) ? false : true" ng-click="loadProceduresList(year + '-' + month + '-' + day)">
+                        &nbsp; &nbsp; <i class="fa fa-search"></i> &nbsp; &nbsp;
+                    </button>
+                    <!--                            <div class="input-group">
+                                                    <input placeholder="Filter by date" prevent-enter type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="filterdate" is-open="opened_date" datepicker-options="dateOptions" close-text="Close" max-date="maxDate" date-disabled="disabled(date, mode)" ng-change="loadProceduresList(filterdate);"/>
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" ng-click="open_date($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                    </span>
+                                                </div>-->
+                    <button ng-click="day = ''; month = ''; year = '';loadProceduresList()" class="btn m-b-xs  btn-dark">  
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+
+            </div>
+            <div class="table-responsive patient-procedure-table">
+                <table st-table="displayedCollection"  st-safe-src="rowCollection"  class="table table-striped b-t b-light">
+                    <thead>
+                        <tr>
+                            <th width="22" >
+                                <button class="btn btn-sm btn-default hms-plus" type="button" ng-click="ctrl.expandAll(allExpanded = !allExpanded)">
+                                    <i ng-if="!allExpanded" class="fa fa-plus text"></i>
+                                    <i ng-if="allExpanded" class="fa fa-minus text"></i>
+                                </button>
+                            </th>
+                            <th>Date of Procedure </th>
+                            <th>Branch Name</th>
+                            <th>Procedure Name</th>
+                            <th>Notes</th>
+                            <th>Doctors Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody ng-hide="isLoading" ng-show="displayedCollection.length > 0">
+                        <tr ng-repeat-start="(key, value) in displayedCollection" ng-init="expanded = (key == 0) ? true : false;">
+                            <td> <button ng-click="expanded = !expanded" expand class="btn btn-sm btn-default hms-plus">
+                                    <i ng-if="!expanded" class="fa fa-plus text"></i>
+                                    <i ng-if="expanded" class="fa fa-minus text"></i>
+                                </button>
+                            </td>
+                            <td colspan="6">
+                                <!--                                <span class="badge bg-success">Branch: {{value.data.branch_name}}</span>&nbsp; &nbsp; -->
+                                <span class="badge bg-primary">Encounter: {{value.data.encounter_id}}</span>&nbsp; &nbsp; 
+                            </td>
+                        </tr>
+                        <tr ng-repeat-end ng-show="expanded" ng-repeat="(patprocedure_key, patProcedure) in value.all">
+                            <td>&nbsp;</td>
+                            <td> 
+                                {{patProcedure.proc_date| moment:'DD/MM/YYYY'}} &nbsp;
+                                <span class="label bg-light dk">{{patProcedure.proc_date| moment:'hh:mm A'}}</span> 
+                            </td>
+                            <td>{{patProcedure.branch_name}}</td>
+                            <td> {{patProcedure.procedure_name}} </td>
+                            <td valign="middle">
+                                <!--                                <div tooltip-placement="left" data-tooltip-html-unsafe="{{patProcedure.concatenate_description ? patProcedure.full_description : ''}}"> <span ng-bind-html="patProcedure.short_description"></span> </div>-->
+                                <span ng-bind-html="patProcedure.full_description"></span>
+                                <!--                                <div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; width: 160px;">
+                                                                    {{patProcedure.proc_description}}
+                                                                </div>-->
+                            </td>
+                            <td valign="middle"> {{patProcedure.doctors}} </td>
+                            <td>
+                                <!--ng-show="enc.selected.status == '1' && enc.selected.encounter_id == value.data.encounter_id"-->
+                                <div>
+                                    <span ng-if="patProcedure.tenant_id != null && patProcedure.encounter_status">
+                                        <a ng-show="patProcedure.tenant_id == app.logged_tenant_id" title="Edit" check-access  ui-sref="patient.edit_procedure({id: $state.params.id, proc_id : patProcedure.proc_id})" class="label bg-info dk">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>&nbsp;
+                                        <a ng-show="patProcedure.tenant_id == app.logged_tenant_id" data-button="patient.delete_procedure" check-access-custom title="Delete" ng-click="removeRow(patProcedure.proc_id)" class="label bg-dark dk">
+                                            <i class="fa fa-trash"></i>
+                                        </a>&nbsp;
+                                    </span>
+                                    <a tooltip="Print Procedure Bill"  class="label bg-primary dk" ng-click="printProcedureBill(patProcedure.proc_id)">
+                                        <i class="fa fa-print"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="7" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                        </tr>
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                <!--<div st-items-by-page="itemsByPage" st-pagination="" st-template="tpl/patient/pagination.custom.html"></div>-->
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

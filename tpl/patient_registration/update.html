@@ -1,0 +1,20 @@
+<div ng-controller="PatientRegisterController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Update Patient: {{data.patient_name}}</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="data.formtype = 'update'; initForm(); loadForm();" novalidate="">
+                <form name="patientForm" class="form-horizontal form-validation">
+                     <input type="hidden" ng-model="data.patient_id">
+                    <div ng-include="'tpl/patients/_form.html'">
+                        {% include 'tpl/patients/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

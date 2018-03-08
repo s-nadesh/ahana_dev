@@ -1,0 +1,119 @@
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-controller="ScannedDocumentsController" ng-init="initForm();"  nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
+
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Document Details</h1>
+    </div>
+
+    <div class="wrapper-md p-b">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="panel panel-default m-b">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <input type="text" ng-model="data.document_name" class="form-control" placeholder="Document Name *">
+                    </div>
+                    <div class="col-sm-3">
+                        <select class="form-control search-dropdown" ng-model="day" ng-options="day.value as day.label for day in days">
+                            <option value="">DD *</option>
+                        </select>
+                        <select class="form-control search-dropdown" ng-model="month" ng-options="month.value as month.label for month in months">
+                            <option value="">MM *</option>
+                        </select>
+                        <select class="form-control search-dropdown" ng-model="year" ng-options="year.value as year.label for year in years">
+                            <option value="">YYYY *</option>
+                        </select>
+                        
+<!--                        <div class="input-group s-md">
+                            <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Creation Date *" data-ng-model="data.date_of_creation" data-date-time-input="YYYY-MM-DD HH:mm:ss" prevent-enter="true" />
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <datetimepicker data-ng-model="data.date_of_creation" data-datetimepicker-config="{ dropdownSelector: '#dropdown2'}" data-before-render="beforeRender($view, $dates, $leftDate, $upDate, $rightDate)"/>
+                            </ul>
+                        </div>-->
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="file" nv-file-select="" uploader="uploader" multiple  /> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper-md">
+        <div class="panel panel-default">
+            <div class="wrapper-md bg-light dk b-b">
+                <span class="pull-right m-t-xs">
+                    Encounter ID: {{encounter.encounter_id}} &nbsp;&nbsp; 
+                    Queue length: <b class="badge bg-info">{{ uploader.queue.length}}</b>
+                </span>
+                <h3 class="m-n font-thin">Upload Scanned Documents</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table bg-white-only b-a">
+                    <thead>
+                        <tr>
+                            <th width="50%">Name</th>
+                            <th ng-show="uploader.isHTML5">Size</th>
+                            <th ng-show="uploader.isHTML5">Progress</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in uploader.queue">
+                            <td><strong>{{ item.file.name}}</strong></td>
+                            <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size / 1024 / 1024|number:2 }} MB</td>
+                            <td ng-show="uploader.isHTML5">
+                                <div class="progress progress-sm m-b-none m-t-xs">
+                                    <div class="progress-bar bg-info" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span ng-show="item.isSuccess" class="text-success"><i class="glyphicon glyphicon-ok"></i></span>
+                                <span ng-show="item.isCancel" class="text-primary"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                <span ng-show="item.isError" class="text-danger"><i class="glyphicon glyphicon-remove"></i></span>
+                            </td>
+                            <td nowrap>
+                                <button type="button" class="btn btn-default btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess || data.document_name == '' || day == '' || month == '' || year == ''">
+                                    Upload
+                                </button>
+                                <button type="button" class="btn btn-default btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                    Cancel
+                                </button>
+                                <button type="button" class="btn btn-default btn-xs" ng-click="item.remove()">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <div>
+                        <p>Queue progress:</p>
+                        <div class="progress bg-light dker" style="">
+                            <div class="progress-bar progress-bar-striped bg-info" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length || data.document_name == '' || day == '' || month == '' || year == ''">
+                        <i class="fa fa-arrow-circle-o-up"></i> Upload all
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="uploader.cancelAll()" ng-disabled="!uploader.isUploading">
+                        <i class="fa fa-ban"></i> Cancel all
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                        <i class="fa fa-trash-o"></i> Remove all
+                    </button>
+                    <button class="btn btn-dark" ng-click="$state.go('patient.document', {id: $state.params.id})">
+                        <i class="fa fa-repeat"></i> Back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

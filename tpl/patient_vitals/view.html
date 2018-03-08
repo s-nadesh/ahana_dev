@@ -1,0 +1,56 @@
+<div ng-controller="VitalsController" ng-init="loadForm()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">View Note</h1>
+    </div>
+    <div class="wrapper-md">
+        <div class="row wrapper">
+            <div class="col-sm-3">
+                <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.notes', {id: $state.params.id})">
+                    <i class="fa fa-repeat"></i> Back 
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <form name="formValidate" class="form-horizontal form-validation">
+                    <div class="panel panel-default">
+                        <div class="panel-body">                    
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Encounter #: </label>
+                                <div class="col-sm-9">
+                                    <p>  {{data.encounter_id}}  </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Date : </label>
+                                <div class="col-sm-9">
+                                    <p> {{data.created_at}} </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Created BY: </label>
+                                <div class="col-sm-9">
+                                    <p> {{data.created_by_name}} </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Notes: </label>
+                                <div class="col-sm-9">
+                                    <p> {{data.notes}} </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

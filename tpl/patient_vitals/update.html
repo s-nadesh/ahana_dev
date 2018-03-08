@@ -1,0 +1,21 @@
+<div ng-controller="VitalsController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Update Vital</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-7" ng-init="data.formtype = 'update';
+                            loadForm();" novalidate="">
+                <form name="vitalForm" class="form-horizontal form-validation">
+                    <input type="hidden" ng-model="data.vital_id">
+                    <div ng-include="'tpl/patient_vitals/_form.html'">
+                        {% include 'tpl/patient_vitals/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
