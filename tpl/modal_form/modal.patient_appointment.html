@@ -1,0 +1,93 @@
+<div>
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3"> {{title}} </h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <form name="patientAppointmentForm" class="form-horizontal form-validation" novalidate="" ng-init="data = {};    
+                    data.PatEncounter.add_casesheet_no = '';
+                        data.formtype = 'add';
+                        initForm();
+                        initAppointmentForm();
+                        data.status = '1';
+                    data.appt_status = 'B';
+                        ">
+                    <div class="modal-body wrapper-lg">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Date of Appointment * </label>
+                                    <div class="col-sm-7">
+                                        <div class="input-group w-md">
+                                            {{data.status_date}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Patient Name * <span ng-show="show_patient_loader">&nbsp;&nbsp;<i class="fa fa-spin fa-refresh"></i></span></label>
+                                    <div class="col-sm-7">
+                                        <input autocomplete="off"
+                                               placeholder="Patient Name"
+                                               type="text"
+                                               class="form-control"
+                                               ng-model="data.patient_name"
+                                               typeahead="patient as patient.name_with_int_code for patient in getModalPatients($viewValue) | filter:{name_with_int_code:$viewValue} | limitTo: 10"
+                                               typeahead-on-select="formatPatient($item, $model, $label)"
+                                               typeahead-wait-ms="400"
+                                               />
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                                
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Case sheet no * </label>
+                                    <div class="col-sm-7">
+                                        <input type="text" ng-model="data.PatEncounter.add_casesheet_no" class="form-control" placeholder="" ng-if="data.show_casesheet">
+                                        <input type="text" readonly ng-value="data.PatEncounter.add_casesheet_no" class="form-control" placeholder="" ng-if="data.show_casesheet == false">
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Consultant * </label>
+                                    <div class="col-sm-7">
+                                        <select class="form-control" ng-model="data.consultant_id" ng-options="doctor.user_id as doctor.fullname for doctor in doctors | orderBy: name" ng-change="getTimeOfAppointment();">
+                                            <option value="">Select Consultant</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Time of Appointment * <span ng-show="show_appt_loader">&nbsp;&nbsp;<i class="fa fa-spin fa-refresh"></i></span></label>
+                                    <div class="col-sm-7">
+                                        <select ng-model="data.status_time" class="form-control">
+                                            <option value="" selected="">Select Time</option>
+                                            <option style="color: {{timeslot.color}}" ng-repeat="timeslot in timeslots" value="{{timeslot.time}}">
+                                                {{timeslot.slot_12hour}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                            </div>
+                            <footer class="panel-footer text-right bg-light lter">
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()">Submit</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+                                &nbsp;
+                            </footer>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

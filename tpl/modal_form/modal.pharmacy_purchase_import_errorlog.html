@@ -1,0 +1,44 @@
+<div ng-init="loadErrorLogs()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3"> Error Logs</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div>
+                    <table class="table m-b-none" ui-jq="footable" data-filter="#filter" data-page-size="10">
+                        <thead>
+                            <tr>
+                                <th data-toggle="true">Invoice No.</th>
+                                <th data-toggle="true">Log message</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-if="isLoading == true">
+                            <tr>
+                                <td colspan="2" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                            </tr>
+                        </tbody>                        
+                        <tbody ng-if="isLoading == false">
+                            <tr ng-repeat="row in rowCollection">
+                                <td>
+                                    {{row.invoice_no}}
+                                </td>
+                                <td ng-bind-html="row.response">
+                                    
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="hide-if-no-paging">
+                            <tr>
+                                <td colspan="2" class="text-right">
+                                    <ul class="pagination"></ul>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+        </div>
+    </div>
+</div>

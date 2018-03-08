@@ -1,0 +1,68 @@
+<div ng-init="initForm()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Add Consultant Visit </h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <form name="consultantVisitForm" class="form-horizontal form-validation" novalidate="">
+
+                <div class="col-sm-12">
+                    <div class="modal-body">
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <select class="form-control" ng-model="data.consultant_id" ng-options="doctor.user_id as doctor.fullname for doctor in doctors | orderBy: name" required>
+                                    <option value="">Select Consultant</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                    <div class="input-group">
+                                        <input prevent-enter="" type="text" class="form-control" data-ng-model="data.consult_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <datetimepicker data-ng-model="data.consult_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-before-render="beforeRender($view, $dates, $leftDate, $upDate, $rightDate)"/>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="modal-body wrapper-lg">
+                        <div class="panel panel-default">
+                            <table class="table table-bordered table-hover table-condensed bg-white-only">
+                                <tr style="font-weight: bold">
+                                    <td><span>Patient Name</span></td>
+                                    <td><span>Description</span></td>
+                                </tr>
+                                <tr ng-repeat="(key, item) in patientdata">
+                                    <td>
+                                        {{item.patient.fullname}}
+                                    </td>
+                                    <td>
+                                        <textarea placeholder="Description" class="form-control" ng-model="item.notes"></textarea>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <footer class="panel-footer text-right bg-light lter">
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()" ng:disabled="consultantVisitForm.$invalid">Submit</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+                                &nbsp;
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

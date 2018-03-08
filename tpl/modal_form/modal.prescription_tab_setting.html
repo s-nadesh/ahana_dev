@@ -1,0 +1,37 @@
+<div>
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Select tabs to enable</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="initSettings()">
+                <form name="tabsettingForm" class="form-horizontal form-validation" novalidate="" id="tabsettingForm">
+                    <div class="modal-body wrapper-lg">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group" ng-repeat="tab in tab_data">
+                                    <div class="col-sm-2">
+                                        <label class="i-checks "> 
+                                            <input type="checkbox" ng-disabled="(tab.code == 'PTP') || (tab.code == 'PTM')" name="{{tab.key}}" ng-model="tab.value" ng-checked="tab.value == '1'"> 
+                                            <i></i> 
+                                        </label> &nbsp; &nbsp;
+                                    </div>
+                                    <label class="col-sm-4 control-label">{{tab.key}}</label>
+                                </div>
+                            </div>
+                            <footer class="panel-footer text-right bg-light lter">
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()">Save</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+                                &nbsp;
+                            </footer>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

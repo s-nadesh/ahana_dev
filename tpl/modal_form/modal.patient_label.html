@@ -1,0 +1,51 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n h3">Patient Label</h1>
+</div>
+<div class="wrapper-md">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" id="print-area">
+<!--                        <style type="text/css">
+                            @media print {
+                                html, body {
+                                    display: block;
+                                    font-family: "Calibri";
+                                    margin: 0;
+                                }
+                                @page {
+                                    size: 8cm 8cm;
+                                }
+                                .col-xs-6{
+                                    width: 50%;
+                                    float: left;
+                                }
+                                b{
+                                    display: none;
+                                }
+                            }
+                        </style>-->
+                        <div class="col-xs-6">
+                            <img id="ahana_image" width="200px" height="50px" src="{{data.app.org_small_logo}}" alt="ahana_log" /><br />
+                            <b>Name:</b> {{data.view_data.fullname}}<br />
+                            <b>UHID:</b> {{data.view_data.patient_global_int_code}}<br />
+                            <b>Gender:</b> {{data.app.patientDetail.patientSex}}<br />
+                            <b>Age: </b> {{data.view_data.patient_age_ym}}<br />
+                            <b>Dr Name:</b> {{data.view_data.consultant_name}}
+                        </div>
+                        <div class="col-xs-6 text-right" id="patient-barcode">
+                            <io-barcode code="{{data.view_data.patient_global_int_code}}" type="{{data.app.IO.type}}" code="{{data.app.IO.code}}" options="data.app.IO.barcodeOptions"></io-barcode>
+                        </div>
+                    </div>
+                </div>
+                <footer class="panel-footer text-right bg-light lter">
+                    <button class="btn m-b-xs  btn-success save-btn" ng-click="print()">Print</button>
+                    &nbsp;
+                    <button class="btn m-b-xs  btn-dark" ng-click="$close()"><i class="fa fa-times"></i> Close</button>
+                    &nbsp;
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>

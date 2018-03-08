@@ -1,0 +1,19 @@
+<div ng-controller="HsnController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Create Hsn Code</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-6" ng-init="initForm();">
+                <form name="roleForm" class="form-horizontal form-validation" novalidate="">
+                    <div ng-include="'tpl/hsn/_form.html'">
+                        {% include 'tpl/hsn/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

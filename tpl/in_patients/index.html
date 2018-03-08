@@ -1,0 +1,99 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n h3">In-Patient</h1>
+</div>
+
+<div class="wrapper-md" ng-controller="InPatientsController" ng-init="loadInPatientsList()">
+    <div class="panel panel-default">
+        <div class="row wrapper pb-0">
+            <div class="col-sm-5 m-b-xs">
+                <button class="btn btn-sm btn-grey" ng-click="loadInPatientsList()">
+                    &nbsp; &nbsp; <i class="fa fa-refresh"></i> &nbsp; &nbsp;
+                </button>
+                <span ng-show="currentAdmissionSelected > 0">
+                    <button ng-click="addConsultantVisit()" class="btn btn-sm btn-grey">
+                        <i class="fa fa-plus"></i> Add Consultant Visit
+                    </button>
+                    <button ng-click="addProcedures()" class="btn btn-sm btn-grey">
+                        <i class="fa fa-plus"></i> Add Procedures
+                    </button>
+                </span>
+            </div>
+            <div class="col-sm-4"></div>
+            <div class="col-sm-3 pull-right text-right hide">
+                <p class="badge bg-primary mt-10">
+                    <b> Census: {{displayedCollection.length}} </b>
+                </p>
+            </div>
+        </div>
+
+        <div class="table-responsive in-patient-table">
+            <div id="demoScroll" infinite-scroll='loadInPatientsListMore()' infinite-scroll-container="'#demoScroll'" style="{{css.style}}" >
+                <!--<table st-table="displayedCollection"  st-safe-src="rowCollection" class="table table-striped b-t b-light">-->
+                <table class="table table-striped b-t b-light">
+                    <thead>
+                        <tr>
+                            <th align="center" valign="middle" style="width:40px;">
+                                <label class="i-checks">
+                                    <input ng-model="selectall" ng-true-value="'1'" ng-false-value="'0'" ng-click="updateCheckbox()" type="checkbox" name="checkall" class="">
+                                    <i></i>
+                                </label>&nbsp; &nbsp;
+                            </th>
+                            <th style="width:65px;">&nbsp;</th>
+                            <th>Patient</th>
+                            <!--<th>Case sheet#</th>-->
+                            <th>Category</th>
+                            <th class="sort-header" ng-click="orderCollection('encounter_date', orderDir)">Admission Date</th>
+                            <th class="sort-header" ng-click="orderCollection('room_name', orderDir)">ROOM#</th>
+                            <th>consultant</th>
+                            <th style="width:210px;"> Actions </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="(ip_key, row) in displayedCollection">
+                            <td align="center" valign="middle" style="width:40px;">
+                                <label class="i-checks">
+                                    <input ng-model="row.selected" ng-checked="row.selected == '1'"  ng-click="moreOptions(ip_key, row)" ng-true-value="'1'" ng-false-value="'0'" class="iplistcheckbox iplistcheckbox_{{ip_key}}" id="iplist_{{ip_key}}" type="checkbox" name="status">
+                                    <i></i>
+                                </label>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div style="margin-top: -10px; position: relative;">
+                                    <img ng-if="row.patient.hasalert" class="pull-left" src="img/symbol1.png"  alt="" tooltip="Has Alert" tooltip-trigger tooltip-animation="false" tooltip-placement="right"  />
+                                    <img ng-if="row.patient.address.incomplete_profile" class="pull-left" src="img/question.png"  alt="" tooltip="Incomplete Profile" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+                                </div>
+                            </td>
+                            <td>
+                                <img width="30" height="30" class="pull-left patient-image" src="img/man-icon.png" ng-attr-lazy-img="{{ row.patient.patient_img_url ? row.patient.patient_img_url : ($even ? 'img/man-icon.png' : 'img/man-icon2.png') }}" />
+                                <a ui-sref="patient.view({id: row.patient.patient_guid})" tooltip="{{row.patient.fullcurrentaddress}}">
+                                    {{row.patient.fullname}}
+                                </a>({{row.patient.patient_age_ym}}) <br/>
+                                {{row.patient.patient_global_int_code}}
+                            </td>
+                            <!--<td>{{row.patient.activeCasesheetno}}</td>-->
+                            <td valign="middle">
+                                <div ng-if="row.patient.patient_category" class="category_badge" tooltip="{{row.patient.patient_category_fullname}}" tooltip-trigger tooltip-animation="false" tooltip-placement="top" style="background-color: {{row.patient.patient_category_color}}">
+                                    {{row.patient.patient_category| uppercase}}
+                                </div>
+                            </td>
+                            <td>
+                                {{row.doe}} <br/>  <span class="text-muted"> {{row.doeTimeago}} </span>
+                            </td>
+                            <td>{{row.room_name}} <br/> <span class="text-muted"> {{row.room_type_name}} </span> </td>
+                            <td>{{row.patient.consultant_name}}</td>
+                            <td align="left">
+                                <div ng-include="'tpl/patient/patient_table_nav_bar.html'">
+                                    {% include 'tpl/patient/patient_table_nav_bar.html' %}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot ng-if="isLoading == true">
+                        <tr>
+                            <td colspan="8" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

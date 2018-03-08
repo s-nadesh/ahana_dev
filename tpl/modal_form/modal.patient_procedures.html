@@ -1,0 +1,89 @@
+<div ng-init="initForm()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Add Patient Procedure </h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <form name="proceduresForm" class="form-horizontal form-validation" novalidate="">
+
+                <div class="col-sm-12">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Procedure Date *</label>
+                            <div class="col-sm-8">
+                                <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                    <div class="input-group">
+                                        <input prevent-enter="" type="text" class="form-control" data-ng-model="data.proc_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <datetimepicker data-ng-model="data.proc_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-before-render="beforeRender($view, $dates, $leftDate, $upDate, $rightDate)"/>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Procedure *</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" ng-model="data.charge_subcat_id" ng-options="procedure.charge_subcat_id as procedure.charge_subcat_name for procedure in procedures | orderBy: charge_subcat_name" required>
+                                    <option value="">Select Procedure</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Consultants</label>
+                            <div class="col-sm-8">
+                                <ui-select multiple ng-model="data.consultant_ids" theme="bootstrap">
+                                    <ui-select-match placeholder="Select doctor...">{{$item.name}} ({{$item.speciality_name}})</ui-select-match>
+                                    <ui-select-choices group-by="someGroupFn" repeat="doctor in doctors | propsFilter: {name: $select.search, age: $select.search}">
+                                        <div ng-bind-html="doctor.name | highlight: $select.search"></div>
+                                        <small>
+                                            Speciality: {{doctor.speciality_name}}
+                                        </small>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="modal-body wrapper-lg">
+                        <div class="panel panel-default">
+                            <table class="table table-bordered table-hover table-condensed bg-white-only">
+                                <tr style="font-weight: bold">
+                                    <td><span>Patient Name</span></td>
+                                    <td><span>Description</span></td>
+                                </tr>
+                                <tr ng-repeat="(key, item) in patientdata">
+                                    <td>
+                                        {{item.patient.fullname}}
+                                    </td>
+                                    <td>
+                                        <textarea placeholder="Description" class="form-control" ng-model="item.notes"></textarea>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <footer class="panel-footer text-right bg-light lter">
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()" ng:disabled="proceduresForm.$invalid">Submit</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+                                &nbsp;
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

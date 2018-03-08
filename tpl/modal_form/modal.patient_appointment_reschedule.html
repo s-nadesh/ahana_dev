@@ -1,0 +1,81 @@
+<div ng-init="initRescheduleForm()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3"> Reschedule Appointment</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <form name="rescheduleForm" class="form-horizontal form-validation" novalidate="">
+
+                <div class="col-sm-12">
+                    <div class="modal-body">
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <select class="form-control" ng-model="data.consultant_id" ng-options="doctor.user_id as doctor.fullname for doctor in doctors | orderBy: name" ng-change="getTimeOfAppointment();">
+                                    <option value="">Select Consultant</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control"
+                                       datepicker-popup="yyyy-MM-dd"
+                                       ng-model="data.status_date"
+                                       is-open="opened"
+                                       close-text="Close"
+                                       min-date="minDate"
+                                       ng-change="getTimeOfAppointment();"
+                                       prevent-enter="true" />
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="open()">
+                                        <i class="glyphicon glyphicon-calendar"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="modal-body wrapper-lg">
+                        <div class="panel panel-default">
+
+                            <table class="table table-bordered table-hover table-condensed bg-white-only">
+                                <tr style="font-weight: bold">
+                                    <td><span>Patient Name</span></td>
+                                    <td><span>Time</span></td>
+                                </tr>
+                                <tr ng-repeat="(key, item) in rescheduledata">
+                                    <td>
+                                        {{item.patient_name}}
+                                    </td>
+                                    <td>
+                                        <select name='slots_{{ $index}}' ng-model="item.status_time" class="form-control" required>
+                                            <option value="" selected="">Select Time</option>
+                                            <option style="color: {{timeslot.color}}"
+                                                ng-selected="{{item.status_time == timeslot.time}}"
+                                                ng-repeat="timeslot in timeslots" value="{{timeslot.time}}"
+                                                >
+                                                {{timeslot.time}}
+                                            </option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <footer class="panel-footer text-right bg-light lter">
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()" ng:disabled="rescheduleForm.$invalid">Submit</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+                                &nbsp;
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

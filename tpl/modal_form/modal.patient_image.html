@@ -1,0 +1,73 @@
+<div>
+    <div class="bg-light lter b-b wrapper-md">
+        <span class="m-n h3"> Upload Image</span>
+        <button class="close" type="button" ng-click="cancel()">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <div class="wrapper-md">
+        <div class="alert ng-isolate-scope alert-danger alert-dismissable" ng-show="errorData2" ng-bind-html="errorData2"></div>
+        <div class="row">
+            <form name="uploadimage" class="form-horizontal form-validation" novalidate="">
+                <div class="col-sm-6">
+                    <div class="modal-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <ng-camera
+                                    capture-message=""
+                                    output-height="225"
+                                    output-width="300"
+                                    crop-height="225"
+                                    crop-width="300"
+                                    image-format="jpeg"
+                                    jpeg-quality="100"
+                                    action-message="Take picture"
+                                    snapshot="picture"
+                                    flash-fallback-url="/vendors/webcamjs/webcam.swf"
+                                    overlay-url="/bower_components/ng-camera/app/overlay.png"
+                                    shutter-url="/bower_components/ng-camera/app/shutter.mp3"
+                                    ></ng-camera>
+                            </div>
+                        </div>
+                        <div class="panel panel-default" ng-show="data.patientObj.patient_img_url">
+                            <div class="panel-heading">Profile Photo:</div>
+                            <div class="panel-body">
+                                <div class="text-center">
+                                <img ng-src="{{data.patientObj.patient_img_url}}"  alt="" width="250" height="200" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6" ng-init="isCrop = false;">
+                    <div class="modal-body">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="cropArea">
+                                    <img-crop
+                                        image="myImage"
+                                        result-image="myCroppedImage"
+                                        area-type="square"
+                                        area-min-size="125"
+                                        on-load-done="isCrop = true"
+                                        on-load-error="isCrop = false"
+                                        ></img-crop>
+                                </div>
+                                <input type="file" id="fileInput" file-model="myFile" accept="image/*" ui-jq="filestyle" data-icon="false" data-classButton="btn btn-default" data-classInput="form-control inline v-middle input-s">
+                                <div>Cropped Image:</div>
+                                <div><img ng-src="{{myCroppedImage}}" /></div>
+                            </div>
+                            <footer class="panel-footer text-right bg-light lter" ng-if="isCrop">
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="uploadPatientPicture(myCroppedImage, block)">Submit</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+                                &nbsp;
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n h3">Hsn Codes</h1>
+</div>
+
+<div class="wrapper-md" ng-controller="HsnController" ng-init="loadHsnList()">
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b> Hsn Management </b>
+                </div>
+                <div class="panel-body b-b b-light">
+                    <input id="filter" type="text" class="form-control input-sm w-sm inline m-r" placeholder="Search"/>
+                    <button check-access-button hot-key-create ng-click="$state.go('pharmacy.hsn_create')" class="btn btn-sm btn-info pull-right">
+                        <i class="fa fa-plus"></i> &nbsp; Add New Hsn
+                    </button>
+                </div>
+                <div>
+                    <table class="table m-b-none" ui-jq="footable" data-filter="#filter" data-page-size="10">
+                        <thead>
+                            <tr>
+                                <th data-toggle="true">Hsn</th>
+                                <th data-sort-ignore="true">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody ng-if="isLoading == true">
+                            <tr>
+                                <td colspan="2" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                            </tr>
+                        </tbody>                        
+                        <tbody ng-if="isLoading == false">
+                            <tr ng-repeat="row in rowCollection| orderBy: description">
+                                <td>
+                                    {{row.hsn_no}}
+                                </td>
+                                <td>
+                                    <a class="btn btn-dark" title="Edit" check-access  ui-sref="pharmacy.hsn_update({id: '{{row.hsn_id}}'})">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="hide-if-no-paging">
+                            <tr>
+                                <td colspan="2" class="text-right">
+                                    <ul class="pagination"></ul>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
