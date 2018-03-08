@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FIELDS>
+    <GROUP>
+        <PANELHEADER>
+            <PROPERTIES>
+                <PROPERTY name="class">panel-heading bg-default</PROPERTY>
+                <PROPERTY name="id">patient-details</PROPERTY>
+            </PROPERTIES>
+            <VALUE>Demographic Details</VALUE>
+        </PANELHEADER>
+        <PANELBODY>
+            <FIELD id="TherapistName" type="TextBox">
+                <PROPERTIES>
+                    <PROPERTY name="id">TherapistName</PROPERTY>
+                    <PROPERTY name="name">TherapistName</PROPERTY>
+                    <PROPERTY name="class">form-control</PROPERTY>
+                    <PROPERTY name="placeholder">Therapist Name</PROPERTY>
+                </PROPERTIES>
+            </FIELD>
+            <FIELD id="name" type="TextBox" label="Name" required="true">
+                <PROPERTIES>
+                    <PROPERTY name="id">txtName</PROPERTY>
+                    <PROPERTY name="name">name</PROPERTY>
+                    <PROPERTY name="class">form-control</PROPERTY>
+                    <PROPERTY name="placeholder">Patient Name</PROPERTY>
+                </PROPERTIES>
+            </FIELD>
+            <FIELD id="uhid" type="TextBox" label="UHID" required="true">
+                <PROPERTIES>
+                    <PROPERTY name="id">uhid</PROPERTY>
+                    <PROPERTY name="name">uhid</PROPERTY>
+                    <PROPERTY name="readonly">readonly</PROPERTY>
+                    <PROPERTY name="class">form-control</PROPERTY>
+                </PROPERTIES>
+            </FIELD>
+
+            <FIELD id="age" type="TextBox" label="Age" required="true" Backtext=" Years">
+                <PROPERTIES>
+                    <PROPERTY name="id">txtage</PROPERTY>
+                    <PROPERTY name="name">age</PROPERTY>
+                    <PROPERTY name="class">form-control</PROPERTY>
+                    <PROPERTY name="placeholder">Patient Age</PROPERTY>
+                    <PROPERTY name="maxlength">3</PROPERTY>
+                    <PROPERTY name="title">Type only numbers</PROPERTY>
+                    <PROPERTY name="onkeydown">return isNumericKeyStroke(event)</PROPERTY>
+                </PROPERTIES>
+            </FIELD>
+            
+            <FIELD id="gender" type="RadioButtonList" label="Gender" required="true">
+                <PROPERTIES>
+                    <PROPERTY name="name">gender</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Male" id="RBGender1" Selected="False">Male</LISTITEM>
+                    <LISTITEM value="Female" id="RBGender2" Selected="False">Female</LISTITEM>
+                </LISTITEMS>
+            </FIELD>
+            
+            <FIELD id="address" type="TextArea" label="Address" required="true">
+                <PROPERTIES>
+                    <PROPERTY name="id">txtAddress</PROPERTY>
+                    <PROPERTY name="name">address</PROPERTY>
+                    <PROPERTY name="class">form-control</PROPERTY>
+                    <PROPERTY name="placeholder">Patient Address</PROPERTY>
+                </PROPERTIES>
+            </FIELD>
+            
+            <FIELD id="referral_details" type="CheckBoxList" label="Referral Details" Backcontrols="hide" Backdivid="referral_details_other_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">referral_details[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Self" id="RBRefferals1" Selected="false" onclick="OThersvisible(this.id, 'referral_details_other_div', 'block');">Self</LISTITEM>
+                    <LISTITEM value="General Practitioner" id="RBRefferals2" Selected="false" onclick="OThersvisible(this.id, 'referral_details_other_div', 'block');">General Practitioner</LISTITEM>
+                    <LISTITEM value="Neighbours" id="RBRefferals3" Selected="false" onclick="OThersvisible(this.id, 'referral_details_other_div', 'block');">Neighbours</LISTITEM>
+                    <LISTITEM value="Traditional Healer" id="RBRefferals4" Selected="false" onclick="OThersvisible(this.id, 'referral_details_other_div', 'block');">Traditional Healer</LISTITEM>
+                    <LISTITEM value="Other Patient" id="RBRefferals5" Selected="false" onclick="OThersvisible(this.id, 'referral_details_other_div', 'block');">Other Patient</LISTITEM>
+                    <LISTITEM value="Other Psychiatrist" id="RBRefferals6" Selected="false" onclick="OThersvisible(this.id, 'referral_details_other_div', 'block');">Other Psychiatrist</LISTITEM>
+                    <LISTITEM value="Media" id="RBRefferals7" Selected="false" onclick="OThersvisible(this.id, 'referral_details_other_div', 'block');">Media</LISTITEM>
+                    <LISTITEM value="Others" id="RBRefferals8" Selected="false" onclick="OThersvisible(this.id, 'referral_details_other_div', 'block');">Others</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="referral_details_other" type="TextBox" label="Referral Details Notes: ">
+                    <PROPERTIES>
+                        <PROPERTY name="id">referral_details_other</PROPERTY>
+                        <PROPERTY name="name">referral_details_other</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="placeholder">Referral Details Notes</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+                      
+            <FIELD id="education" type="RadioButtonList" required="true" label="Education" Backcontrols="hide" Backdivid="education_note_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">education</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Not Educated" id="RBEducation1" Selected="False" onclick="OThersvisible(this.id,'education_note_div');">Not Educated</LISTITEM>
+                    <LISTITEM value="Primary" id="RBEducation2" Selected="False" onclick="OThersvisible(this.id,'education_note_div');">Primary</LISTITEM>
+                    <LISTITEM value="High School" id="RBEducation3" Selected="False" onclick="  OThersvisible(this.id,'education_note_div');">High School</LISTITEM>
+                    <LISTITEM value="Graduate" id="RBEducation4" Selected="False" onclick=" OThersvisible(this.id,'education_note_div');">Graduate</LISTITEM>
+                    <LISTITEM value="Post Graduate" id="RBEducation5" Selected="False" onclick=" OThersvisible(this.id,'education_note_div');">Post Graduate</LISTITEM>
+                    <LISTITEM value="Others" id="RBEducation6" Selected="False" onclick="OThersvisible(this.id,'education_note_div');">Others</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="educationnote" type="TextBox" label="Education Notes: ">
+                    <PROPERTIES>
+                        <PROPERTY name="id">educationnote</PROPERTY>
+                        <PROPERTY name="name">educationnote</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="placeholder">Education Notes</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+                      
+            <FIELD id="occupation" type="RadioButtonList" label="Occupation" required="false" Backcontrols="hide" Backdivid="occupationnote_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">occupation</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Employed" id="RBoccupation1" Selected="False" onclick="OThersvisible(this.id, 'occupationnote_div');">Employed</LISTITEM>
+                    <LISTITEM value="UnEmployed" id="RBoccupation2" Selected="False" onclick="OThersvisible(this.id, 'occupationnote_div');">UnEmployed</LISTITEM>
+                    <LISTITEM value="Homemaker" id="RBoccupation3" Selected="False" onclick="OThersvisible(this.id, 'occupationnote_div');">Homemaker</LISTITEM>
+                    <LISTITEM value="Student" id="RBoccupation4" Selected="False" onclick="OThersvisible(this.id, 'occupationnote_div');">Student</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="occupationnote" type="TextBox" label="Occupation Notes: ">
+                    <PROPERTIES>
+                        <PROPERTY name="id">occupationnote</PROPERTY>
+                        <PROPERTY name="name">occupationnote</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="placeholder">Occupation Notes</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="martial_status" type="RadioButtonList" label="Marital Status" required="true" Backcontrols="hide" Backdivid="maritalnote_div">
+                <FIELD id="maritalnote" type="TextBox" label="Marital Notes: ">
+                    <PROPERTIES>
+                        <PROPERTY name="id">maritalnote</PROPERTY>
+                        <PROPERTY name="name">maritalnote</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="placeholder">Marital Notes</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+                <PROPERTIES>
+                    <PROPERTY name="name">martial_status</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    
+                    <LISTITEM value="Un Married" id="RBMartial1" Selected="False" onclick="OThersvisible(this.id, 'maritalnote_div');">Un Married</LISTITEM>
+                    <LISTITEM value="Married" id="RBMartial2" Selected="False" onclick="OThersvisible(this.id, 'maritalnote_div');">Married</LISTITEM>
+                    <LISTITEM value="Separated" id="RBMartial3" Selected="False" onclick="OThersvisible(this.id, 'maritalnote_div');">Separated</LISTITEM>
+                    <LISTITEM value="Divorced" id="RBMartial4" Selected="False" onclick="OThersvisible(this.id, 'maritalnote_div');">Divorced</LISTITEM>
+                    <LISTITEM value="Widow" id="RBMartial5" Selected="False" onclick="OThersvisible(this.id, 'maritalnote_div');">Widow</LISTITEM>
+                </LISTITEMS>
+            </FIELD>
+            
+            <FIELD id="religion" type="RadioButtonList" label="Religion" Backcontrols="hide" Backdivid="religionother_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">religion</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Hindu" id="RBReligion1" Selected="False" onclick="OThersvisible(this.id,'religionother_div','none');">Hindu</LISTITEM>
+                    <LISTITEM value="Muslim" id="RBReligion2" Selected="False" onclick="OThersvisible(this.id,'religionother_div','none');">Muslim</LISTITEM>
+                    <LISTITEM value="Christian" id="RBReligion3" Selected="False" onclick="OThersvisible(this.id,'religionother_div','none');">Christian</LISTITEM>
+                    <LISTITEM value="Others" id="RBReligion4" Selected="False" onclick="OThersvisible(this.id,'religionother_div','block');">Others</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="religionother" type="TextBox" label="Religion Notes: ">
+                    <PROPERTIES>
+                        <PROPERTY name="id">religionother</PROPERTY>
+                        <PROPERTY name="name">religionother</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="placeholder">Religion Notes</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="level_status" type="RadioButtonList" label="Status">
+                <PROPERTIES>
+                    <PROPERTY name="name">level_status</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Lower" id="RBstatus1" Selected="False">Lower</LISTITEM>
+                    <LISTITEM value="Middle" id="RBstatus2" Selected="False">Middle</LISTITEM>
+                    <LISTITEM value="Upper" id="RBstatus3" Selected="False">Upper</LISTITEM>
+                </LISTITEMS>
+            </FIELD>
+            
+            <FIELD id="place_of_living" type="RadioButtonList" label="Place of living">
+                <PROPERTIES>
+                    <PROPERTY name="name">place_of_living</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Rural" id="RBliving1" Selected="False">Rural</LISTITEM>
+                    <LISTITEM value="Urban" id="RBliving2" Selected="False">Urban</LISTITEM>
+                </LISTITEMS>
+            </FIELD>
+            
+            <FIELD type="Header2" label="Informant" class="Informant"/>
+            
+            <FIELD id="relationship" header2Class="Informant" type="CheckBoxList" label="Relationship" required="true" Backcontrols="hide" Backdivid="relationshipother_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">relationship[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Self" id="RBRelation1" Selected="false">Self</LISTITEM>
+                    <LISTITEM value="Father" id="RBRelation2" Selected="false">Father</LISTITEM>
+                    <LISTITEM value="Mother" id="RBRelation3" Selected="false">Mother</LISTITEM>
+                    <LISTITEM value="Sibling" id="RBRelation4" Selected="false">Sibling</LISTITEM>
+                    <LISTITEM value="Spouse" id="RBRelation5" Selected="false">Spouse</LISTITEM>
+                    <LISTITEM value="Children" id="RBRelation6" Selected="false">Children</LISTITEM>
+                    <LISTITEM value="Friend" id="RBRelation7" Selected="false">Friend</LISTITEM>
+                    <LISTITEM value="Others" id="RBRelation8" Selected="false" onclick="OThersvisible(this.id, 'relationshipother_div');">Others</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="relationshipother" type="TextBox" label="Relationship Notes: ">
+                    <PROPERTIES>
+                        <PROPERTY name="id">relationshipother</PROPERTY>
+                        <PROPERTY name="name">relationshipother</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="placeholder">Relationship Notes</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="primary_care_giver" header2Class="Informant" type="MultiDropDownList" label="Primary Care giver" required="false">
+                <PROPERTIES>
+                    <PROPERTY name="id">primary_care_giver</PROPERTY>
+                    <PROPERTY name="name">primary_care_giver[]</PROPERTY>
+                    <PROPERTY name="class">form-control</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    
+                    <LISTITEM value="Father" Selected="False">Father</LISTITEM>
+                    <LISTITEM value="Mother" Selected="False">Mother</LISTITEM>
+                    <LISTITEM value="Sibling" Selected="False">Sibling</LISTITEM>
+                    <LISTITEM value="Spouse" Selected="False">Spouse</LISTITEM>
+                    <LISTITEM value="Children" Selected="False">Children</LISTITEM>
+                    <LISTITEM value="Friend" Selected="False">Friend</LISTITEM>
+                    <LISTITEM value="Others" Selected="False">Others</LISTITEM>
+                </LISTITEMS>
+            </FIELD>
+            
+            <FIELD id="duration_of_relationship" header2Class="Informant" type="TextBoxDDL" label="Duration of Relationship">
+                <PROPERTIES>
+                    <PROPERTY name="id">txtrelduration</PROPERTY>
+                    <PROPERTY name="name">duration_of_relationship</PROPERTY>
+                    <PROPERTY name="class">form-control</PROPERTY>
+                    <PROPERTY name="onkeydown">return isNumericDotKeyStroke(event)</PROPERTY>
+                </PROPERTIES>
+                <FIELD id="ddlrelation" type="DropDownList">
+                    <PROPERTIES>
+                        <PROPERTY name="id">ddlrelation</PROPERTY>
+                        <PROPERTY name="name">ddlrelation</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                    </PROPERTIES>
+                    <LISTITEMS>
+                        <LISTITEM value="Yrs" Selected="True">Yrs</LISTITEM>
+                        <LISTITEM value="Months" Selected="False">Months</LISTITEM>
+                        <LISTITEM value="Weeks" Selected="False">Weeks</LISTITEM>
+                        <LISTITEM value="Days" Selected="False">Days</LISTITEM>
+                    </LISTITEMS>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="information" header2Class="Informant" type="RadioButtonList" label="Information (Reliability)" required="true">
+                <PROPERTIES>
+                    <PROPERTY name="name">information</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Reliable" id="RBInfo1" Selected="False">Reliable</LISTITEM>
+                    <LISTITEM value="Unreliable" id="RBInfo2" Selected="False">Unreliable</LISTITEM>
+                </LISTITEMS>
+            </FIELD>
+            
+            <FIELD id="information_adequacy" header2Class="Informant" type="RadioButtonList" label="Information (Adequacy)" required="true">
+                <PROPERTIES>
+                    <PROPERTY name="name">information_adequacy</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Adequate" id="RBInfo3" Selected="False">Adequate</LISTITEM>
+                    <LISTITEM value="Inadequate" id="RBInfo4" Selected="False">Inadequate</LISTITEM>
+                </LISTITEMS>
+            </FIELD>
+        </PANELBODY>
+    </GROUP>
+    
+    <GROUP>
+        <PANELHEADER>
+            <PROPERTIES>
+                <PROPERTY name="class">panel-heading bg-default</PROPERTY>
+                <PROPERTY name="id">medical-case-history</PROPERTY>
+            </PROPERTIES>
+            <VALUE>Medical Casehistory</VALUE>
+        </PANELHEADER>
+
+        <PANELBODY>
+            <FIELD id="presenting_complaints" type="TextArea" label="Presenting Complaints">
+                <PROPERTIES>
+                    <PROPERTY name="id">presenting_complaints</PROPERTY>
+                    <PROPERTY name="name">presenting_complaints</PROPERTY>
+                    <PROPERTY name="class">form-control</PROPERTY>
+                    <PROPERTY name="placeholder">Presenting Complaints</PROPERTY>
+                </PROPERTIES>
+            </FIELD>
+            <FIELD id="history_presenting_illness" type="textareaFull" label="History Of Presenting Illness">
+                <PROPERTIES>
+                    <PROPERTY name="id">history_presenting_illness</PROPERTY>
+                    <PROPERTY name="name">history_presenting_illness</PROPERTY>
+                    <PROPERTY name="class">form-control classy-edit</PROPERTY>
+                    <PROPERTY name="placeholder">History Of Presenting Illness</PROPERTY>
+                    <PROPERTY name="rows">6</PROPERTY>
+                </PROPERTIES>
+            </FIELD>
+            
+            <FIELD id="past_medical_diabetes" header2Class="Past_medical_history" type="CheckBoxList" label="Past Medical / Surgical History" Backcontrols="hide" Backdivid="past_medical_diabetes_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">past_medical_diabetes[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Diabetes" id="past_medical_diabetes1" Selected="false" onclick="OThersvisible(this.id, 'past_medical_diabetes_div', 'block');">Diabetes</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="txtdiabetesdate" type="TextBox" label="Date Of Onset">
+                    <PROPERTIES>
+                        <PROPERTY name="id">txtdiabetesdate</PROPERTY>
+                        <PROPERTY name="name">txtdiabetesdate</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="onkeydown">return isNumericSlashStroke(event)</PROPERTY>
+                        <PROPERTY name="placeholder">MM/YYYY</PROPERTY>
+                        <PROPERTY name="maxlength">7</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="past_medical_hypertension" header2Class="Past_medical_history" type="CheckBoxList" label="" Backcontrols="hide" Backdivid="past_medical_hypertension_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">past_medical_hypertension[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Hypertension" id="past_medical_hypertension1" Selected="False" onclick="OThersvisible(this.id, 'past_medical_hypertension_div', 'block');">Hypertension</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="txthypertensiondate" type="TextBox" label="Date Of Onset">
+                    <PROPERTIES>
+                        <PROPERTY name="id">txthypertensiondate</PROPERTY>
+                        <PROPERTY name="name">txthypertensiondate</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="onkeydown">return isNumericSlashStroke(event)</PROPERTY>
+                        <PROPERTY name="placeholder">MM/YYYY</PROPERTY>
+                        <PROPERTY name="maxlength">7</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="past_medical_cva" header2Class="Past_medical_history" type="CheckBoxList" label="" Backcontrols="hide" Backdivid="past_medical_cva_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">past_medical_cva[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="CVA" id="past_medical_cva1" Selected="False" onclick="OThersvisible(this.id, 'past_medical_cva_div', 'block');">CVA</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="txtcvadate" type="TextBox" label="Date Of Onset">
+                    <PROPERTIES>
+                        <PROPERTY name="id">txtcvadate</PROPERTY>
+                        <PROPERTY name="name">txtcvadate</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="onkeydown">return isNumericSlashStroke(event)</PROPERTY>
+                        <PROPERTY name="placeholder">MM/YYYY</PROPERTY>
+                        <PROPERTY name="maxlength">7</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="past_medical_TB" header2Class="Past_medical_history" type="CheckBoxList" label="" Backcontrols="hide" Backdivid="past_medical_TB_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">past_medical_TB[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Asthma/Allergy/TB" id="past_medical_TB" Selected="False" onclick="OThersvisible(this.id, 'past_medical_TB_div', 'block');">Asthma/Allergy/TB</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="txttbdate" type="TextBox" label="Date Of Onset">
+                    <PROPERTIES>
+                        <PROPERTY name="id">txttbdate</PROPERTY>
+                        <PROPERTY name="name">txttbdate</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="onkeydown">return isNumericSlashStroke(event)</PROPERTY>
+                        <PROPERTY name="placeholder">MM/YYYY</PROPERTY>
+                        <PROPERTY name="maxlength">7</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="past_medical_cancer" header2Class="Past_medical_history" type="CheckBoxList" label="" Backcontrols="hide" Backdivid="past_medical_cancer_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">past_medical_cancer[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Cancer" id="past_medical_cancer" Selected="False" onclick="OThersvisible(this.id, 'past_medical_cancer_div', 'block');">Cancer</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="txtcancerdate" type="TextBox" label="Date Of Onset">
+                    <PROPERTIES>
+                        <PROPERTY name="id">txtcancerdate</PROPERTY>
+                        <PROPERTY name="name">txtcancerdate</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="onkeydown">return isNumericSlashStroke(event)</PROPERTY>
+                        <PROPERTY name="placeholder">MM/YYYY</PROPERTY>
+                        <PROPERTY name="maxlength">7</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="past_medical_seizure" header2Class="Past_medical_history" type="CheckBoxList" label="" Backcontrols="hide" Backdivid="past_medical_seizure_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">past_medical_seizure[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Seizure" id="past_medical_seizure" Selected="False" onclick="OThersvisible(this.id, 'past_medical_seizure_div', 'block');">Seizure</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="txtseizuredate" type="TextBox" label="Date Of Onset">
+                    <PROPERTIES>
+                        <PROPERTY name="id">txtseizuredate</PROPERTY>
+                        <PROPERTY name="name">txtseizuredate</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="onkeydown">return isNumericSlashStroke(event)</PROPERTY>
+                        <PROPERTY name="placeholder">MM/YYYY</PROPERTY>
+                        <PROPERTY name="maxlength">7</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="past_medical_cad" header2Class="Past_medical_history" type="CheckBoxList" label="" Backcontrols="hide" Backdivid="past_medical_cad_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">past_medical_cad[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="CAD" id="past_medical_cad" Selected="False" onclick="OThersvisible(this.id, 'past_medical_cad_div', 'block');">CAD</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="txtcaddate" type="TextBox" label="Date Of Onset">
+                    <PROPERTIES>
+                        <PROPERTY name="id">txtcaddate</PROPERTY>
+                        <PROPERTY name="name">txtcaddate</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="onkeydown">return isNumericSlashStroke(event)</PROPERTY>
+                        <PROPERTY name="placeholder">MM/YYYY</PROPERTY>
+                        <PROPERTY name="maxlength">7</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="past_medical_mental_illness" header2Class="Past_medical_history" type="CheckBoxList" label="" Backcontrols="hide" Backdivid="past_medical_mental_illness_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">past_medical_mental_illness[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Mental Illness" id="past_medical_mental_illness" Selected="False" onclick="OThersvisible(this.id, 'past_medical_mental_illness_div', 'block');">Mental Illness</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="txtmentaldate" type="TextBox" label="Date Of Onset">
+                    <PROPERTIES>
+                        <PROPERTY name="id">txtmentaldate</PROPERTY>
+                        <PROPERTY name="name">txtmentaldate</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="onkeydown">return isNumericSlashStroke(event)</PROPERTY>
+                        <PROPERTY name="placeholder">MM/YYYY</PROPERTY>
+                        <PROPERTY name="maxlength">7</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="past_medical_notes" type="TextArea" label="Past Medical Notes">
+                <PROPERTIES>
+                    <PROPERTY name="id">past_medical_notes</PROPERTY>
+                    <PROPERTY name="name">past_medical_notes</PROPERTY>
+                    <PROPERTY name="class">form-control</PROPERTY>
+                    <PROPERTY name="placeholder">Notes</PROPERTY>
+                </PROPERTIES>
+            </FIELD>
+            
+            <FIELD type="Header2" label="Current Medications" class="Informant"/>
+            
+            <FIELD type="RadGrid" ADDButton="False" ADDButtonID="RGprevprescriptionadd" AddButtonTableId="RGprevprescription">
+                <PROPERTIES>
+                    <PROPERTY name="id">RGprevprescription</PROPERTY>
+                    <PROPERTY name="class">table table-bordered</PROPERTY>
+                </PROPERTIES>
+                <HEADER>
+                    <TH>Pres Date</TH>
+                    <TH>Product Name</TH>
+                    <TH>Frequency</TH>
+                    <TH>No Of Days</TH>
+                    <TH>AF/BF</TH>
+                </HEADER>
+            </FIELD>
+            
+            <FIELD id="family_histroy" type="CheckBoxList" label="Family History">
+                <PROPERTIES>
+                    <PROPERTY name="name">family_histroy[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Diabetes" id="family_histroy1" Selected="false">Diabetes</LISTITEM>
+                    <LISTITEM value="Hypertension" id="family_histroy2" Selected="false">Hypertension</LISTITEM>
+                    <LISTITEM value="CVA" id="family_histroy3" Selected="false">CVA</LISTITEM>
+                    <LISTITEM value="Asthma/Allergy/TB" id="family_histroy4" Selected="false">Asthma/Allergy/TB</LISTITEM>
+                    <LISTITEM value="Cancer" id="family_histroy5" Selected="false">Cancer</LISTITEM>
+                    <LISTITEM value="Seizure" id="family_histroy6" Selected="false">Seizure</LISTITEM>
+                    <LISTITEM value="CAD" id="family_histroy7" Selected="false">CAD</LISTITEM>
+                    <LISTITEM value="Mental Illness" id="family_histroy8" Selected="false">Mental Illness</LISTITEM>
+                <LISTITEM value="Others" id="family_histroy9" Selected="False">Others</LISTITEM></LISTITEMS>
+            </FIELD>
+            
+            <FIELD type="Header2" label="Personal History" class="Informant"/>
+            
+            <FIELD id="habit" header2Class="personal_history" type="CheckBoxList" label="Habits" Backcontrols="hide" Backdivid="habitother_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">habit[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Exercise" id="RBhabit1" Selected="false">Exercise</LISTITEM>
+                    <LISTITEM value="Diet" id="RBhabit2" Selected="false">Diet</LISTITEM>
+                    <LISTITEM value="Others" id="RBhabit3" Selected="false" onclick="OThersvisible(this.id, 'habitother_div');">Others</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="habitother" type="TextBox" label="Habit Notes: ">
+                    <PROPERTIES>
+                        <PROPERTY name="id">habitother</PROPERTY>
+                        <PROPERTY name="name">habitother</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="placeholder">Habit Notes</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD id="drug_dependence" header2Class="personal_history" type="CheckBoxList" label="Drug Dependence" Backcontrols="hide" Backdivid="drug_dependence_other_div">
+                <PROPERTIES>
+                    <PROPERTY name="name">drug_dependence[]</PROPERTY>
+                </PROPERTIES>
+                <LISTITEMS>
+                    <LISTITEM value="Smoking" id="RBdrugdependence1" Selected="false">Smoking</LISTITEM>
+                    <LISTITEM value="Alcohol" id="RBdrugdependence2" Selected="false">Alcohol</LISTITEM>
+                    <LISTITEM value="Others" id="RBdrugdependence3" Selected="false" onclick="OThersvisible(this.id, 'drug_dependence_other_div');">Others</LISTITEM>
+                </LISTITEMS>
+                <FIELD id="drug_dependence_other" type="TextBox" label="Drug Dependence Notes: ">
+                    <PROPERTIES>
+                        <PROPERTY name="id">drug_dependence_other</PROPERTY>
+                        <PROPERTY name="name">drug_dependence_other</PROPERTY>
+                        <PROPERTY name="class">form-control</PROPERTY>
+                        <PROPERTY name="placeholder">Drug Dependence Notes</PROPERTY>
+                    </PROPERTIES>
+                </FIELD>
+            </FIELD>
+            
+            <FIELD type="Header2" label="Physical Examination" class="Informant"/>
+            
+            <FIELD type="RadGrid" ADDButton="False" ADDButtonID="RGvitaladd" AddButtonTableId="RGvital">
+                <PROPERTIES>
+                    <PROPERTY name="id">RGvital</PROPERTY>
+                    <PROPERTY name="class">table table-bordered</PROPERTY>
+                </PROPERTIES>
+                <HEADER>
+                    <TH>Vital Time</TH>
+                    <TH>Temperature</TH>
+                    <TH>BP Systolic</TH>
+                    <TH>BP Diastolic</TH>
+                    <TH>Pulse</TH>
+                    <TH>Weight</TH>
+                    <TH>Height</TH>
+                    <TH>SP02</TH>
+                    <TH>Pain Score</TH>
+                </HEADER>
+            </FIELD>
+            
+            <FIELD id="investigations" type="TextArea" label="Investigations">
+                <PROPERTIES>
+                    <PROPERTY name="id">investigations</PROPERTY>
+                    <PROPERTY name="name">investigations</PROPERTY>
+                    <PROPERTY name="class">form-control</PROPERTY>
+                    <PROPERTY name="placeholder">Investigations</PROPERTY>
+                </PROPERTIES>
+            </FIELD>
+            
+            <FIELD type="RadGrid" ADDButton="True" ADDButtonID="TBicdcodeadd" AddButtonTableId="TBicdcode">
+                <PROPERTIES>
+                    <PROPERTY name="id">TBicdcode</PROPERTY>
+                    <PROPERTY name="class">table table-bordered</PROPERTY>
+                </PROPERTIES>
+                <HEADER>
+                    <TH>ICD Code</TH>
+                </HEADER>
+                <COLUMNS>
+                    <FIELD id="icd_code" type="TextBox">
+                        <PROPERTIES>
+                            <PROPERTY name="id">icd_code</PROPERTY>
+                            <PROPERTY name="name">icd_code</PROPERTY>
+                            <PROPERTY name="class">form-control icd_code_autocomplete</PROPERTY>
+                        </PROPERTIES>
+                    </FIELD>
+                </COLUMNS>
+            </FIELD>
+            
+            <FIELD id="follow_up_plan" type="TextArea" label="Follow up Plan">
+                <PROPERTIES>
+                    <PROPERTY name="id">follow_up_plan</PROPERTY>
+                    <PROPERTY name="name">follow_up_plan</PROPERTY>
+                    <PROPERTY name="class">form-control</PROPERTY>
+                    <PROPERTY name="placeholder">Follow up plan</PROPERTY>
+                </PROPERTIES>
+            </FIELD>
+        </PANELBODY>
+
+    </GROUP>
+</FIELDS>
