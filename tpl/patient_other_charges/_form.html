@@ -1,0 +1,78 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Encounter # </label>
+            <div class="col-sm-6">
+                {{encounter.encounter_id}}
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Charge Category*</label>
+            <div class="col-lg-6">
+                <select class="form-control" ng-model="data.charge_cat_id" ng-options="Category.value as Category.label for Category in chargecategory| orderBy: label" ng-change="updateSubcategory();">
+                    <option value="">Select Charge Category</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Charge Subcategory*</label>
+            <div class="col-lg-6">
+                <select class="form-control" ng-model="data.charge_subcat_id" ng-options="subCategory.value as subCategory.label for subCategory in availableSubcategory| orderBy: charge_subcat_name" ng-change="updateChargeamount();">
+                    <option value="">Select Charge Type</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Charge * </label>
+            <div ng-if="data.formtype == 'add'" class="col-sm-6">
+                <input type="text" ng-model="data.charge_amount" maxlength="50" class="form-control" placeholder="Charge" number-mask="">
+            </div>
+            <div ng-if="data.formtype != 'add'" class="col-sm-6">
+                <table class="table table-bordered">
+                    <tr ng-repeat="singledata in alldata">
+                        <td class="col-sm-1">{{singledata.created_at| moment:'DD/MM/YYYY - hh:mm A'}}</td>
+                        <td class="col-sm-1"><input type="text" ng-model="singledata.charge_amount" maxlength="50" class="form-control" placeholder="Charge" number-mask=""></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group" ng-if="data.formtype == 'add'">
+            <label class="col-sm-3 control-label">Repeat </label>
+            <div class="col-sm-6">
+                <div class="input-group w-md">
+                    <label class="i-checks">
+                        <input type="radio" checked="" value="until_discharge" name="repeat" ng-model="data.untill_discharge" ng-click="repeat = 'discharge'">
+                        <i></i>
+                        Until Discharge&nbsp; &nbsp;
+                    </label>
+                    <label class="i-checks">
+                        <input type="radio" checked="" value="days" name="repeat" ng-model="data.next" ng-click="repeat = 'next'">
+                        <i></i>
+                        Next &nbsp; &nbsp; 
+                    </label>
+                    <span ng-show="repeat == 'next'">
+                        <select style="float: none" class="form-control search-dropdown" ng-model="data.no_of_days" ng-options="day.value as day.label for day in days">
+                        </select> Days
+                    </span><a class="label bg-primary" ng-click="updateEmptyrepeat(); repeat = 'discharge'">Clear</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.billing', {id: $state.params.id})"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

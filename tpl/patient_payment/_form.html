@@ -1,0 +1,453 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading font-bold">Payment Details</div>
+                    <div class="panel-body">
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Encounter # </label>
+                            <div class="col-sm-9">
+                                {{encounter.encounter_id}}
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Date of Payment * </label>
+                            <div class="col-sm-9">
+                                <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" data-ng-model="data.payment_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <datetimepicker data-ng-model="data.payment_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-on-set-time="onTimeSet(newDate, oldDate)"/>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Type Of Payment * </label>
+                            <div class="col-sm-9">
+                                <div class="radio">
+                                    <div ng-show="enc.selected.finalize == '0'">
+                                        <label class="i-checks">
+                                            <input type="radio" value="option1" name="a" ng-click="PaymentType('advance')">
+                                            <i></i>
+                                            Advance
+                                        </label>
+                                    </div>
+                                    <div ng-show="enc.selected.finalize != '0'">
+                                        <label class="i-checks">
+                                            <input type="radio" value="option1" name="a" ng-click="PaymentType('settlement')">
+                                            <i></i>
+                                            Settlement
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <div ng-show="payment_type == 'advance'">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Amount Paid * </label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="data.payment_amount" maxlength="50" class="form-control" placeholder="Amount" number-mask="">
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                        </div>
+
+                        <div ng-show="payment_type == 'settlement'">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Total Amount </label>
+                                <div class="col-sm-9">
+                                    <label>{{(billing_data.total_charge - billing_data.total_concession|| 0) | number:2 }}</label>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Amount Already Paid </label>
+                                <div class="col-sm-9">
+                                    <label>{{(billing_data.total_paid|| 0) | number:2 }}</label>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Amount Payable </label>
+                                <div class="col-sm-9">
+                                    <label>{{(billing_data.balance|| 0) | number:2 }}</label>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group" ng-show="billing_data.balance">
+                                <label class="col-sm-3 control-label">Amount Paid Now * </label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="data.paid_amount" maxlength="50" class="form-control" placeholder="Amount" ng-keyup="calculateNetamount()" ng-blur="calculateNetamount()">
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg " ng-show="billing_data.balance"></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Net Amount * </label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="data.net_amount" maxlength="50" class="form-control" placeholder="Amount" readonly="true">
+                                    <span style="color:#a94442" ng-if="totalErrormessage">{{totalErrormessage}}</span>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading font-bold">Payment Mode</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <label class="i-checks" ng-repeat="paymentMode in paymentModes">
+                                    <input type="radio" checked="" value="{{paymentMode.value}}" ng-model="data.payment_mode">
+                                    <i></i>
+                                    {{paymentMode.label}}&nbsp; &nbsp;
+                                </label>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <!-- CARD -->
+                        <div ng-show="data.payment_mode == 'CD'">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Card Type *</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" ng-model="data.card_type" ng-options="cardType.value as cardType.label for cardType in cardTypes| orderBy: label">
+                                        <option value="">Select Card Type</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Card Number *<br><em class="text-muted">(Last 4 Digits)</em></label>
+                                <div class="col-sm-9">
+                                    <input type="text" ui-mask="9999" ng-model="data.card_number" placeholder="XXXX" class="form-control m-b">
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                        </div>
+
+                        <!-- Cheque -->
+                        <div ng-show="data.payment_mode == 'CH'">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Bank Name *</label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="data.bank_name" maxlength="100" class="form-control" placeholder="Bank Name">
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Cheque Number *</label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="data.bank_number" maxlength="100" class="form-control" placeholder="Cheque Number">
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Date *</label>
+                                <div class="col-sm-9">
+                                    <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" data-ng-model="data.bank_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <datetimepicker data-ng-model="data.bank_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown3' }" data-on-set-time="onTimeSet(newDate, oldDate)"/>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                        </div>
+
+                        <!-- Online -->
+                        <div ng-show="data.payment_mode == 'ON'">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Bank Name *</label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="data.bank_name" maxlength="100" class="form-control" placeholder="Bank Name">
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Ref No *</label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="data.ref_no" maxlength="100" class="form-control" placeholder="Ref No">
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Date *</label>
+                                <div class="col-sm-9">
+                                    <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" data-ng-model="data.bank_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                        </div>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <datetimepicker data-ng-model="data.bank_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown3' }" data-on-set-time="onTimeSet(newDate, oldDate)"/>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-show="payment_type == 'settlement'">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <b>Write Off</b>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="col-sm-6"></div>
+                                        <label class="col-sm-3 control-label">Already Return Of Amount: {{writeoffAmount}}</label>
+                                        <div class="col-sm-3">
+                                            <input type="text" ng-model="data.writeoff_amount" maxlength="100" class="form-control" placeholder="Write Off Session Amount" readonly="true">
+                                        </div>
+                                    </div>
+                                    <table  class="table table-striped b-t b-light">
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Category</th>
+                                            <th>Headers</th>
+                                            <th>Charge</th>
+                                            <th>Count</th>
+                                            <th>Concession</th>
+                                            <th>Extra</th>
+                                            <th align="right" style="text-align:right;">Total Price</th>
+                                        </tr>
+                                        <tbody>
+                                            <!-- Recurring -->
+                                            <tr ng-show="recurring != 0">
+                                                <td align="center" valign="middle"></td>
+                                                <td>
+                                                    <label class="i-checks m-b-none">
+                                                        <input id="recurring_0" class="enc_chk" type="checkbox" name="b[]" ng-click="addChargesAmount('0', 'recurring', recurring)"><i></i>
+                                                    </label>
+                                                </td>
+                                                <td></td>
+                                                <td colspan="6"><span class="badge bg-info ng-binding">Category : Recurring Charges</span></td>
+                                                <td align="right" style="text-align:right;">{{recurring}}</td>
+                                            </tr>
+                                            
+                                            <!-- Professional -->
+                                            <tr ng-init="expanded_1 = true;" ng-show="professional.length > 0">
+                                                <td align="center" valign="middle"></td>
+                                                <td>
+                                                    <label class="i-checks">
+                                                        <input id="professional_selectall" ng-model="professional_selectall" ng-true-value="'1'" ng-false-value="'0'" ng-click="updateCheckbox('professional')" type="checkbox" name="professional_selectall" class="">
+                                                        <i></i>
+                                                    </label>&nbsp; &nbsp;
+                                                </td>
+                                                <td> 
+                                                    <button ng-click="expanded_1 = !expanded_1" target="#moreless" ui-toggle-class="show" class="btn btn-sm btn-default hms-plus">
+                                                        <i ng-if="!expanded_1" class="fa fa-plus text"></i>
+                                                        <i ng-if="expanded_1" class="fa fa-minus text"></i>
+                                                    </button>
+                                                </td>
+                                                <td colspan="7">
+                                                    <b> 
+                                                        <span class="badge bg-success ng-binding">Category : Professional Charges</span> 
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr ng-show="expanded_1" ng-repeat="(key, row) in professional">
+                                                <td align="center" valign="middle"></td>
+                                                <td>
+                                                    <label class="i-checks">
+                                                        <input ng-model="row.selected" ng-checked="row.selected == '1'" id="professional_{{key}}" class="professional_{{key}}" name="status" type="checkbox"  ng-click="addChargesAmount(key, 'professional', row.total_charge_amount, row.concession_amount, row.extra_amount, row.consultant_id)"><i></i>
+                                                    </label>
+                                                </td>
+                                                <td></td>
+                                                <td>Professional Charges</td>
+                                                <td>{{row.consultant_name}}</td>
+                                                <td>{{row.amount}}</td>
+                                                <td>{{row.total_visit}}</td>
+                                                <td>{{row.concession_amount}}</td>
+                                                <td>{{row.extra_amount}}</td>
+                                                <td align="right" style="text-align:right;"> {{getTotalamount(row.total_charge_amount, row.concession_amount, row.extra_amount)}} </td>
+                                            </tr>
+
+                                            <!-- Procedures -->
+                                            <tr ng-init="expanded_2 = true;" ng-show="procedure.length > 0">
+                                                <td align="center" valign="middle"></td>
+                                                <td>
+                                                    <label class="i-checks">
+                                                        <input id="procedure_selectall" ng-model="procedure_selectall" ng-true-value="'1'" ng-false-value="'0'" ng-click="updateCheckbox('procedure')" type="checkbox" name="procedure_selectall" class="">
+                                                        <i></i>
+                                                    </label>&nbsp; &nbsp;
+                                                </td>
+                                                <td> 
+                                                    <button ng-click="expanded_2 = !expanded_2" target="#moreless" ui-toggle-class="show" class="btn btn-sm btn-default hms-plus">
+                                                        <i ng-if="!expanded_2" class="fa fa-plus text"></i>
+                                                        <i ng-if="expanded_2" class="fa fa-minus text"></i>
+                                                    </button>
+                                                </td>
+                                                <td colspan="7">
+                                                    <b> 
+                                                        <span class="badge bg-success ng-binding">Category : Procedure Charges</span> 
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr ng-show="expanded_2" ng-repeat="(key, row) in procedure">
+                                                <td align="center" valign="middle"></td>
+                                                <td>
+                                                    <label class="i-checks m-b-none">
+                                                        <input ng-model="row.selected" ng-checked="row.selected == '1'" id="procedure_{{key}}" class="procedure_{{key}}" name="status" type="checkbox"  ng-click="addChargesAmount(key, 'procedure', row.total_charge_amount, row.concession_amount, row.extra_amount, row.charge_subcat_id)"><i></i>
+                                                    </label>
+                                                </td>
+                                                <td></td>
+                                                <td>Procedure Charges</td>
+                                                <td>{{row.charge_sub_category}}</td>
+                                                <td>{{row.amount}}</td>
+                                                <td>{{row.total_visit}}</td>
+                                                <td>{{row.concession_amount}}</td>
+                                                <td>{{row.extra_amount}}</td>
+                                                <td align="right" style="text-align:right;"> {{getTotalamount(row.total_charge_amount, row.concession_amount, row.extra_amount)}} </td>
+                                            </tr>
+
+                                            <!-- Other Charges -->
+                                            <tr ng-init="expanded_3 = true;" ng-show="otherCharges.length > 0">
+                                                <td align="center" valign="middle"></td>
+                                                <td>
+                                                    <label class="i-checks">
+                                                        <input id="othercharges_selectall" ng-model="othercharges_selectall" ng-true-value="'1'" ng-false-value="'0'" ng-click="updateCheckbox('othercharges')" type="checkbox" name="othercharges_selectall" class="">
+                                                        <i></i>
+                                                    </label>&nbsp; &nbsp;
+                                                </td>
+                                                <td> 
+                                                    <button ng-click="expanded_3 = !expanded_3" target="#moreless" ui-toggle-class="show" class="btn btn-sm btn-default hms-plus">
+                                                        <i ng-if="!expanded_3" class="fa fa-plus text"></i>
+                                                        <i ng-if="expanded_3" class="fa fa-minus text"></i>
+                                                    </button>
+                                                </td>
+                                                <td colspan="7">
+                                                    <b> 
+                                                        <span class="badge bg-success ng-binding">Category : Other Charges</span> 
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr ng-show="expanded_3" ng-repeat="(key, row) in otherCharges">
+                                                <td align="center" valign="middle"></td>
+                                                <td>
+                                                    <label class="i-checks m-b-none">
+                                                        <input ng-model="row.selected" ng-checked="row.selected == '1'" id="othercharges_{{key}}" type="checkbox" name="status" ng-click="addChargesAmount(key, 'othercharges', row.total_charge_amount, row.concession_amount, row.extra_amount, row.charge_subcat_id)"><i></i>
+                                                    </label>
+                                                </td>
+                                                <td></td>
+                                                <td>{{row.charge_category}}</td>
+                                                <td>{{row.charge_sub_category}}</td>
+                                                <td>{{row.amount}}</td>
+                                                <td>{{row.total_visit}}</td>
+                                                <td>{{row.concession_amount|| '0'}}</td>
+                                                <td>{{row.extra_amount|| '0'}}</td>
+                                                <td align="right" style="text-align:right;"> {{row.total_charge_amount}} </td>
+                                            </tr>
+
+                                            <!-- pharmacyCharges START-->
+                                            <tr ng-show="pharmacyCharges.length > 0">
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                                <th>Category</th>
+                                                <th>Bill No</th>
+                                                <th>Sale Date</th>
+                                                <th>Payment Type</th>
+                                                <th>Bill Amount</th>
+                                                <th></th>
+                                                <th align="right" style="text-align:right;">Pending Amount</th>
+                                            </tr>
+                                            <tr ng-init="expanded_4 = true;" ng-show="pharmacyCharges.length > 0">
+                                                <td align="center" valign="middle"></td>
+                                                <td>
+                                                    <label class="i-checks">
+                                                        <input id="pharmacy_selectall" ng-model="pharmacy_selectall" ng-true-value="'1'" ng-false-value="'0'" ng-click="updateCheckbox('pharmacy')" type="checkbox" name="pharmacy_selectall" class="">
+                                                        <i></i>
+                                                    </label>&nbsp; &nbsp;
+                                                </td>
+                                                <td> 
+                                                    <button ng-click="expanded_4 = !expanded_4" target="#moreless" ui-toggle-class="show" class="btn btn-sm btn-default hms-plus">
+                                                        <i ng-if="!expanded_4" class="fa fa-plus text"></i>
+                                                        <i ng-if="expanded_4" class="fa fa-minus text"></i>
+                                                    </button>
+                                                </td>
+                                                <td colspan="7">
+                                                    <b> 
+                                                        <span class="badge bg-primary ng-binding">Category : Pharmacy Charges</span> 
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                            <tr ng-show="expanded_4" ng-repeat="(key, row) in pharmacyCharges">
+                                                <td align="center" valign="middle"></td>
+                                                <td>
+                                                    <label class="i-checks m-b-none">
+                                                        <input ng-model="row.selected" ng-checked="row.selected == '1'" id="pharmacy_{{key}}" type="checkbox" name="status" ng-click="addChargesAmount(key, 'pharmacy', row.billings_total_balance_amount, '0', '0', row.sale_id)"><i></i>
+                                                    </label>
+                                                </td>
+                                                <td></td>
+                                                <td>Pharmacy Charges</td>
+                                                <td>{{row.bill_no}}</td>
+                                                <td>{{row.sale_date}}</td>
+                                                <td>{{row.bill_payment}}</td>
+                                                <td>{{row.bill_amount}}</td>
+                                                <td></td>
+                                                <td align="right" style="text-align:right;"> {{row.billings_total_balance_amount}} </td>
+                                            </tr>
+                                            <!-- pharmacyCharges END-->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-show="payment_type == 'advance'" ng-click="saveForm(data.formtype)">Save</button>
+        <button class="btn m-b-xs  btn-success save-btn" ng-show="payment_type == 'settlement'" ng-disabled="!data.net_amount" ng-click="saveSettleForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.billing', {id: $state.params.id})"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

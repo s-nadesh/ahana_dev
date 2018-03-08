@@ -1,0 +1,58 @@
+<div ng-controller="OtherDocumentsController" ng-init="loadView()">
+    <div>
+        <div class="bg-light lter b-b wrapper-md">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h1 class="m-n h3">View {{form_name}}</h1>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <button ng-click="printDocument()" class="btn btn-sm btn-primary"> 
+                        <i class="fa fa-print"></i> Print
+                    </button>
+                    <button class="btn btn-sm btn-dark" ng-click="$state.go('patient.document', {id: $state.params.id})">
+                        <i class="fa fa-repeat"></i> Back
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        <div class="wrapper-md">
+            <div ng-include="'tpl/blocks/alert.html'">
+                {% include 'tpl/blocks/alert.html' %}
+            </div>
+            <div class="row">
+                <form class="form-horizontal form-validation ng-pristine ng-valid" name="formValidate">
+                    <div class="panel panel-default other-doc">
+                        <div class="panel-body">  
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Encounter ID:   </label>
+                                <div class="col-sm-9">
+                                    <p>  {{other_document.encounter_id}}  </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Document name:   </label>
+                                <div class="col-sm-9">
+                                    <p>  {{other_document.other_doc_name}}  </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Description:</label>
+                                <div class="col-sm-12 other_document_summary">
+                                    <p ng-bind-html="other_document.other_doc_content | sanitize"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div ng-include="'tpl/patient_other_documents/_print.html'">
+        {% include 'tpl/patient_other_documents/_print.html' %}
+    </div>
+</div>

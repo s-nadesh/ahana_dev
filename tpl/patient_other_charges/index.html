@@ -1,0 +1,81 @@
+
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n h3"> Notes</h1>
+</div>
+
+<div class="wrapper-md" ng-controller="BillingOtherChargeController" ng-init="loadPatNotesList();">
+    <div class="panel panel-default">
+        <div class="row wrapper">
+            <div class="col-sm-3">
+                <button class="btn btn-info" ng-click="$state.go('patient.noteCreate', {id: $state.params.id})"><i class="fa fa-plus"></i> Create Note </button>
+            </div>
+        </div>
+        <div class="table-responsive in-patient-table">
+            <table st-table="displayedCollection"  st-safe-src="rowCollection"  class="table table-striped b-t b-light">
+                <thead>
+                    <tr>
+                        <th>
+                            <button class="btn btn-sm btn-default" type="button" ng-click="ctrl.expandAll(allExpanded = !allExpanded)">
+                                <i ng-if="!allExpanded" class="fa fa-plus text"></i>
+                                <i ng-if="allExpanded" class="fa fa-minus text"></i>
+                            </button>
+                        </th>
+                        <th>Created By</th>
+                        <th>Date</th>
+                        <th>Notes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody ng-hide="isLoading">
+                    <tr ng-repeat-start="(key, value) in displayedCollection | groupBy: 'encounter_id'">
+                        <td>
+                            <button ng-click="expanded = !expanded" expand class="btn btn-sm btn-default">
+                                <i ng-if="!expanded" class="fa fa-plus text"></i>
+                                <i ng-if="expanded" class="fa fa-minus text"></i>
+                            </button>
+                        </td>
+                        <td colspan="4">
+                            <b> Encounter: {{key}}</b>
+                        </td>
+
+                    </tr>
+                    <tr ng-repeat-end ng-show="expanded" ng-repeat="note in value">
+                        <td> &nbsp; </td>
+                        <td> {{note.created_by_name}} </td>
+                        <td> {{note.created_at}} </td>
+                        <td> 
+                            <a title="View" ui-sref="patient.noteView({id: '{{$state.params.id}}', note_id: '{{note.pat_note_id}}'})">
+                                {{note.short_notes}}
+                            </a>
+                        </td>
+                        <td>
+                            <a title="Edit" check-access  ui-sref="patient.noteUpdate({id: '{{$state.params.id}}', note_id: '{{note.pat_note_id}}'})">
+                                <i class="fa fa-pencil"></i>
+                            </a>&nbsp;&nbsp;&nbsp;
+                            <a class="hide" title="Delete" ng-click="removeRow(note)">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="6" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            <!--<div st-items-by-page="itemsByPage" st-pagination="" st-template="tpl/patient/pagination.custom.html"></div>-->
+                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+        <footer class="panel-footer">
+            <!--<div st-pagination="" st-items-by-page="itemsByPage" st-template="pagination.custom.html" st-displayed-pages="7"></div>-->
+        </footer>    
+    </div>
+</div>

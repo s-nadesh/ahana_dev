@@ -1,0 +1,19 @@
+<div ng-controller="BillingOtherChargeController" ng-init="initCanAddOtherCharge(); initForm()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Add Charge</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <form name="otherChargesForm" class="form-horizontal form-validation" novalidate="">
+                    <div ng-include="'tpl/patient_other_charges/_form.html'">
+                        {% include 'tpl/patient_other_charges/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

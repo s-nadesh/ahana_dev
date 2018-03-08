@@ -1,0 +1,34 @@
+<div ng-controller="OtherDocumentsController">
+    <div class="bg-light lter b-b wrapper-md">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-n h3">Update {{form_name}}</h1>
+            </div>
+            <div class="col-sm-6 text-right">
+                <button ng-click="printDocument()" class="btn btn-sm btn-primary"> 
+                    <i class="fa fa-print"></i> Print
+                </button>
+                <button class="btn btn-sm btn-dark" ng-click="$state.go('patient.document', {id: $state.params.id})">
+                    <i class="fa fa-repeat"></i> Back
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="loadForm(); loadView();">
+                <form id="other_document_form" name="otherDocumentForm" class="form-horizontal form-validation" novalidate="">
+                    <div ng-include="'tpl/patient_other_documents/_form.html'">
+                        {% include 'tpl/patient_other_documents/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div ng-include="'tpl/patient_other_documents/_print.html'">
+        {% include 'tpl/patient_other_documents/_print.html' %}
+    </div>
+</div>

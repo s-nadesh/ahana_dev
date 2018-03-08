@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Encounter # </label>
+            <div class="col-sm-5" ng-if="all_encounters.length > 1">
+                <select class="form-control" ng-model="data.encounter_id" ng-options="all_encounter.encounter_id as all_encounter.encounter_id for all_encounter in all_encounters| orderBy: encounter_id">
+                </select>
+            </div>
+            <div class="col-sm-9" ng-if="all_encounters.length == 1">
+                {{encounter.encounter_id}}
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Nurse's Notes * </label>
+            <div class="col-sm-9">
+                <textarea placeholder="Notes" class="form-control" ng-model="data.notes"></textarea>
+            </div>
+        </div>
+        
+        <div class="form-group" ng-show="data.pat_note_id != null">
+            <label class="col-sm-3 control-label">Last Modified</label>
+            <div class="col-sm-9">{{ data.modified_at}}
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.notes', {id: $state.params.id})"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>
