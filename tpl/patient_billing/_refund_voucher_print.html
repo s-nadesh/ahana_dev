@@ -1,0 +1,71 @@
+<table width="100%" cellspacing="0" cellpadding="0" class="voucher-table">
+    <tbody>
+        <tr>
+            <td width="10px" class="orgimg" rowspan="2">
+                <img width="60" height="60" alt="AHANA HOSPITALS" src="{{app.org_document_logo}}">
+            </td>
+            <td colspan="2">
+                <span style="display:inline-block;width:100%;" class="orgcss" id="lblOrganisation">{{app.org_name}}</span>
+            </td>
+            <td class="orgtable2" style="width: 25%">
+                <span style="display:inline-block;width:100%;" class="SplCss" id="lblvourcherno">
+                    Voucher No : <b>{{printVoucher.refund_payment_id}}</b>
+                </span>
+            </td>
+        </tr>
+        <tr>
+            <td class="orgtable" rowspan="1" colspan="2"> 
+                {{app.org_address}}<br>
+                {{app.org_city}} {{app.org_state}} {{app.org_country}}<br>
+                Ph : {{app.org_mobile}}
+            </td>
+            <td class="orgtable2"><span style="display:inline-block;width:100%;" class="DateCss" id="lblDate">
+                    <span class="SplCss">Date : </span>{{printVoucher.refund_date| moment:'DD/MM/YYYY'}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" class="recived-details">
+                Patient Name : 
+                <span> 
+                    <strong>
+                        {{patientObj.fullname}} 
+                        ({{patientObj.patient_age_ym}})
+                    </strong> 
+                </span>
+                UHID :
+                <span> 
+                    <strong>
+                        ({{patientObj.patient_global_int_code}}) 
+                    </strong>
+                </span>
+                <span ng-if="patientObj.current_room != '-'">
+                    ({{patientObj.current_room}})
+                </span>
+                <br />
+                <br /> 
+                Rs <span><strong>{{printVoucher.refund_amount}}</strong></span> (Rupees <span><strong>{{printVoucher.refund_amount| words}}</strong></span> only)
+                <br />
+                <br />
+                on account of <strong><span>Refund Payment</span></strong>
+                <br />
+                <br />
+                through <strong><span ng-if="printVoucher.payment_mode == 'CA'">Cash</span><span ng-if="printVoucher.payment_mode == 'CH'">Cheque</span>
+                    <span ng-if="printVoucher.payment_mode == 'ON'">Online</span><span ng-if="printVoucher.payment_mode == 'CD'">Card</span></strong>
+                Bank <strong><span>{{printVoucher.bank_name}}</span></strong>
+                <br />
+                <br />
+                Dated <strong><span>{{printVoucher.bank_date | moment:'DD/MM/YYYY'}}</span></strong>
+                <br />
+                <br />
+                <br />
+                <br />
+            </td>
+        </tr>
+        <tr>
+            <td>Accountant</td>
+            <td>Biller</td>
+            <td>Attender</td>
+            <td>Payee</td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,271 @@
+<div ng-controller="PatientAlertsController" ng-init="loadPatientAlertsList(); initTab()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Alerts & Allergies</h1>
+    </div>
+    <div class="wrapper-md tab-btn">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="btn-group op-btn-group">
+                    <button class="btn btn-info alert-tab" ng-click="changeTab('alert')">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;Alerts
+                    </button>
+                    <button class="btn btn-info allergies-tab" ng-click="changeTab('allergies')">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;Allergies
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="alert" ng-show="current_tab == 'alert'">
+        <div class="wrapper-md p-b">
+            <div ng-include="'tpl/blocks/alert.html'">
+                {% include 'tpl/blocks/alert.html' %}
+            </div>
+            <div class="panel panel-default m-b"  ng-init= "data   =   {};
+                 data.formtype  =   'add';
+                 initForm();
+                 data.status   =   '1'">
+                <form name="alertForm" class="form-horizontal form-validation" novalidate="">
+                    <div class="panel-heading font-bold"> <i class="fa fa-medkit"></i> Patient Alert Details</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <label> Alert Type  </label>
+                                <select class="form-control" ng-model="data.alert_id" ng-options="alert.alert_id as alert.alert_name for alert in alerts| orderBy: alert_name">
+                                    <option value="">Select Alert</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label> Alert Details</label>
+                                <input type="text" ng-model="data.alert_description" maxlength="50" class="form-control" placeholder="Alert Name">
+                            </div>
+                            <div class="col-sm-3">
+                                <label> </label>
+                                <br/>
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)"><i class="fa fa-pencil"></i> Add</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="data.alert_id = '';
+                                            data.alert_description = '';
+                                            successMessage = '';
+                                            errorData = ''"> <i class="fa fa-repeat"></i> Reset</button>
+                                &nbsp; </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="wrapper-md">
+            <div class="panel panel-default">
+                <!--<div class="panel-heading">
+                  Responsive Table
+                </div>-->
+                <div class="row wrapper">
+                    <div class="col-sm-5 m-b-xs">
+                        <button class="btn btn-sm btn-grey" ng-click="loadPatientAlertsList()"> 
+                            &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+                        </button>      
+                    </div>
+                    <div class="col-sm-4">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table  st-table="displayedCollection"  st-safe-src="rowCollection" class="table table-striped b-t b-light">
+                        <thead>
+                            <tr>
+                                <th>Alert Type</th>
+                                <th>Alert </th>
+                                <th>Created At</th>
+                                <th>Created By</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-hide="isLoading">
+                            <tr ng-repeat="row in displayedCollection| orderBy: alert_description">
+                                <td>
+                                    <span editable-select="row.alert_id" e-name="alert_id" e-form="rowform" e-ng-options="alert.alert_id as alert.alert_name for alert in alerts | orderBy: alert_name">
+                                        {{ showStatus(row)}}
+                                    </span>
+                                </td>
+                                <td class="v-middle">
+                                    <span editable-text="row.alert_description" e-name="alert_description" e-form="rowform" onbeforesave="checkName($data)" e-required>
+                                        {{ row.alert_description || 'empty' }}
+                                    </span>
+                                </td>
+                                <td class="v-middle">
+                                    {{row.created_at| moment:'DD/MM/YYYY'}} &nbsp;
+                                    <span class="label bg-light dk">{{row.created_at| moment:'hh:mm A'}}</span>
+                                </td>
+                                <td class="v-middle">
+                                    {{row.created_by}}
+                                </td>
+                                <td>
+                                    <label class="i-checks "> 
+<!--                                        <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="row.status" ng-change='updateAlert(row, row.pat_alert_id)'> -->
+                                            <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="row.status"  ng-change='updateStatus("PatAlert", row.pat_alert_id)'>
+                                        <i></i>
+                                    </label>
+                                </td>
+                                <td style="white-space: nowrap">
+                                    <!-- form -->
+                                    <form editable-form name="rowform" onbeforesave="updateAlert($data, row.pat_alert_id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == row">
+                                        <button type="submit" ng-disabled="rowform.$waiting" class="btn m-b-xs btn-info save-btn">
+                                            Save
+                                        </button>
+                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn m-b-xs btn-default">
+                                            Cancel
+                                        </button>
+                                    </form>
+                                    <div class="buttons" ng-show="!rowform.$visible">
+                                        <button class="btn m-b-xs  btn-primary " ng-click="rowform.$show()"> <i class="fa fa-pencil"></i> Edit</button> 
+                                        <a data-button="patient.alertDelete" check-access-custom class="btn m-b-xs btn-dark" title="Delete" ng-click="removeRow(row)">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </a>
+                                    </div>  
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="5" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="allergies" ng-show="current_tab == 'allergies'">
+        <div class="wrapper-md p-b">
+            <div ng-include="'tpl/blocks/alert.html'">
+                {% include 'tpl/blocks/alert.html' %}
+            </div>
+            <div class="panel panel-default m-b"  ng-init= "initAllergiesForm()">
+                <form name="alertForm" class="form-horizontal form-validation" novalidate="">
+                    <div class="panel-heading font-bold"> <i class="fa fa-medkit"></i> Patient Allergies Details</div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <label>Encounter # </label>
+                                <div ng-if="all_encounters.length > 1">
+                                    <select class="form-control" ng-model="allergies_data.encounter_id" ng-options="all_encounter.encounter_id as all_encounter.encounter_id for all_encounter in all_encounters| orderBy: encounter_id">
+                                    </select>
+                                </div>
+                                <div ng-if="all_encounters.length == 1">
+                                    {{encounter.encounter_id}}
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label> Notes *</label>
+                                <textarea placeholder="Notes" class="form-control" ng-model="allergies_data.notes"></textarea>
+                            </div>
+                            <div class="col-sm-3">
+                                <label> </label>
+                                <br/>
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="allergiesSave(allergies_data.formtype)"><i class="fa fa-pencil"></i> Add</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="allergies_data.notes = '';
+                                            successMessage = '';
+                                            errorData = ''"> <i class="fa fa-repeat"></i> Reset</button>
+                                &nbsp; </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="wrapper-md">
+            <div class="panel panel-default">
+                <!--<div class="panel-heading">
+                  Responsive Table
+                </div>-->
+                <div class="row wrapper">
+                    <div class="col-sm-5 m-b-xs">
+                        <button class="btn btn-sm btn-grey" ng-click="loadPatientAllergiesList()"> 
+                            &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+                        </button>      
+                    </div>
+                    <div class="col-sm-4">
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table  st-table="displayedCollection"  st-safe-src="rowCollection" class="table table-striped b-t b-light">
+                        <thead>
+                            <tr>
+                                <th>Encounter ID</th>
+                                <th>Note</th>
+                                <th>Created At</th>
+                                <th>Created By</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-hide="isLoading">
+                            <tr ng-repeat="row in allergiesCollection| orderBy: pat_allergies_id">
+                                <td>
+                                    {{row.encounter_id}}
+                                </td>
+                                <td class="v-middle">
+                                    <span editable-textarea="row.notes" e-name="notes" e-form="rowform" onbeforesave="checkName($data)" e-required>
+                                        <div tooltip-placement="top" data-tooltip-html-unsafe="{{row.concatenate_notes ? row.full_notes : ''}}"> <span ng-bind-html="row.short_notes"></span> </div>
+                                    </span>
+                                </td>
+                                <td class="v-middle">
+                                    {{row.created_at| moment:'DD/MM/YYYY'}} &nbsp;
+                                    <span class="label bg-light dk">{{row.created_at| moment:'hh:mm A'}}</span>
+                                </td>
+                                <td>
+                                    {{row.created_by}}
+                                </td>
+                                <td>
+                                    <label class="i-checks "> 
+<!--                                        <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="row.status" ng-change='updateAllergies(row, row.pat_allergies_id)'> -->
+                                            <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="row.status" ng-change='updateStatus("PatAllergies", row.pat_allergies_id)'>
+                                        <i></i>
+                                    </label>
+                                </td>
+                                <td style="white-space: nowrap">
+                                    <!-- form -->
+                                    <form editable-form name="rowform" onbeforesave="updateAllergies($data, row.pat_allergies_id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == row">
+                                        <button type="submit" ng-disabled="rowform.$waiting" class="btn m-b-xs btn-info save-btn">
+                                            Save
+                                        </button>
+                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn m-b-xs btn-default">
+                                            Cancel
+                                        </button>
+                                    </form>
+                                    <div class="buttons" ng-show="!rowform.$visible">
+                                        <button class="btn m-b-xs  btn-primary " ng-click="rowform.$show()"> <i class="fa fa-pencil"></i> Edit</button> 
+                                        <a data-button="patient.alertDelete" check-access-custom class="btn m-b-xs btn-dark" title="Delete" ng-click="removeAllergies(row)">
+                                            <i class="fa fa-trash"></i> Delete
+                                        </a>
+                                    </div>  
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="5" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

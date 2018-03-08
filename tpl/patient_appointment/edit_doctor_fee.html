@@ -1,0 +1,77 @@
+<div ng-controller="PatientAppointmentController" ng-init="initCanEditDoctorFee();
+                initChangeStatusForm();">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Edit Doctor Fee</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-if="data.PatAppointment.dummy_status == 'S';">
+                <form name ="patientAppointmentChangeStatusForm" class="form-horizontal form-validation" novalidate="">
+                    <input type="hidden" class="form-control" data-ng-model="data.PatAppointment.appt_id" />
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Status</label>
+                                <div class="col-sm-9"> Completed </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Status Timing * </label>
+                                <div class="col-sm-9">
+                                    <div class="input-group w-md">
+                                        <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" data-ng-model="data.PatAppointment.status_date" readonly />
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            
+<!--                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Billing</label>
+                                <div class="col-sm-9">
+                                    <label class="i-checks" ng-repeat="bill_type in bill_types">
+                                        <input type="radio" checked="" value="{{bill_type.value}}" name="b" ng-model="data.PatAppointment.patient_bill_type" ng-checked="patientObj.patient_bill_type == bill_type.value" ng-click="updateFreeCharge()">
+                                        <i></i>
+                                        {{bill_type.label}}&nbsp; &nbsp;
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>-->
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Patient category * </label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" ng-model="data.PatAppointment.patient_cat_id" ng-options="charges.patient_cat_id as charges.op_dept for charges in chargesList" ng-change="updateCharge()">
+                                        <option value="">Select Category</option>
+                                    </select>
+                                    <!--{{chargeAmount}}-->
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">OP amount * </label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="data.PatAppointment.amount" maxlength="50" class="form-control" placeholder="Amount" number-mask="">
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                        </div>
+
+                        <footer class="panel-footer text-right bg-light lter">
+                            <button class="btn m-b-xs  btn-success save-btn" ng-click="changeAppointmentStatus('seen')">Save</button> &nbsp;
+                            <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.encounter', {id: $state.params.id})"><i class="fa fa-times"></i> Cancel</button>
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

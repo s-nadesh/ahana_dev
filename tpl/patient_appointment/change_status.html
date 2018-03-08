@@ -1,0 +1,24 @@
+<div ng-controller="PatientAppointmentController" ng-init="initCanSaveAppointment();initChangeStatusForm();">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Appointment change status</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <!--<a ng-click="cancelAppointment()">Cancel Appointment</a>-->
+            <div class="col-sm-12" ng-if="data.PatAppointment.dummy_status == 'B'">
+                <div ng-include="'tpl/patient_appointment/_arrived_form.html'">
+                    {% include 'tpl/patient_appointment/_arrived_form.html' %}
+                </div>
+            </div>
+            
+            <div class="col-sm-12" ng-if="data.PatAppointment.dummy_status == 'A';">
+                <div ng-include="'tpl/patient_appointment/_seen_form.html'">
+                    {% include 'tpl/patient_appointment/_seen_form.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

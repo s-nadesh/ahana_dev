@@ -1,0 +1,84 @@
+<div ng-controller="PatientAdmissionController" ng-init="initCanSaveAdmission()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Patient Clinical Discharge</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="data = {}; data.formtype = 'add';
+                            initForm();
+                            initTransferForm();
+                            data.PatAdmission.status = '1';
+                            data.PatAdmission.admission_status = 'CD';
+                            data.PatAdmission.discharge_type = 'DA'
+                 " ng-show="showForm">
+                <form name="patientAppointmentForm" class="form-horizontal form-validation" novalidate="">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Encounter</label>
+                                <div class="col-sm-9">
+                                    {{$state.params.enc_id}}
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Date of Discharge * </label>
+                                <div class="col-sm-9">
+                                    <!--{{data.PatAdmission.status_date}}-->
+                                    
+                                    <!-- Datepicker Hide -->
+                                    <div class="input-group w-md">
+                                        <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" data-ng-model="data.PatAdmission.status_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                            </div>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                            <datetimepicker data-ng-model="data.PatAdmission.status_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-before-render="dischargeBeforeRender($view, $dates, $leftDate, $upDate, $rightDate)" prevent-enter="true" />
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Discharge Type *</label>
+                                <div class="col-sm-9">
+                                    <label class="i-checks" ng-repeat="dischargeType in dischargeTypes">
+                                        <input type="radio" checked="" value="{{dischargeType.value}}" ng-model="data.PatAdmission.discharge_type">
+                                        <i></i>
+                                        {{dischargeType.label}}&nbsp; &nbsp;
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Notes  </label>
+                                <div class="col-sm-9">
+                                    <textarea type="text" class="form-control" ng-model="data.PatAdmission.notes"></textarea>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            
+                        </div>
+                        <footer class="panel-footer text-right bg-light lter">
+                            <button class="btn m-b-xs  btn-success save-btn" ng-click="saveAdmissionForm('discharge')">Save</button> &nbsp;
+                            <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.encounter', {id: $state.params.id})"> <i class="fa fa-times"></i> Cancel</button>  &nbsp;
+                        </footer>
+                    </div>
+
+
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

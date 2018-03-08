@@ -1,0 +1,102 @@
+<div ng-controller="BillingController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3"> Billing Lists</h1>
+    </div>
+    <div class="wrapper-md" ng-init="loadPatientAllBilling('Current');">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="panel panel-default">
+            <div class="row wrapper pb-10">
+                <div class="col-sm-8 m-b-xs">
+                    <button class="btn btn-sm btn-grey" ng-click="loadPatientAllBilling('Current');"> &nbsp; &nbsp; <i class="fa fa-repeat"></i>  &nbsp; &nbsp; </button>    
+                </div>
+
+                <div class="col-sm-4 text-right" ng-hide="isLoading">
+                    <select class="form-control search-dropdown" ng-model="day" ng-options="day.value as day.label for day in days">
+                        <option value="">DD</option>
+                    </select>
+                    <select class="form-control search-dropdown" ng-model="month" ng-options="month.value as month.label for month in months">
+                        <option value="">MM</option>
+                    </select>
+                    <select class="form-control search-dropdown" ng-model="year" ng-options="year.value as year.label for year in years">
+                        <option value="">YYYY</option>
+                    </select>
+                    <button class="btn m-b-xs btn-grey"  ng-disabled=" (day && month && year) ? false : true" ng-click="loadPatientAllBilling('Current', year + '-' + month + '-' + day)">
+                        &nbsp; &nbsp; <i class="fa fa-search"></i> &nbsp; &nbsp;
+                    </button>
+
+                    <button title="Clear" ng-click="day = ''; month = ''; year = '';loadPatientAllBilling('Current')" class="btn m-b-xs  btn-dark">  
+                        <i class="fa fa-times"></i> 
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive in-patient-table">
+                <table st-table="displayedCollection"  st-safe-src="rowCollection"  class="table table-striped b-t b-light">
+                    <thead>
+                        <tr>
+                            <th>Encounter ID </th>
+                            <th>Date</th>
+                            <th>Details</th>
+                            <th>Doctors Name</th>
+                            <th>Amount Paid</th>
+                            <th>Amount Pending</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-hide="isLoading">
+                        <tr ng-repeat="encounter in displayedCollection" ng-init="encounter.seen.doctor = encounter.seen.consultant_name">
+                            <td> {{encounter.encounter_id}} </td>
+                            <td class="logindeatils">
+                                <p ng-if="encounter.encounter_type == 'OP'"> 
+                                    <b> OP: </b>
+                                    {{encounter.date| moment:'DD/MM/YYYY'}} 
+                                    {{encounter.date| moment:'hh:mm A'}}
+                                </p>
+                                <p ng-if="encounter.encounter_type == 'IP'"> 
+                                    <b> Admission: </b>
+                                    {{encounter.date| moment:'DD/MM/YYYY'}} 
+                                    {{encounter.date| moment:'hh:mm A'}}
+                                </p>
+                                <p ng-if="encounter.encounter_type == 'IP'"> 
+                                    <b>Discharge: </b>
+                                    <span ng-if="encounter.discharge_date != '-'">
+                                        {{encounter.discharge_date| moment:'DD/MM/YYYY'}}
+                                        {{encounter.discharge_date| moment:'hh:mm A'}}
+                                    </span>
+                                    <span ng-if="encounter.discharge_date == '-'">
+                                        -
+                                    </span>
+                                </p>
+                            </td>
+                            <td> 
+                                <span ng-if="encounter.encounter_type == 'OP'" class="label bg-primary">{{encounter.details}}</span>
+                                <span ng-if="encounter.encounter_type == 'IP'" class="label bg-success">{{encounter.details}}</span>
+                            </td>
+                            <td> {{encounter.doctor}} </td>
+                            <td> {{(encounter.view_calculation.total_paid|| 0) | number:2 }} </td>
+                            <td> {{(encounter.view_calculation.balance|| 0) | number:2}} </td>
+                            <td>
+                                <button tooltip="View/Print Bill"  class="label bg-info dk" ng-if="encounter.encounter_type == 'IP'" ng-click="$state.go('patient.billing', {id: $state.params.id, enc_id: encounter.encounter_id})">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                                <button tooltip="Print Bill"  class="label bg-primary dk" ng-if="encounter.encounter_type == 'OP'" ng-click="printOPBill(encounter.seen)">
+                                    <i class="fa fa-print"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="6" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div ng-include="'tpl/patient_appointment/_print_op_seen_bill.html'">
+        {% include 'tpl/patient_appointment/_print_op_seen_bill.html' %}
+    </div>
+</div>

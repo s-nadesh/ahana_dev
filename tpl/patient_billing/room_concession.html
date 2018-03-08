@@ -1,0 +1,62 @@
+<div ng-controller="BillingController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Room Concession</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <form name="roomConcessionForm" class="form-horizontal form-validation" novalidate="">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Encounter # </label>
+                                <div class="col-sm-9">
+                                    {{data.encounter_id}}
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Category</label>
+                                <div class="col-sm-9">
+                                    Room Charges
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            
+                            <div class="form-group" ng-init="roomCharge = {}">
+                                <label class="col-sm-3 control-label">Amount</label>
+                                <div class="col-sm-9">
+                                    <span ng-repeat="(key, row) in recurring_charges">
+                                        <span ng-init="roomCharge.Total = roomCharge.Total + parseFloat(row.total_charge)"></span>
+                                    </span>
+                                    {{ roomCharge.Total | number:2 }}
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Concession Amount * </label>
+                                <div class="col-sm-9">
+                                    <input type="text" ng-model="data.concession_amount" maxlength="50" class="form-control" placeholder="Amount" number-mask="">
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                        </div>
+                        <footer class="panel-footer text-right bg-light lter">
+                            <button class="btn m-b-xs  btn-success save-btn" ng-click="saveRoomConcession()">Save</button>
+                            &nbsp;
+                            <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.billing', {id: $state.params.id})"><i class="fa fa-times"></i> Cancel</button>
+                            &nbsp;
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

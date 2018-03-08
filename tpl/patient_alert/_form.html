@@ -1,0 +1,26 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Alert Type * </label>
+            <div class="col-sm-9">
+                <select class="form-control" ng-model="data.alert_id" ng-options="alert.alert_id as alert.alert_name for alert in alerts | orderBy: alert_name">
+                    <option value="">Select Alert</option>
+                </select>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Alert Name * </label>
+            <div class="col-sm-9">
+                <input type="text" ng-model="data.alert_description" maxlength="50" class="form-control" placeholder="Alert Name">
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.alert', {id: $state.params.id})"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

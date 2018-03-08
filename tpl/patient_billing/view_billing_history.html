@@ -1,0 +1,50 @@
+<div ng-controller="BillingController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">View Billing History</h1>
+    </div>
+
+    <div class="wrapper-md" ng-init="loadBillingHistory();">
+        <div class="panel panel-default">
+            <div class="row wrapper pb-10">
+                <div class="col-sm-9 m-b-xs">
+                    <button class="btn btn-sm btn-grey" ng-click="loadBillingHistory();"> &nbsp; &nbsp; 
+                        <i class="fa fa-repeat"></i>  &nbsp; &nbsp; 
+                    </button>    
+                </div>
+                <div class="col-sm-3 text-right">
+                    <button class="btn btn-sm btn-dark"  ng-click="$state.go('patient.billing', {id: $state.params.id})"> 
+                        <i class="fa fa-arrow-left"></i> Back
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive in-patient-table">
+                <table st-table="displayedCollection"  st-safe-src="rowCollection"  class="table table-striped b-t b-light">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Charge Type</th>
+                            <th>Category</th>
+                            <th>Activity</th>
+                            <th>Activity By</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-hide="isLoading">
+                        <tr ng-repeat="log in displayedCollection">
+                            <td> {{log.date_time}} </td>
+                            <td> {{log.log_type_name}} </td>
+                            <td> {{log.header}} </td>
+                            <td> {{log.activity}} </td>
+                            <td> {{log.activity_by}} </td>
+                        </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="5" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

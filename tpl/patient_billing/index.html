@@ -1,0 +1,575 @@
+<div ng-controller="BillingController">
+    <div class="bg-light lter b-b wrapper-md" style="width: 100%; float: left">
+        <div class="col-sm-4">
+            <h1 class="m-n h3">Billing</h1>
+        </div>
+        <div class="col-sm-8 text-right">
+            <a data-button="patient.finalize" check-access-custom class="btn btn-default btn-success" ng-show="enc.selected.finalize == '0' && enc.selected.discharge_date" ng-click="password_auth(enc.selected.encounter_id, 'finalize', '1', 'Finalize')"> <i class="fa fa-check-square-o"></i> Finalize</a>
+            <a data-button="patient.unfinalize" check-access-custom class="btn btn-default btn-dark" ng-show="enc.selected.authorize == '0' && enc.selected.finalize != '0' && enc.selected.discharge_date" ng-click="password_auth(enc.selected.encounter_id, 'finalize', '0', 'Unfinalize')"> <i class="fa fa-ban"></i> Unfinalize</a>
+            <a data-button="patient.authorize" check-access-custom class="btn btn-default btn-success" ng-show="enc.selected.finalize != '0' && enc.selected.authorize == '0' && enc.selected.discharge_date" ng-click="password_auth(enc.selected.encounter_id, 'authorize', '1', 'Authorize')"> <i class="fa fa-eye"></i> Authorize</a>
+            <a data-button="patient.unathorize" check-access-custom class="btn btn-default btn-dark" ng-show="enc.selected.authorize != '0' && enc.selected.discharge == '0' && enc.selected.discharge_date" ng-click="password_auth(enc.selected.encounter_id, 'authorize', '0', 'Unauthorize')"> <i class="fa fa-eye-slash"></i> Unauthorize</a>
+            <a data-button="patient.admindischarge" check-access-custom class="btn btn-default btn-success" ng-show="enc.selected.authorize != '0' && enc.selected.discharge == '0' && enc.selected.discharge_date" ng-click="password_auth(enc.selected.encounter_id, 'discharge', '1', 'Administrative Discharge')"> <i class="fa fa-home"></i> Administrative Discharge</a>
+            <a data-button="patient.refundamount" class="btn btn-default btn-success" ng-show="enc.selected.encounter_status == '0' && billing_total_balance < 0" ng-click="refundAmount(enc.selected.encounter_id, 'discharge', '1', 'Administrative Discharge')"> <i class="fa fa-plus"></i> Add Refund Amount</a>
+            <button check-access-button ng-click="$state.go('patient.viewBillingHistory', {id: $state.params.id, enc_id: enc.selected.encounter_id})" class="btn btn-sm btn-info">
+                <i class="fa fa-file-text"></i> &nbsp; View Billing History
+            </button>
+            <button class="btn btn-sm btn-primary"  ng-click="openPrintBill('lg')"> 
+                <i class="fa fa-print"></i> Print Bill
+            </button>
+            <button class="btn btn-sm btn-dark"  ng-click="$state.go('patient.allbilling', {id: $state.params.id})"> 
+                <i class="fa fa-arrow-left"></i> Back
+            </button>
+        </div>
+    </div>
+    <div class="wrapper-md p-b" ng-if="charge_alerts.length > 0 && enc.selected.finalize == '0'">
+        <div class="alert ng-isolate-scope alert-danger alert-dismissable">
+            <h4>Implement changes in pricing structure for recurring charges ?</h4>
+            <div style="height: 25px;" ng-repeat="(key, alert) in charge_alerts">
+                <b>{{alert.charge_item}} ({{alert.room_type}})</b> @ <b>{{alert.charge}}</b> from <b>{{alert.from_date}}</b> to <b>{{alert.org_to_date}} </b> &nbsp;&nbsp;
+                <button class="btn btn-sm btn-primary btn-rounded badge" ng-click="changeRoomChargeHistory('apply', alert)">Yes</button>
+                <button class="btn btn-sm btn-rounded btn-dark badge" ng-click="changeRoomChargeHistory('cancel', alert)">No</button><br />
+            </div>
+        </div>
+    </div>
+    <div ng-show="encounters.length > 0">
+        <div class="wrapper-md p-b">
+            <div ng-include="'tpl/blocks/alert.html'">
+                {% include 'tpl/blocks/alert.html' %}
+            </div>
+            <div class="panel panel-default m-b billing-panel">
+                <div class="panel-heading font-bold"> <i class="fa fa-medkit"></i> Billing Details</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group" ng-show="enc.selected.bill_no">
+                                <div class="row">  
+                                    <div class="col-sm-5">  <b> Bill No:</b>   </div>
+                                    <div class="col-sm-7"> {{enc.selected.bill_no}}</div>
+                                </div> 
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-sm-5 control-label"> <b> Encounter ID </b> </label>
+                                    <div class="col-sm-5">
+                                        <div class="btn-group btn-group-justified">
+                                            <ui-select ng-model="enc.selected" theme="bootstrap">
+                                                <ui-select-match placeholder="Select">{{$select.selected.encounter_id}}</ui-select-match>
+                                                <ui-select-choices repeat="item in encounters | filter: $select.search | orderBy: 'encounter_id' : true">
+                                                    <div ng-bind-html="item.encounter_id | highlight: $select.search"></div>
+                                                </ui-select-choices>
+                                            </ui-select>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">  
+                                    <div class="col-sm-5">  <b>Admission Date:</b>   </div>
+                                    <div class="col-sm-7"> {{enc.selected.encounter_date| moment:'DD/MM/YYYY - hh:mm A'}} </div>
+                                </div> </div>
+                            <div class="form-group">
+                                <div class="row">  
+                                    <div class="col-sm-5">  <b> Discharge Date:</b>   </div>
+                                    <div class="col-sm-7" ng-show="enc.selected.discharge_date"> {{enc.selected.discharge_date| moment:'DD/MM/YYYY - hh:mm A'}}</div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-sm-5">  <b>Stay Duration :</b>   </div>
+                                    <div class="col-sm-7">  {{enc.selected.stay_duration}}  </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-5">  <b>Room Discount :</b>   </div>
+                                    <div class="col-sm-7"> <span class="label bg-light dk"> {{enc.selected.concession_amount| number:2}} </span> </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-5">  <b>Other Discount :</b>   </div>
+                                    <div class="col-sm-7"> <span class="label bg-light dk"> {{billing.total.concession|| "0" | number:2}} </span> </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-5">  <b>Total Discount :</b>   </div>
+                                    <div class="col-sm-7"> <span class="label bg-light dk"> {{billing.discount = billing.total.concession + parseFloat(enc.selected.concession_amount) | number:2}} </span> </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <div class="col-sm-5">  <b>Total Amount : </b>   </div>
+                                <div class="col-sm-7"> 	<span class="label bg-dark"> {{billing.total_price = (billing.total.price + recurr_billing.total.recurring_total + billing.total.concession + recurr_billing.total_pharmacy.recurring_total) | number:2}} </span> </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-5">  <b>Total Discount :</b>   </div>
+                                <div class="col-sm-7"> <span class="label bg-light dk"> {{billing.discount = billing.total.concession + parseFloat(enc.selected.concession_amount) | number:2}} </span> </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-5">  <b>Amount Paid : </b>   </div>
+                                <div class="col-sm-7"> 
+                                    <span ng-hide="true">{{billing_total_paid = billing.total.advance_charge + recurr_billing.total_pharmacy.recurring_total_paid}}</span> 
+                                    <span class="label bg-success">{{billing_total_paid||'0' | number:2}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-5">  <b>Amount Payable : </b>   </div>
+                                <span ng-hide="true">{{billing_total_balance = (billing.total_price) - (billing_total_paid + billing.discount - parseFloat(refund_amount))}}</span>
+                                <div class="col-sm-7"> <span class="label bg-danger">{{billing_total_balance| number:2}}</span> </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper-md p-b">
+            <div class="panel panel-default m-b">
+                <div class="panel-heading no-border bg-primary"> <i class="fa fa-medkit"></i> Recurring Charges</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <a check-access-button class="btn btn-default" ng-show="enc.selected.finalize == '0'" ng-click="$state.go('patient.roomConcession', {id: $state.params.id, encounter_id: enc.selected.encounter_id})"> <i class="fa fa-plus-square"></i> &nbsp;Room Concession</a>
+                        <span class="pull-right"> <b> Concession amount : </b><span class="label bg-success"> {{enc.selected.concession_amount| number:2}} </span></span>
+                    </div>
+                    <div class="m-b-sm">
+                    </div>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table" ng-init="recurr_billing.total = {}">
+                        <tr>
+                            <th>Item</th>
+                            <th>Branch</th>
+                            <th>Charge</th>
+                            <th>Bed Type</th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>	Stay Duration</th>
+                            <th align="right" style="text-align:right;">Total Charge</th>
+                        </tr>
+                        <tr ng-repeat="(key, row) in recurring_charges | orderBy:'from_date'">
+                            <td>{{row.charge_item}} </td>
+                            <td>{{row.tenant_name}}</td>
+                            <td> {{row.charge_amount}} </td>
+                            <td> {{row.room_type}} </td>
+                            <td> {{row.from_date}} </td>
+                            <td> {{row.to_date}} </td>
+                            <td> {{row.duration}} </td>
+                            <td align="right" ng-init="row_recurring_total = getTotalRecurringPrice(row);
+                                recurr_billing.total.recurring_total = recurr_billing.total.recurring_total + row_recurring_total;
+                                "> {{row_recurring_total| number:2}} </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7">&nbsp;</td>   
+                            <td align="right">	<strong>{{recurr_billing.total.recurring_total| number:2}}</strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper-md p-b">
+            <div class="panel panel-default m-b">
+                <div class="panel-heading bg-info font-bold"> <i class="fa fa-medkit"></i> Non-recurring charges</div>
+                <div class="panel-body">
+                    <div class="form-group" ng-if="enc.selected.finalize == '0'"> 
+                        <a check-access-button ng-click="$state.go('patient.addOtherCharge', {id: $state.params.id, enc_id: enc.selected.encounter_id})" class="btn btn-default">
+                            <i class="fa fa-plus-square"></i> &nbsp; Add other charges
+                        </a>
+                        <span ng-repeat="(key, li) in more_li">
+                            <a check-access-custom2 ng-if="li.mode == 'sref'" class="btn btn-default" ui-sref="{{li.href}}"><i class="{{li.i_class}}"></i> &nbsp; {{li.name}}</a>
+                            <a check-access-button ng-if="li.mode == 'click'" class="btn btn-default" ng-click="{{li.href}}"><i class="{{li.i_class}}"></i> &nbsp; {{li.name}}</a>
+                        </span>
+                    </div>
+                    <div class="m-b-sm" ng-if="enc.selected.finalize == '0'"></div>
+                    <table  class="table table-striped b-t b-light">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>Category</th>
+                                <th>Branch</th>
+                                <th>Headers</th>
+                                <th>Charge</th>
+                                <th>Count</th>
+                                <th>Mode</th>
+                                <th>Charge</th>
+                                <th>Concession</th>
+                                <th>Extra</th>
+                                <th align="right" style="text-align:right;">Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-hide="isLoading" ng-init="billing.total = {}">
+                            <!-- Procedures -->
+                            <tr ng-init="expanded_1 = true;" ng-show="procedures.length > 0">
+                                <td align="center" valign="middle"></td>
+                                <td> 
+                                    <button ng-click="expanded_1 = !expanded_1" target="#moreless" ui-toggle-class="show" class="btn btn-sm btn-default hms-plus">
+                                        <i ng-if="!expanded_1" class="fa fa-plus text"></i>
+                                        <i ng-if="expanded_1" class="fa fa-minus text"></i>
+                                    </button>
+                                </td>
+                                <td colspan="10">
+                                    <b> 
+                                        <span class="badge bg-success ng-binding">Category : Procedure Charges</span> 
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr ng-show="expanded_1" ng-repeat="(key, row) in procedures">
+                                <td align="center" valign="middle"></td>
+                                <td>
+                                    <label class="i-checks m-b-none">
+                                        <input id="enc_procedure_{{key}}" class="enc_chk" type="checkbox" name="b[]" ng-click="moreOptions(key, 'procedure', row.ec_id, row.category_id, row.concession_amount, row.extra_amount)"><i></i>
+                                    </label>
+                                </td>
+                                <td>{{row.category}} </td>
+                                <td>{{row.tenant_name}}</td>
+                                <td> {{row.headers}} </td>
+                                <td> {{row.charge}} </td>
+                                <td> {{row.visit_count}} </td>
+                                <td> {{row.trans_mode}} </td>
+                                <td ng-init="billing.total.charge = billing.total.charge + parseFloat(row.total_charge);
+                                    "> {{row.total_charge}} </td>
+                                <td ng-init="billing.total.concession = billing.total.concession + parseFloat(row.concession_amount);
+                                    "> {{row.concession_amount}} </td>
+                                <td ng-init="billing.total.extra = billing.total.extra + parseFloat(row.extra_amount);
+                                    "> {{row.extra_amount}} </td>
+                                <td align="right" ng-init="row_total = getTotalPrice(row);
+                                    billing.total.price = billing.total.price + row_total;
+                                    "> {{row_total| number:2}} </td>
+                            </tr>
+                            <!-- Consultants -->
+                            <tr ng-init="expanded_2 = true;" ng-show="consultants.length > 0">
+                                <td align="center" valign="middle"></td>
+                                <td> 
+                                    <button ng-click="expanded_2 = !expanded_2" target="#moreless" ui-toggle-class="show" class="btn btn-sm btn-default hms-plus">
+                                        <i ng-if="!expanded_2" class="fa fa-plus text"></i>
+                                        <i ng-if="expanded_2" class="fa fa-minus text"></i>
+                                    </button>
+                                </td>
+                                <td colspan="10">
+                                    <b> 
+                                        <span class="badge bg-success ng-binding">Category : Professional Charges</span> 
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr ng-show="expanded_2" ng-repeat="(key, row) in consultants">
+                                <td align="center" valign="middle"></td>
+                                <td>
+                                    <label class="i-checks m-b-none">
+                                        <input id="enc_consultant_{{key}}" class="enc_chk" type="checkbox" name="b[]" ng-click="moreOptions(key, 'consultant', row.ec_id, row.category_id, row.concession_amount, row.extra_amount)"><i></i>
+                                    </label>
+                                </td>
+                                <td>{{row.category}} </td>
+                                <td>{{row.tenant_name}}</td>
+                                <td> {{row.headers}} </td>
+                                <td> {{row.charge}} </td>
+                                <td> {{row.visit_count}} </td>
+                                <td> {{row.trans_mode}} </td>
+                                <td ng-init="billing.total.charge = billing.total.charge + parseFloat(row.total_charge);
+                                    "> {{row.total_charge}} </td>
+                                <td ng-init="billing.total.concession = billing.total.concession + parseFloat(row.concession_amount);
+                                    "> {{row.concession_amount}} </td>
+                                <td ng-init="billing.total.extra = billing.total.extra + parseFloat(row.extra_amount);
+                                    "> {{row.extra_amount}} </td>
+                                <td align="right" ng-init="row_total = getTotalPrice(row);
+                                    billing.total.price = billing.total.price + row_total;
+                                    "> {{row_total| number:2}} </td>
+                            </tr>
+                            <!-- Other Charges -->
+                            <tr ng-init="expanded_3 = true;" ng-show="other_charges.length > 0">
+                                <td align="center" valign="middle"></td>
+                                <td> 
+                                    <button ng-click="expanded_3 = !expanded_3" target="#moreless" ui-toggle-class="show" class="btn btn-sm btn-default hms-plus">
+                                        <i ng-if="!expanded_3" class="fa fa-plus text"></i>
+                                        <i ng-if="expanded_3" class="fa fa-minus text"></i>
+                                    </button>
+                                </td>
+                                <td colspan="10">
+                                    <b> 
+                                        <span class="badge bg-success ng-binding">Category : Other Charges</span> 
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr ng-show="expanded_3" ng-repeat="(key, row) in other_charges">
+                                <td align="center" valign="middle"></td>
+                                <td>
+                                    <label class="i-checks m-b-none">
+                                        <input id="enc_other_{{key}}" class="enc_chk" type="checkbox" name="b[]" ng-click="moreOptions(key, 'other', row.other_charge_id)"><i></i>
+                                    </label>
+                                </td>
+                                <td>{{row.category}} </td>
+                                <td>{{row.tenant_name}}</td>
+                                <td> {{row.headers}} </td>
+                                <td> {{row.charge}} </td>
+                                <td> {{row.visit_count}} </td>
+                                <td> {{row.trans_mode}} </td>
+                                <td ng-init="billing.total.charge = billing.total.charge + parseFloat(row.total_charge);
+                                    "> {{row.total_charge}} </td>
+                                <td> {{row.concession_amount}} </td>
+                                <td> {{row.extra_amount}} </td>
+                                <td align="right" ng-init="row_total = getTotalPrice(row);
+                                    billing.total.price = billing.total.price + row_total;
+                                    "> {{row_total| number:2}} </td>
+                            </tr>
+                            <tr>
+                                <td align="center" valign="middle"></td>
+                                <td colspan="7" class="text-right"></td>
+                                <td><strong>{{billing.total.charge| number:2}}</strong></td>
+                                <td><strong>{{billing.total.concession| number:2}}</strong></td>
+                                <td><strong>{{billing.total.extra| number:2}}</strong></td>
+                                <td align="right"><strong>{{billing.total.price| number:2}}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper-md p-b" ng-if="pharmacy_charge.length > 0">
+            <div class="panel panel-default m-b">
+                <div class="panel-heading no-border bg-primary"> <i class="fa fa-medkit"></i> Pharmacy Charges</div>
+                <div class="panel-body" ng-init="pharmacy = {}">
+                    <div class="form-group">
+                        <span class="pull-right"> <b> Total Pending Amount : </b><span class="label bg-danger"> {{pharmacy.total| number:2}} </span></span>
+<!--                        <span class="pull-right"> <b> Total Paid Amount : </b><span class="label bg-success"> {{pharmacy.total_paid| number:2}} </span></span>-->
+                    </div>
+                    <div class="m-b-sm">
+                    </div>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table" ng-init="recurr_billing.total_pharmacy = {}">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Bill No</th>
+                            <th>Date</th>
+                            <th>Payment Type</th>
+                            <th>Amount</th>
+                            <th>Payment Status</th>
+                            <th style="text-align:right;" align="right">Pending Amount</th>
+                        </tr>
+                        <tr ng-repeat="(key, row) in pharmacy_charge | orderBy:'sale_id'">
+                            <td>{{key + 1}}</td>
+                            <td>{{row.bill_no}}<span ng-if="row.tenant_id != logged_tenant_id"> ({{row.branch_name}}) </span></td>
+                            <td>{{row.sale_date| moment:'DD/MM/YYYY'}}</td>
+                            <td>{{row.bill_payment}}</td>
+                            <td>{{row.bill_amount}}</td>
+                            <td>{{row.billings_total_balance_amount == '0.00' ? 'Paid' : 'Pending'}}</td>
+                            <td align="right" 
+                                ng-init="pharmacy.total = pharmacy.total + parseFloatIgnoreCommas(row.billings_total_balance_amount);
+                                    pharmacy.total_paid = pharmacy.total_paid + parseFloatIgnoreCommas(row.billings_total_paid_amount_using_pharmacy);
+                                    recurr_billing.total_pharmacy.recurring_total = recurr_billing.total_pharmacy.recurring_total + parseFloatIgnoreCommas(row.bill_amount);
+                                    recurr_billing.total_pharmacy.recurring_total_paid = recurr_billing.total_pharmacy.recurring_total_paid + parseFloatIgnoreCommas(row.billings_total_paid_amount_using_pharmacy);"> 
+                                {{row.billings_total_balance_amount}} </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrapper-md p-b" ng-if="pharmacy_bill.length > 0">
+            <div class="panel panel-default m-b">
+                <div class="panel-heading no-border bg-primary"> <i class="fa fa-medkit"></i> Pharmacy Bill</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <span class="pull-right"> <b> Total Paid Amount : </b><span class="label bg-success"> {{recurr_billing.total_pharmacy.recurring_total_paid| number:2}} </span></span>
+                    </div>
+                    <div class="m-b-sm">
+                    </div>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+                        <tr>
+                            <th>S.No</th>
+                            <th>Bill No</th>
+                            <th>Date</th>
+                            <th>Return Bill No</th>
+                            <th>Payment Status</th>
+                            <th style="text-align:right;" align="right">Paid Amount</th>
+                        </tr>
+                        <tr ng-repeat="(key, row) in pharmacy_bill | orderBy:'sale_billing_id'">
+                            <td>{{key + 1}}</td>
+                            <td>{{row.bill_no}}<span ng-if="row.tenant_id != logged_tenant_id"> ({{row.branch_name}}) </span></td>
+                            <td>{{row.paid_date| moment:'DD/MM/YYYY'}}</td>
+                            <td>{{row.sale_return_bill_no == '' ? '-' : row.sale_return_bill_no}}</td>
+                            <td>{{row.sale_return_bill_no == '' ? 'Payment' : 'Return'}}</td>
+                            <td align="right">{{row.paid_amount}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper-md p-b">
+            <div class="panel panel-default m-b">
+                <div class="panel-heading panel-heading bg-dark font-bold"> <i class="fa fa-medkit"></i> Payments</div>
+                <div class="panel-body">
+                    <div class="form-group" ng-if="add_payment">
+                        <a check-access-button ng-click="$state.go('patient.addPayment', {id: $state.params.id, enc_id: enc.selected.encounter_id})" class="btn btn-default">
+                            <i class="fa fa-plus-square"></i>&nbsp; Add Payment
+                        </a>
+                        <span ng-show="enc.selected.finalize == '0'" ng-if="more_advance_li.length > 0" ng-repeat="(key, li) in more_advance_li">
+                            <a check-access-custom2 ng-if="li.mode == 'sref'" ui-sref="{{li.href}}" class="btn btn-default"> <i class="{{li.i_class}}"></i> &nbsp;{{li.name}}</a>    
+                            <a check-access-custom3 ng-if="li.mode == 'click'" ng-click="{{li.href}}" class="btn btn-default" data-url='{{li.url}}'> <i class="{{li.i_class}}"></i> &nbsp;{{li.name}}</a>
+                        </span>
+                    </div>
+                    <div class="m-b-sm" ng-if="enc.selected.finalize == '0'"></div>
+                    <table  class="table table-striped b-t b-light">
+                        <thead>
+                            <tr>
+                                <th colspan="2">&nbsp;</th>
+                                <th>Category</th>
+                                <th>Branch</th>
+                                <th>Date</th>
+                                <th>Headers</th>
+                                <th>Mode</th>
+                                <th>Details</th>
+                                <th>Print Bill</th>
+                                <th align="right" style="text-align:right;">Paid Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-hide="isLoading" ng-init="billing.total = {}">
+                            <!-- Advance Charges -->
+                            <tr ng-repeat="(key, row) in advances">
+                                <td align="center" valign="middle"></td>
+                                <td>
+                                    <label class="i-checks m-b-none">
+                                        <input id="enc_advance_{{key}}" class="enc_chk" type="checkbox" name="b[]" ng-click="moreOptions(key, 'advance', row.payment_id)"><i></i>
+                                    </label>
+                                </td>
+                                <td>{{row.category}} </td>
+                                <td>{{row.tenant_name}} </td>
+                                <td>{{row.payment_date| moment:'DD/MM/YYYY HH:mm:ss'}} </td>
+                                <td> {{row.headers}} </td>
+                                <td> {{row.trans_mode}} </td>
+                                <td>
+                                    <div ng-show="row.trans_mode == 'Card'">
+                                        <p> <b> Card Type : </b>{{row.card_type}}</p>
+                                        <p> <b> Card Number : </b>{{row.card_number}}</p>
+                                    </div>
+                                    <div ng-show="row.trans_mode == 'Cheque'">
+                                        <p> <b> Bank Name : </b>{{row.bank_name}}</p>
+                                        <p> <b> Cheque Number : </b>{{row.bank_number}}</p>
+                                        <p> <b> Date : </b>{{row.bank_date}}</p>
+                                    </div>
+                                    <div ng-show="row.trans_mode == 'Online'">
+                                        <p> <b> Bank Name : </b>{{row.bank_name}}</p>
+                                        <p> <b> Ref No : </b>{{row.ref_no}}</p>
+                                        <p> <b> Date : </b>{{row.bank_date}}</p>
+                                    </div>
+                                    <div ng-show="row.trans_mode == 'Cash'"> - </div> 
+                                </td>
+                                <td>                             
+                                    <button class="btn btn-sm btn-primary" ng-click="setVoucher(row, 'voucherPrint')">
+                                        <i class="fa fa-print"></i>
+                                    </button>
+                                </td>
+                                <td align="right" ng-init="row_total = parseFloat(row.total_charge);
+                                    billing.total.advance_charge = billing.total.advance_charge + row_total;
+                                    "> {{row_total| number:2}} 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" valign="middle"></td>
+                                <td colspan="8">&nbsp;</td>
+                                <td align="right"><strong>{{billing.total.advance_charge| number:2}}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Refund Charges -->
+        <div ng-show="refund" class="wrapper-md p-b">
+            <div class="panel panel-default m-b">
+                <div class="panel-heading panel-heading bg-dark font-bold"> <i class="fa fa-medkit"></i> Refund Payments</div>
+                <div class="panel-body">
+                    <table  class="table table-striped b-t b-light">
+                        <thead>
+                            <tr>
+                                <th colspan="2">&nbsp;</th>
+                                <th>Category</th>
+                                <th>Date</th>
+                                <th>Mode</th>
+                                <th>Details</th>
+                                <th>Print Bill</th>
+                                <th align="right" style="text-align:right;">Refund Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-hide="isLoading">
+                            <!-- Refund Charges -->
+                            <tr>
+                                <td align="center" valign="middle"></td>
+                                <td></td>
+                                <td>Refund Charge</td>
+                                <td>{{refund.refund_date| moment:'DD/MM/YYYY HH:mm:ss'}} </td>
+                                <td> 
+                                    <p ng-show="refund.payment_mode == 'CA'">Cash</p>
+                                    <p ng-show="refund.payment_mode == 'CD'">Card</p>
+                                    <p ng-show="refund.payment_mode == 'ON'">Online</p>
+                                    <p ng-show="refund.payment_mode == 'CH'">Cheque</p>
+                                </td>
+                                <td>
+                                    <div ng-show="refund.payment_mode == 'CD'">
+                                        <p> <b> Card Type : </b>{{refund.card_type}}</p>
+                                        <p> <b> Card Number : </b>{{refund.card_number}}</p>
+                                    </div>
+                                    <div ng-show="refund.payment_mode == 'CH'">
+                                        <p> <b> Bank Name : </b>{{refund.bank_name}}</p>
+                                        <p> <b> Cheque Number : </b>{{refund.cheque_number}}</p>
+                                        <p> <b> Date : </b>{{refund.bank_date}}</p>
+                                    </div>
+                                    <div ng-show="refund.payment_mode == 'ON'">
+                                        <p> <b> Bank Name : </b>{{refund.bank_name}}</p>
+                                        <p> <b> Ref No : </b>{{refund.ref_no}}</p>
+                                        <p> <b> Date : </b>{{refund.bank_date}}</p>
+                                    </div>
+                                    <div ng-show="refund.trans_mode == 'CA'"> - </div> 
+                                </td>
+                                <td>                             
+                                    <button class="btn btn-sm btn-primary" ng-click="setVoucher(refund, 'refundvoucherPrint'); increasePrintCount();">
+                                        <i class="fa fa-print"></i>
+                                    </button>
+                                </td>
+                                <td align="right"> {{refund.refund_amount| number:2}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrapper-md p-b">
+            <div class="panel panel-default m-b">
+                <div class="panel-heading panel-heading bg-dark font-bold"> 
+                    <i class="fa fa-file"></i> Notes
+                </div>
+                <div class="panel-body">
+                    <textarea ng-model="enc.selected.bill_notes" class="form-control" placeholder="Notes"></textarea>
+                    <span class="text-danger" ng-show="notes_error">Enter Billing Notes !!! </span>
+                    <footer class="panel-footer text-right">
+                        <button ng-click="saveBillNotes()" class="btn m-b-xs  btn-success save-btn">Save</button>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id='voucherPrint' class="hide">
+        <div ng-include="'tpl/patient_billing/_voucher_print.html'">
+            {% include 'tpl/patient_billing/_voucher_print.html' %}
+        </div>
+    </div>
+
+    <div id='refundvoucherPrint' class="hide">
+        <div ng-include="'tpl/patient_billing/_refund_voucher_print.html'">
+            {% include 'tpl/patient_billing/_refund_voucher_print.html' %}
+        </div>
+    </div>
+
+    <div class="wrapper-md p-b" ng-show="encounters.length == 0">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="panel panel-default m-b">
+            <div class="panel-heading font-bold"> <i class="fa fa-medkit"></i> Billing Details</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        No Encounters Found
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

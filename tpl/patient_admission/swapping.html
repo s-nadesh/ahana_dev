@@ -1,0 +1,129 @@
+<div ng-controller="PatientAdmissionController" ng-init="initCanSwapAdmission()" ng-show="showForm">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Patient Transfer (Swapping)</h1>
+    </div>
+    <div class="wrapper-md" ng-init="data = {}; data.formtype = 'add';
+                    initSwappingForm();
+                    data.PatAdmission.status = '1';
+                    data.PatAdmission.admission_status = 'TR';
+                    data.PatAdmission.swapEncounterId = null
+         ">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <form name="patientAppointmentForm" class="form-horizontal form-validation" novalidate="">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Encounter</label>
+                                <div class="col-sm-9">
+                                    {{$state.params.enc_id}}
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Date of Transfer * </label>
+                                <div class="col-sm-9">
+                                    <div class="input-group w-md">
+                                        <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" data-ng-model="data.PatAdmission.status_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                            </div>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                            <datetimepicker data-ng-model="data.PatAdmission.status_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" />
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Current Bed  </label>
+                                <div class="col-sm-9">
+                                    {{activeEncounter.currentAdmission.room.ward_detail.floor_name + ' > ' + activeEncounter.currentAdmission.room.ward_detail.ward_name + ' > ' + activeEncounter.currentAdmission.room.bed_name}}
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Target Bed * </label>
+                                <div class="col-sm-5" ng-show="roomList.length > 0">
+                                    <select ng-show="roomList.length > 0" class="form-control" ng-change="setSwappingDetails()" ng-model="data.PatAdmission.swapEncounterId" ng-options="room.value as room.label for room in roomList | orderBy: label">
+                                        <option value="">Select Bed</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-9" ng-show="roomList.length == 0">
+                                    No Active Beds
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row" ng-show="data.PatAdmission.swapEncounterId !== null">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-12 text-center">
+                                    <h4>Bed No: {{data.PatAdmission.swapRoom}}</h4>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Patient</label>
+                                <div class="col-sm-9">
+                                    {{activeEncounter.patient.fullname}}
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Bed Type * </label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" ng-model="data.PatAdmission.swapRoomTypeId" ng-options="roomType.room_type_id as roomType.room_type_name for roomType in availableRoomtypes2 | orderBy: room_type_name">
+                                        <option value="">Select Bed Type</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-12 text-center">
+                                    <h4>Bed No: {{activeEncounter.currentAdmission.room.bed_name}}</h4>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Patient </label>
+                                <div class="col-sm-9">
+                                    {{data.PatAdmission.swapPatientName}}
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Bed Type * </label>
+                                <div class="col-sm-9">
+                                    <select class="form-control" ng-model="data.PatAdmission.room_type_id" ng-options="roomType.room_type_id as roomType.room_type_name for roomType in availableRoomtypes | orderBy: room_type_name">
+                                        <option value="">Select Bed Type</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <footer class="panel-footer text-right bg-light lter">
+                            <button class="btn m-b-xs  btn-success save-btn" ng-click="saveAdmissionForm('swap')">Save</button> &nbsp;
+                            <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.encounter', {id: $state.params.id})"> <i class="fa fa-times"></i> Cancel</button>  &nbsp;
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

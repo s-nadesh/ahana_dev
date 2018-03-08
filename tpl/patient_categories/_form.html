@@ -1,0 +1,37 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Patient Category Name * </label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="data.patient_cat_name" maxlength="50" class="form-control" placeholder="Patient Category Name">
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Patient Short Code * </label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="data.patient_short_code" maxlength="50" class="form-control" placeholder="Patient Short Code">
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Color Picker *</label>
+
+            <div class="col-sm-8">
+                <div class="input-group m-b">
+                    <span class="input-group-addon" style="background-color:{{data.patient_cat_color}};">&nbsp;</span>
+                    <input colorpicker type="text" ng-model="data.patient_cat_color" maxlength="50" class="form-control" placeholder="Patient Category Color" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.patientCategories')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

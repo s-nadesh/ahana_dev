@@ -1,0 +1,90 @@
+<div id="Getprintval" ng-hide="1">
+    <div style="text-align: center"><b>OP BILL</b></div>
+    <div class="invoice-details3">
+        <table width="100%" border="0" align="right" cellpadding="0" cellspacing="0" class="purchase-list-tab purchase-list-tab2 ">
+            <tr>
+                <th align="left">Patient Name :</th>
+                <td align="left">{{patientObj.fullname}}</td>
+            </tr>
+            <tr>
+                <th align="left">UHID :</th>
+                <td align="left">{{patientObj.patient_global_int_code}}</td>
+            </tr>
+            <tr>
+                <th align="left">Age / Sex :</th>
+                <td align="left">{{patientObj.patient_age_ym}} / {{app.patientDetail.patientSex}} </td>
+            </tr>
+        </table>
+    </div>
+    <div class="invoice-details1 invoice-details2">
+        <table width="100%" border="0" align="right" cellpadding="0" cellspacing="0" class="purchase-list-tab purchase-list-tab2 ">  
+            <tr>
+                <th align="left">Bill No :</th>
+                <td align="left"> {{printBillData.bill_no}}</td>
+            </tr>   
+            <tr>
+                <th align="left">Bill Date :</th>
+                <td align="left"> {{printBillData.date}}</td>
+            </tr>
+            <!--            <tr>
+                            <th align="left">Organization  :  </th>
+                            <td align="left">{{patientObj.org_name}} </td>
+                        </tr>    -->
+        </table>
+    </div>
+    <div class="clearfix"></div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="purchase-list-tab">
+        <tr>
+            <th>S.No</th>
+            <th>Service</th>
+            <th>Description</th>
+            <th>Amount</th>         
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Professional Charges</td>
+            <td>{{printBillData.doctor}}</td>
+            <td align="right">{{ (printBillData.op_amount > 0) ? printBillData.op_amount : "-"}}</td>
+        </tr>
+        <tr ng-repeat="(key, proce) in printBillData.procedure">
+            <td>{{key + 2}}</td>
+            <td>Procedure Charges</td>
+            <td>{{proce.procedure_name}}</td>
+            <td align="right">{{ (proce.charge_amount > 0) ? proce.charge_amount : "-"}}</td>
+        </tr>
+        <tr>
+            <td colspan="4" align="right">
+                <b>Bill Total:</b> {{printBillData.op_bill_total | number:2}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" align="right">
+                Amount paid: {{printBillData.op_bill_total | number:2}}
+            </td>
+        </tr>
+    </table>
+
+    <p></p>
+
+    <div class="invoice-details3">
+        <table width="100%" border="0" align="right" cellpadding="0" cellspacing="0" class="purchase-list-tab purchase-list-tab2 ">
+            <tr>
+                <td>
+                    <p ng-if="printBillData.op_bill_total > 0">Payment Mode : {{printBillData.payment_mode}} <strong> ( {{printBillData.op_bill_total | number:2}} )</strong> </p>     
+                    <p ng-if="printBillData.op_bill_total > 0"><strong> {{printBillData.op_bill_total | words}} Rupees Only.</strong></p>  
+                </td>
+            </tr>   
+        </table>
+    </div>
+    <div class="invoice-details1 invoice-details2">
+        <table width="100%" border="0" align="right" cellpadding="0" cellspacing="0" class="purchase-list-tab purchase-list-tab2 ">  
+            <tr>
+                <td>
+                    <p style="text-align: center;">For {{patientObj.org_name}}</p>
+                    <p>&nbsp;</p>
+                    <p style="text-align: center;">Authorized signatory</p>
+                </td>
+            </tr> 
+        </table>
+    </div>
+</div>

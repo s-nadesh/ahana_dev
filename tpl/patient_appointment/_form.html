@@ -1,0 +1,83 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Mode</label>
+            <div class="col-sm-9">
+                <label class="i-checks"><input type="radio" name="z" value="OP" checked="" disabled=""><i></i>OP&nbsp; &nbsp;</label>
+                <label class="i-checks"><input type="radio" name="z" value="IP" ng-click="loadbar('show');
+                        $state.go('patient.admission', {id: $state.params.id})"><i></i>IP&nbsp; &nbsp;</label>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Case sheet no * </label>
+            <div class="col-sm-9">
+                <input type="text" ng-model="data.PatEncounter.add_casesheet_no" class="form-control" placeholder="" ng-if="patientObj.activeCasesheetno == null">
+                <input type="text" readonly ng-value="patientObj.activeCasesheetno" class="form-control" placeholder="" ng-if="patientObj.activeCasesheetno != null">
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Consultant * </label>
+            <div class="col-sm-9">
+                <select class="form-control" ng-model="data.consultant_id" ng-options="doctor.user_id as doctor.fullname for doctor in doctors | orderBy: name" ng-change="getTimeOfAppointment();">
+                    <option value="">Select Consultant</option>
+                </select>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Date of Appointment * </label>
+            <div class="col-sm-9">
+                <div class="input-group w-md">
+                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.status_date" is-open="$parent.opened" datepicker-options="dateOptions" close-text="Close"  min-date="minDate" ng-change="getTimeOfAppointment();" prevent-enter="true"/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Time of Appointment * </label>
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <select ng-model="data.status_time" class="form-control" ng-disabled="timeslotloader">
+                            <option value="" selected="">Select Time</option>
+                            <option style="color: {{timeslot.color}}" ng-repeat="timeslot in timeslots" value="{{timeslot.time}}" ng-disabled="{{timeslot.disable}}">
+                                {{timeslot.slot_12hour}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2" ng-if="timeslotloader">
+                        <i class="fa fa-spin fa-spinner"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Status * </label>
+            <div class="col-sm-9">
+                <label class="i-checks" ng-repeat="appt_status_list in appt_status_lists">
+                    <input type="radio" checked="" value="{{appt_status_list.value}}" name="b" ng-model="data.appt_status" ng-change="setTimeOfAppointment();">
+                    <i></i>
+                    {{appt_status_list.label}}&nbsp; &nbsp;
+                </label>
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm('add')">Save</button> &nbsp;
+        <!--        <button class="btn m-b-xs  btn-default"> Register & Book an appoinment</button>  &nbsp;-->
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.encounter', {id: $state.params.id});"> <i class="fa fa-times"></i> Cancel</button>  &nbsp;
+    </footer>
+</div>
+
+

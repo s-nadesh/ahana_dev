@@ -1,0 +1,243 @@
+<form name ="patientAppointmentChangeStatusForm" class="form-horizontal form-validation" novalidate="">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Status</label>
+                <div class="col-sm-9"> Seen </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Status Timing * </label>
+                <div class="col-sm-9">
+                    <div class="input-group w-md">
+                        <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                            <div class="input-group">
+                                <input type="text" class="form-control" data-ng-model="data.PatAppointment.status_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <datetimepicker data-ng-model="data.PatAppointment.status_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-on-set-time="onTimeSet(newDate, oldDate)"/>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+
+            <!--            <div class="form-group">
+                            <label class="col-sm-3 control-label">Billing</label>
+                            <div class="col-sm-9">
+                                <label class="i-checks" ng-repeat="bill_type in bill_types">
+                                    <input type="radio" checked="" value="{{bill_type.value}}" name="b" ng-model="data.PatAppointment.patient_bill_type" ng-checked="patientObj.patient_bill_type == bill_type.value" ng-click="updateFreeCharge()">
+                                    <i></i>
+                                    {{bill_type.label}}&nbsp; &nbsp;
+                                </label>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>-->
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Patient category * </label>
+                <div class="col-sm-9">
+                    <select class="form-control" ng-model="data.PatAppointment.patient_cat_id" ng-options="charges.patient_cat_id as charges.op_dept for charges in chargesList" ng-change="updateCharge()">
+                        <option value="">Select Category</option>
+                    </select>
+                    <!--{{chargeAmount}}-->
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">OP amount * </label>
+                <div class="col-sm-9">
+                    <input type="text" ng-model="data.PatAppointment.amount" maxlength="50" class="form-control" placeholder="Amount" number-mask="">
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Payment Mode *</label>
+                <div class="col-sm-9">
+                    <label class="i-checks" ng-repeat="paymentMode in paymentModes">
+                        <input type="radio" checked="" value="{{paymentMode.value}}" ng-model="data.PatAppointment.payment_mode">
+                        <i></i>
+                        {{paymentMode.label}}&nbsp; &nbsp;
+                    </label>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+
+            <!-- CARD -->
+            <div ng-show="data.PatAppointment.payment_mode == 'CD'">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Card Type *</label>
+                    <div class="col-sm-9">
+                        <select class="form-control" ng-model="data.PatAppointment.card_type" ng-options="cardType.value as cardType.label for cardType in cardTypes| orderBy: label">
+                            <option value="">Select Card Type</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Card Number *<br><em class="text-muted">(Last 4 Digits)</em></label>
+                    <div class="col-sm-9">
+                        <input type="text" ui-mask="9999" ng-model="data.PatAppointment.card_number" placeholder="XXXX" class="form-control m-b">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+            </div>
+
+            <!-- Cheque -->
+            <div ng-show="data.PatAppointment.payment_mode == 'CH'">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Bank Name *</label>
+                    <div class="col-sm-9">
+                        <input type="text" ng-model="data.PatAppointment.bank_name" maxlength="100" class="form-control" placeholder="Bank Name">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Cheque Number *</label>
+                    <div class="col-sm-9">
+                        <input type="text" ng-model="data.PatAppointment.bank_number" maxlength="100" class="form-control" placeholder="Cheque Number">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Date *</label>
+                    <div class="col-sm-9">
+                        <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                            <div class="input-group">
+                                <input type="text" class="form-control" data-ng-model="data.PatAppointment.bank_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <datetimepicker data-ng-model="data.PatAppointment.bank_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown3' }" data-on-set-time="onTimeSet(newDate, oldDate)"/>
+                        </ul>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+            </div>
+
+            <!-- Online -->
+            <div ng-show="data.PatAppointment.payment_mode == 'ON'">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Bank Name *</label>
+                    <div class="col-sm-9">
+                        <input type="text" ng-model="data.PatAppointment.bank_name" maxlength="100" class="form-control" placeholder="Bank Name">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Ref No *</label>
+                    <div class="col-sm-9">
+                        <input type="text" ng-model="data.PatAppointment.ref_no" maxlength="100" class="form-control" placeholder="Ref No">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Date *</label>
+                    <div class="col-sm-9">
+                        <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                            <div class="input-group">
+                                <input type="text" class="form-control" data-ng-model="data.PatAppointment.bank_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <datetimepicker data-ng-model="data.PatAppointment.bank_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown3' }" data-on-set-time="onTimeSet(newDate, oldDate)"/>
+                        </ul>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Future appointment section START-->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">Future Appointment</h4>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Consultant </label>
+                <div class="col-sm-9">
+                    <select class="form-control" ng-model="data.PatAppointment.future_consultant_id" ng-options="doctor.user_id as doctor.fullname for doctor in doctors | orderBy: name" ng-change="getTimeOfFutureAppointment();">
+                        <option value="">Select Consultant</option>
+                    </select>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Date of Appointment </label>
+                <div class="col-sm-9">
+                    <div class="input-group w-md">
+                        <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.PatAppointment.future_status_date" is-open="future.opened" close-text="Close"  min-date="minDate" ng-change="getTimeOfFutureAppointment();" prevent-enter="true"/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="futureOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Time of Appointment </label>
+                <div class="col-sm-3">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <select ng-model="data.PatAppointment.future_status_time" class="form-control" ng-disabled="timeslotloader">
+                                <option value="" selected="">Select Time</option>
+                                <option style="color: {{timeslot.color}}" ng-repeat="timeslot in timeslots" value="{{timeslot.time}}" ng-disabled="{{timeslot.disable}}">
+                                    {{timeslot.slot_12hour}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2" ng-if="timeslotloader">
+                            <i class="fa fa-spin fa-spinner"></i>
+                        </div>
+                        <div class="col-sm-4">
+                            <button class="btn m-b-xs  btn-dark" ng-click="futureClear()">
+                                <i class="fa fa-times"></i> Clear 
+                            </button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+        </div>
+    </div>
+    <!-- Future appointment section END-->
+
+    <footer class="panel-footer text-right bg-light lter">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="pull-left">
+                    <button class="btn m-b-xs  btn-primary save-print-bill" ng-click="changeAppointmentStatus('seen_print')"> <i class="fa fa-print"></i> Save and Print Bill</button>
+                    &nbsp;
+                    <!--<button class="btn m-b-xs  btn-success save-future" ng-click="changeAppointmentStatus('seen_future')">Save and Future Appointment</button> &nbsp;-->
+                </div>
+                <div class="pull-right">
+                    <button class="btn m-b-xs  btn-success save-btn" ng-click="changeAppointmentStatus('seen')">Save</button> &nbsp;
+                    <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.encounter', {id: $state.params.id})"><i class="fa fa-times"></i> Cancel</button>
+                </div>
+            </div>    
+        </div>    
+    </footer>
+</form>
+
+<div ng-include="'tpl/patient_appointment/_print_op_seen_bill.html'">
+    {% include 'tpl/blocks/_print_op_seen_bill.html' %}
+</div>
