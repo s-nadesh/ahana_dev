@@ -1,0 +1,123 @@
+<a href class="btn no-shadow navbar-btn" ng-click="app.settings.asideFolded = !app.settings.asideFolded">
+    <i class="fa {{app.settings.asideFolded ? 'fa-indent' : 'fa-dedent'}} fa-fw"></i>
+</a> 
+<ul class="nav ng-scope">
+    
+    <li class="ng-scope"> 
+        <a class="auto" href=""> 
+            <span class="pull-right text-muted"> 
+                <i class="fa fa-fw fa-angle-right text"></i> 
+                <i class="fa fa-fw fa-angle-down text-active"></i> 
+            </span> 
+            <i class="fa fa-medkit icon text-info-lter"></i> 
+            <span class="ng-binding"> Sale </span> 
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.saleCreate"> <span>Sale</span> </a> 
+            </li>
+            <!--            <li ui-sref-active="active"> 
+                            <a check-access ui-sref="pharmacy.sales"> <span>Sale List</span> </a> 
+                        </li>-->
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.saleReturnCreate"> <span>Sale Return</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.saleReturn"> <span>Sale Return List</span> </a> 
+            </li>
+        </ul>
+    </li>
+    <li class="ng-scope"> 
+        <a class="auto" href=""> 
+            <span class="pull-right text-muted"> 
+                <i class="fa fa-fw fa-angle-right text"></i> 
+                <i class="fa fa-fw fa-angle-down text-active"></i> 
+            </span> 
+            <i class="fa fa-briefcase icon text-info-lter"></i> 
+            <span class="ng-binding"> Purchase</span> 
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.purchaseCreate"> <span>Purchase</span> </a> 
+            </li>
+            <!--            <li ui-sref-active="active"> 
+                            <a check-access ui-sref="pharmacy.purchase"> <span>Purchase List</span> </a> 
+                        </li>-->
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.purchaseReturnCreate"> <span>Purchase Return</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.purchaseReturn"> <span>Purchase Return List</span> </a> 
+            </li>
+        </ul>
+    </li>
+    <li class="ng-scope"> 
+        <a class="auto" href=""> 
+            <span class="pull-right text-muted"> 
+                <i class="fa fa-fw fa-angle-right text"></i> 
+                <i class="fa fa-fw fa-angle-down text-active"></i> 
+            </span> 
+            <i class="fa fa-file-text icon text-info-lter"></i> 
+            <span class="ng-binding"> Reports </span> 
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.purchaseReport"> <span>Purchase Report</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.purchaseVatReport"> <span>Purchase GST Report</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.saleReport"> <span>Sale Report</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.saleReturnReport"> <span>Sale Return Report</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.saleVatReport"> <span>Sale GST Report</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.prescriptionRegister"> <span>Prescription Register</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.stockReport"> <span>Stock Report</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.patientoutstandingReport"> <span>Patient Outstanding Report</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.shortexpiryDrug"> <span>Short Expiry Drug</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a ui-sref="pharmacy.makepaymentReport"> <span>Make Payment Report</span> </a> 
+            </li>
+        </ul>
+    </li>
+    <li class="ng-scope"> 
+        <a class="auto" href=""> 
+            <span class="pull-right text-muted"> 
+                <i class="fa fa-fw fa-angle-right text"></i> 
+                <i class="fa fa-fw fa-angle-down text-active"></i> 
+            </span> 
+            <i class="fa fa-bar-chart-o icon text-info-lter"></i> 
+            <span class="ng-binding"> Stock Detail</span> 
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.batchDetails"> <span>Batch Details</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.stockAdjust"> <span>Stock Adjust</span> </a> 
+            </li>
+        </ul>
+    </li>
+    <li ui-sref-active="active"> 
+        <a check-access ui-sref="pharmacy.reorder"> 
+            <i class="fa fa-reorder icon text-info-lter"></i>
+            <span>Reorders</span> 
+        </a> 
+    </li>
+    <!--    <li ui-sref-active="active"> 
+            <a check-access ui-sref="pharmacy.purchase"> <span>Accounts</span> </a> 
+        </li>-->
+</ul>

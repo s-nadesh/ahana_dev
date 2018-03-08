@@ -1,0 +1,95 @@
+<a href class="btn no-shadow navbar-btn" ng-click="app.settings.asideFolded = !app.settings.asideFolded">
+    <i class="fa {{app.settings.asideFolded ? 'fa-indent' : 'fa-dedent'}} fa-fw"></i>
+</a>
+<ul class="nav ng-scope">
+    <li class="ng-scope">
+        <a class="auto" href="">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-file-text icon text-info-lter"></i>
+            <span class="ng-binding">OP Reports</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.opDoctorPay"> <span>OP Payments</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.opSummaryReport"> <span>OP Summary Report</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.opNonRecurringChargeReport"> <span>OP Non-Recurring charge Report</span> </a>
+            </li>
+        </ul>
+    </li>
+    <li class="ng-scope" ng-show="checkAccess('myworks.ipBillStatus') || checkAccess('myworks.dischargedPatientBills') || checkAccess('myworks.ipDoctorsPay')">
+        <a class="auto" href="">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-file-text icon text-info-lter"></i>
+            <span class="ng-binding"> IP Reports </span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.ipBillStatus"> <span>IP Bill Status</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.dischargedPatientBills"> <span>Discharged Patient Bills</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.ipDoctorsPay"> <span>IP Doctors Pay</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.ipincomereport"> <span>IP Income Report</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.nonrecurringChargeReport"> <span>Non-Recurring Charge Report</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.recurringChargeReport"> <span>Recurring Charge Report</span> </a>
+            </li>
+        </ul>
+    </li>
+    <li ui-sref-active="active">
+        <a check-access ui-sref="myworks.patientMerge">
+            <i class="fa fa-users icon text-info-lter"></i>
+            <span>Patients Merge</span>
+        </a>
+    </li>
+    <li ui-sref-active="active">
+        <a check-access ui-sref="myworks.audit_log">
+            <i class="fa fa-users icon text-info-lter"></i>
+            <span>Audit Log</span>
+        </a>
+    </li>
+    <li class="ng-scope" ng-show="checkAccess('myworks.addconsultation_visit') || checkAccess('myworks.addprocedure') || checkAccess('myworks.addother_charges') || checkAccess('myworks.addnotes') || checkAccess('myworks.addvitals')">
+        <a class="auto" href="">
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-file-text icon text-info-lter"></i>
+            <span class="ng-binding"> My Shortcuts </span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.addconsultation_visit"> <span>Add Consultation visit</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.addprocedure"> <span>Add Procedure</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.addother_charges"> <span>Add Other charges</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.addnotes"> <span>Add Notes</span> </a>
+            </li>
+            <li ui-sref-active="active">
+                <a check-access ui-sref="myworks.addvitals"> <span>Add Vitals</span> </a>
+            </li>
+        </ul>
+    </li>
+</ul>

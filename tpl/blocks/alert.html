@@ -1,0 +1,21 @@
+<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+<!-- SUCCESS -->
+<div class="wrapper alert ng-isolate-scope alert-success alert-dismissable" ng-show="successMessage">
+    <div>
+        <i class="fa fa-info-circle"></i> {{successMessage}}
+    </div>
+</div>
+<div class="wrapper alert ng-isolate-scope alert-success alert-dismissable" ng-show="msg.successMessage">
+    <div>
+        <i class="fa fa-info-circle"></i> {{msg.successMessage}}
+    </div>
+</div>
+
+<!-- ERROR -->
+<div class="alert ng-isolate-scope alert-danger alert-dismissable" ng-show="errorData" ng-bind-html="errorData">
+</div>
+<div class="wrapper alert ng-isolate-scope alert-danger alert-dismissable" ng-show="msg.errorMessage">
+    <div>
+        <i class="fa fa-info-circle"></i> {{msg.errorMessage}}
+    </div>
+</div>

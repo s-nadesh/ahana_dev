@@ -1,0 +1,19 @@
+<div ng-controller="AlertsController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Create Alert</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-5" ng-init="data = {}; data.formtype = 'add'; initForm(); data.status = '1'">
+                <form name="alertForm" class="form-horizontal form-validation" novalidate="">
+                    <div ng-include="'tpl/alerts/_form.html'">
+                        {% include 'tpl/alerts/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,141 @@
+<div class="patient-panel">
+    <div class="patient-row1">
+        <div class="patient-panel">
+            <div class="col-md-1 pati-thumb">
+                <div class="row" id="{{patientObj.patient_img_url ? 'patientTopbarPhoto' : ''}}">
+                    <a ng-click="openUploadForm('topbar')">
+                        <!--<img class="patient_image" data-preview-img="{{ patientObj.patient_img_url ? patientObj.patient_img_url : '' }}" src="img/patient-img2.jpg" ng-attr-lazy-img="{{ patientObj.patient_img_url ? patientObj.patient_img_url : 'img/patient-img2.jpg' }}" alt="" width="125" height="103" />-->
+                        <img class="patient_image" src="img/patient-img2.jpg" ng-attr-lazy-img="{{ patientObj.patient_img_url ? patientObj.patient_img_url : 'img/patient-img2.jpg' }}" alt="" width="125" height="103" />
+                    </a>
+                </div>
+            </div>
+            <img ng-hide="true" id="ahana_print_logo" src="{{app.org_logo}}"/>
+            <div class="col-md-11 paitent-details2">
+
+                <div class="paitent-details2-newleft">
+                    <div class="paitent-details2-newleft-row1"> 
+                        <i aria-hidden="true" class="fa fa-user"></i>
+                        <b class="patient-name">{{patientObj.fullname}}</b>
+                        ({{patientObj.patient_global_int_code}})
+                    </div>
+
+                    <div class="paitent-details2-newleft-row2">
+                        <i class="fa fa-venus-mars"></i>
+                        {{app.patientDetail.patientSex}}
+                        <span ng-if="patientObj.patient_age_ym">({{patientObj.patient_age_ym}})</span>
+                        <i class="fa fa-mobile" aria-hidden="true"></i>  {{patientObj.patient_mobile}}
+                    </div>
+
+                    <div class="header-new"></div>
+                </div>
+
+                <div class="paitent-details2-newright"> 
+                    <span class="alleries-txt" ng-if="patientObj.hasallergies"><b>Allergies : </b> {{patientObj.allergies}}</span>
+                    <b ng-show="false"> Allergies : </b>
+                    <i aria-hidden="true" class="fa fa-ban" ng-show="false"></i>
+                    <!--                    <div class="pati-cate" ng-show="patientObj.have_encounter">{{patientObj.encounter_type}}</div>-->
+
+                    <br/> <span ng-if="patientObj.patient_category" style="background-color: {{patientObj.patient_category_color}}" class="category_badge header-badge category_icon" tooltip="{{patientObj.patient_category_fullname}}" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom">
+                        {{patientObj.patient_category| uppercase}}
+                    </span> 
+
+                    <span class="paitent-details2-CD" ng-if="patientObj.clinical_discharge_date != '-'">
+                        <b> Clinical Discharge : </b> {{patientObj.clinical_discharge_date | moment:'DD/MM/YYYY - hh:mm A'}}
+                    </span>
+                </div>
+                <br/>
+
+                <div class="headerbg2">
+                    <div class="patient-details-part patinet-id" ng-if="patientObj.activeCasesheetno">
+                        <b> CS No : </b> {{patientObj.activeCasesheetno}}
+                    </div>
+                    <!--                    <div class="patient-details-part patinet-id" ng-if="patientObj.clinical_discharge_date != '-'">
+                                            <b> Clinical Discharge : </b> {{patientObj.clinical_discharge_date | moment:'DD/MM/YYYY - hh:mm A'}}
+                                        </div>-->
+                    <div class="patient-details-part patinet-id" ng-if="patientObj.patActiveIp">
+                        <b> D.O.A : </b> {{patientObj.doa}}
+                    </div>
+                    <div class="patient-details-part" ng-if="patientObj.current_room != '-'">
+                        <i class="fa fa-bed"></i> {{patientObj.current_room}}
+                    </div>
+                    <div class="patient-details-part" ng-if="patientObj.active_op_current_status != '-'">
+                        <i class="fa fa-bed"></i> <b> Status : </b> {{patientObj.active_op_current_status}}
+                    </div>
+                    <div class="patient-details-part" ng-if="patientObj.consultant_name != '-'">
+                        <i class="fa fa-user-md"></i> {{patientObj.consultant_name}}
+                    </div>
+                    <div class="patient-details-part">
+                        <i class="fa fa-hospital-o"></i> {{patientObj.org_name}}
+                    </div>
+                    <!--                    <div class="patient-details-part" ng-if="patientObj.childrens_global_ids != ''">
+                                            <i class="fa fa-bullseye"></i> <b> Secondary Patient Ids :  </b> {{patientObj.childrens_global_ids}}
+                                        </div>-->
+                    <!--                    <div class="patient-details-part b-n">
+                                            <div ng-if="patientObj.patient_category" style="background-color: {{patientObj.patient_category_color}}" class="category_badge header-badge" tooltip="{{patientObj.patient_category_fullname}}" tooltip-trigger tooltip-animation="false" tooltip-placement="top">
+                                                {{patientObj.patient_category| uppercase}}
+                                            </div>
+                                        </div>-->
+                    <!-- pateint alleriges alert readmore start-->
+                    <!--                    <div class="patient-details-part b-n" ng-show="patientObj.hasallergies">
+                                            <div style="cursor: pointer" class="alert_badge header-badge trigger-allergies-close" popover="{{patient_allergies_html}}" popover-trigger="click" popover-placement="bottom">
+                                                <i class="fa fa-warning"></i>
+                                            </div>
+                                        </div>-->
+                    <!-- pateint alleriges alert readmore end-->
+
+                    <div class="patient-details-part b-n" style="padding :0px 10px" ng-show="patientObj.hasalert">
+                        <div style="cursor: pointer" class="alert_badge header-badge trigger-close" popover="{{patient_alert_html}}" popover-trigger="click" popover-placement="bottom">
+                            <i class="fa fa-warning"></i>
+                        </div>
+                    </div>
+
+                    <!-- topbar next and previous options start-->
+                    <div style="float:right;" class="patient-details-part b-n" ng-show="patientObj.have_encounter == true">
+                        <a ng-disabled="patientObj.prevPatient == ''" ng-click="checkPatientPage(patientObj.prevPatient)" class="btn btn-default"> <span class="fa fa-chevron-left"></span> </a>
+                        <a ng-disabled="patientObj.nextPatient == ''" ng-click="checkPatientPage(patientObj.nextPatient)" class="btn btn-default"> <span class="fa fa-chevron-right"></span> </a>
+                        <div class="btn-group dropdown" dropdown="">
+                            <button ng-disabled="patientObj.allEncounter == ''" class="btn btn-default" dropdown-toggle="" aria-haspopup="true" aria-expanded="false"><span class="fa fa-chevron-down"></span></button>
+                            <ul class="dropdown-menu dropdown-menu-right patient-dropdown">
+                                <li ng-repeat="(key, patient) in patientObj.allEncounter">
+                                    <div>
+                                        <div class="col-xs-12 col-sm-2 col-md-3">
+                                            <img width="36" height="36" class="patient-image" src="img/man-icon.png" ng-attr-lazy-img="{{ patient.apptPatientData.patient_img_url ? patient.apptPatientData.patient_img_url : ($even ? 'img/man-icon.png' : 'img/man-icon2.png') }}" />
+                                        </div>
+                                        <div class="col-xs-12 col-sm-5 col-md-9">
+                                            <div class="row ng-binding">
+                                                <a ng-bind-html="patient.apptPatientData.fullname" ng-click="checkPatientPage(patient.apptPatientData.patient_guid)" class="ng-binding">
+                                                </a>
+                                                <b ng-if="patient.apptPatientData.patient_age_ym">({{patient.apptPatientData.patient_age_ym}}) </b>
+                                                <br>
+                                                <span class="pull-left" ng-bind-html="patient.apptPatientData.patient_global_int_code | highlight:patient"></span> &nbsp; &nbsp;
+                                                <span ng-bind-html="patient.apptPatientData.patient_mobile | highlight:patient"> </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- topbar next and previous options end-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        if ($.isFunction($.fn.photoZoom)) {
+            setTimeout(function () {
+                profilePhoto("#patientTopbarPhoto");
+            }, 1000);
+        } else {
+            $.getScript("js/photoZoom.js", function (data, textStatus, jqxhr) {
+                setTimeout(function () {
+                    profilePhoto("#patientTopbarPhoto");
+                }, 1000);
+            });
+        }
+    });
+</script>

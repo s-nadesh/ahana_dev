@@ -1,0 +1,230 @@
+<ul class="nav ng-scope" ng-init="app.settings.asideFolded = false">
+    <li class="ng-scope active" ng-show="checkAccess('administrative')"> 
+        <a class="auto" href=""> 
+            <span class="pull-right text-muted"> 
+                <i class="fa fa-fw fa-angle-right text"></i> 
+                <i class="fa fa-fw fa-angle-down text-active"></i> 
+            </span> 
+            <i class="fa fa-dashboard icon text-info-lter"></i> 
+            <span class="ng-binding"> Administrative Module </span> 
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.roles" href="#/configuration/roles"> <span>Roles</span> </a> 
+            </li>
+            <li ui-sref-active="active" class="ng-scope active"> 
+                <a check-access ui-sref="configuration.roleRights" href="#/configuration/roleRights"> <span>Role Rights</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.specialities" href="#/configuration/specialities"> <span>Specialities</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.patientCategories" href="#/configuration/patientCategories"> <span>Patient Category</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.roomChargeCategory" href="#/configuration/roomChargeCategory"> <span>Charge Category</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.roomChargeCategoryItem" href="#/configuration/roomChargeCategoryItem"> <span>Room Charge Item</span> </a> 
+            </li>
+            <!--            <li ui-sref-active="active"> 
+                            <a check-access ui-sref="configuration.alliedCharge" href="#/configuration/alliedCharge"> <span>Allied Charges</span> </a> 
+                        </li>
+                        <li ui-sref-active="active"> 
+                            <a check-access ui-sref="configuration.procedure" href="#/configuration/procedure"> <span>Procedures</span> </a> 
+                        </li>-->
+        </ul>
+    </li>
+    <li class="ng-scop" ng-show="checkAccess('userModule')"> 
+        <a class="auto" href=""> 
+            <span class="pull-right text-muted"> 
+                <i class="fa fa-fw fa-angle-right text"></i> 
+                <i class="fa fa-fw fa-angle-down text-active"></i> 
+            </span> 
+            <i class="fa fa-users icon text-info-lter"></i> 
+            <span class="ng-binding"> User Module </span> 
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.registration({mode: 'A'})" href="#/configuration/registration"> <span>User Registration</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.userRoles" href="#/configuration/userRoles"> <span>User roles</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.userBranches" href="#/configuration/userBranches"> <span>User Branches</span> </a> 
+            </li>
+        </ul>
+    </li>
+    <li class="ng-scope" ng-show="checkAccess('wardManagement')"> 
+        <a class="auto" href=""> 
+            <span class="pull-right text-muted"> 
+                <i class="fa fa-fw fa-angle-right text"></i> 
+                <i class="fa fa-fw fa-angle-down text-active"></i> 
+            </span> 
+            <i class="fa fa-wheelchair icon text-info-lter"></i> 
+            <span class="ng-binding"> Ward Management </span> 
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.floors" href="#/configuration/floors"> <span>Floors</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.wards" href="#/configuration/wards"> <span>Wards</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.roomType" href="#/configuration/roomType"> <span>Bed Type</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.room" href="#/configuration/room"> <span>Room</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.roomTypeRoom" href="#/configuration/roomTypeRoom"> <span>Room and Bed Type</span> </a> 
+            </li>
+        </ul>
+    </li>
+    <li class="ng-scope" ng-show="checkAccess('chargesConfiguration')"> 
+        <a class="auto" href=""> 
+            <span class="pull-right text-muted"> 
+                <i class="fa fa-fw fa-angle-right text"></i> 
+                <i class="fa fa-fw fa-angle-down text-active"></i> 
+            </span> 
+            <i class="fa fa-rupee icon text-info-lter"></i> 
+            <span class="ng-binding"> Charges Configuration </span> 
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.roomCharge" href="#/configuration/roomCharge"> <span>Room Charge</span> </a> 
+            </li>
+            <!--            <li ui-sref-active="active"> 
+                            <a check-access ui-sref="configuration.roomMaintenance" href="#/configuration/roomMaintenance"> <span>Room Maintenance</span> </a> 
+                        </li>-->
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.chargePerCategory" href="#/configuration/charge_per_category"> <span>Charges for Category</span> </a> 
+            </li>
+        </ul>
+    </li>
+    <li class="ng-scope" ng-show="checkAccess('doctorsConfiguration')"> 
+        <a class="auto" href=""> 
+            <span class="pull-right text-muted"> 
+                <i class="fa fa-fw fa-angle-right text"></i> 
+                <i class="fa fa-fw fa-angle-down text-active"></i> 
+            </span> 
+            <i class="fa fa-user-md icon text-info-lter"></i> 
+            <span class="ng-binding"> Doctor’s Configuration </span> 
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.docSchedule" href="#/configuration/docSchedule"> <span>Doctors Schedule</span> </a> 
+            </li>
+        </ul>
+    </li>
+    <li class="ng-scope" ng-show="checkAccess('miscellaneous')"> 
+        <a class="auto" href=""> 
+            <span class="pull-right text-muted"> 
+                <i class="fa fa-fw fa-angle-right text"></i> 
+                <i class="fa fa-fw fa-angle-down text-active"></i> 
+            </span> 
+            <i class="fa fa-hospital-o icon text-info-lter"></i> 
+            <span class="ng-binding"> Miscellaneous </span> 
+        </a>
+        <ul class="nav nav-sub dk">
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.alerts" href="#/configuration/alerts"> <span>Alerts</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.internalCode" href="#/configuration/internalCode"> <span>Internal Code Settings</span> </a> 
+            </li><li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.countries" href="#/configuration/countries"> <span>Master Country</span> </a> 
+            </li><li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.states" href="#/configuration/states"> <span>Master State</span> </a> 
+            </li><li ui-sref-active="active"> 
+                <a check-access ui-sref="configuration.cities" href="#/configuration/cities"> <span>Master City</span> </a> 
+            </li>
+    </li><li ui-sref-active="active"> 
+        <a check-access ui-sref="configuration.patientgroup" href="#/configuration/patientgroup"> <span>Patient Grouping</span> </a> 
+    </li>
+</ul>
+</li>
+<li ui-sref-active="active">
+    <a check-access ui-sref="configuration.settings">
+        <i class="fa fa-users icon text-info-lter"></i>
+        <span>Settings</span>
+    </a>
+</li>
+<li ui-sref-active="active">
+    <a check-access ui-sref="configuration.vital_management">
+        <i class="fa fa-heartbeat icon text-info-lter"></i>
+        <span>Vitals Management</span>
+    </a>
+</li>
+<li class="ng-scope"> 
+    <a class="auto" href=""> 
+        <span class="pull-right text-muted"> 
+            <i class="fa fa-fw fa-angle-right text"></i> 
+            <i class="fa fa-fw fa-angle-down text-active"></i> 
+        </span> 
+        <i class="fa fa-cog icon text-info-lter"></i> 
+        <span class="ng-binding"> Pharmacy Management</span> 
+    </a>
+    <ul class="nav nav-sub dk">
+        <li ui-sref-active="active"> 
+            <a check-access ui-sref="configuration.brand"> <span>Brand</span> </a> 
+        </li>
+        <li class="ng-scope"> 
+            <a check-access ui-sref="configuration.brandrep"> <span>Brand Rep</span> </a> 
+        </li>
+        <li class="ng-scope"> 
+            <a check-access ui-sref="configuration.products"> <span>Products</span> </a> 
+        </li>
+        <li class="ng-scope"> 
+            <a check-access ui-sref="configuration.supplier"> <span>Supplier</span> </a> 
+        </li>
+        <li class="ng-scope"> 
+            <a check-access ui-sref="configuration.patientgroupassign"> <span>Patient Group</span> </a> 
+        </li>
+        <li class="ng-scope"> 
+            <a check-access ui-sref="configuration.hsn"> <span>HSN Code</span> </a> 
+        </li>
+        <li class="ng-scope"> 
+            <a class="auto" href=""> 
+                <span class="pull-right text-muted"> 
+                    <i class="fa fa-fw fa-angle-right text"></i> 
+                    <i class="fa fa-fw fa-angle-down text-active"></i> 
+                </span> 
+                <i class="fa fa-wrench icon text-info-lter"></i> 
+                <span class="ng-binding"> Prod & Brand Config.</span> 
+            </a>
+            <ul class="nav nav-sub dk">
+                <li ui-sref-active="active"> 
+                    <a check-access ui-sref="configuration.brandDivision"> <span>Brand Division</span> </a> 
+                </li>
+                <li ui-sref-active="active"> 
+                    <a check-access ui-sref="configuration.drugclass"> <span>Drug Class</span> </a> 
+                </li>
+                <li ui-sref-active="active"> 
+                    <a check-access ui-sref="configuration.genericName"> <span>Generic Names</span> </a> 
+                </li>
+                <li ui-sref-active="active"> 
+                    <a check-access ui-sref="configuration.drugGeneric"> <span>Drug Class & Generic</span> </a> 
+                </li>
+                <li ui-sref-active="active">
+                    <a check-access ui-sref="configuration.routes"> <span>Routes</span> </a>
+                </li>
+                <li ui-sref-active="active">
+                    <a check-access ui-sref="configuration.prodesc"> <span>Product Type</span> </a>
+                </li>
+                <li ui-sref-active="active"> 
+                    <a check-access ui-sref="configuration.vat"> <span>Vat</span> </a> 
+                </li>
+                <li ui-sref-active="active"> 
+                    <a check-access ui-sref="configuration.gst"> <span>Gst</span> </a> 
+                </li>
+                <li ui-sref-active="active"> 
+                    <a check-access ui-sref="configuration.packingUnit"> <span>Packing Unit</span> </a> 
+                </li>
+            </ul>
+        </li>
+    </ul>
+</li>
+</ul>
