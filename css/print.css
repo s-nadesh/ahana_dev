@@ -1,0 +1,761 @@
+@charset "utf-8";
+/*@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');*/
+
+#printThisElement
+{
+
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:13px;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+}
+
+
+@media print
+{
+    table.print-friendly tr td, table.print-friendly tr th {
+        page-break-inside: avoid;
+    }
+
+    .complaints
+    {
+        padding-top: 1px !important;
+        padding-bottom: 1px !important;
+    }
+
+    .bill-cont
+    {
+        width:800px !important;
+        margin:0px auto;
+    }
+
+    /*table {
+        width:100%;
+    }*/
+
+    .reports table, .reports table th, .reports table td  {
+        border-collapse:collapse;
+        border: 1px solid black;
+    }
+    *
+    {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    #printThisElement
+    {
+
+        font-family:Arial, Helvetica, sans-serif;
+        font-size:13px;
+        -webkit-print-color-adjust: exact;
+        color-adjust: exact;
+        line-height: 26px;
+    }
+
+    .RadGrid table, .RadGrid table th, .RadGrid table td {
+        border-collapse:collapse;
+        /*border: 1px solid black;*/
+    }
+
+    body > table:nth-last-of-type(1){
+        page-break-after:auto
+    }
+    .hide {
+        display: none;
+    }
+    .referl-details
+    {
+        background:#cccccc;
+        margin-top:25px;
+        text-align:center;
+        margin: 10px 0px 10px 0px;
+        padding: 10px;
+    }
+    .referl-details td 
+    {
+        padding: 1px;
+    }
+    .reason {
+        font-size:7pt !important;
+        color:#444444;
+    }
+    .table4 td:before {
+        display:none;
+    }
+    .table4 td {
+        padding-left:15px;
+    }
+    .table-boder {
+        margin-top:10px;
+        margin-bottom:15px;
+    }
+    .table-boder .topborder {
+        margin:0px;
+    }
+    .notes {
+        padding-top:10px;
+        border-top:#dddddd solid 1px;
+        border-bottom:#dddddd solid 1px;
+        padding-bottom:10px;
+        padding-left: 10px;
+    }
+    .ribbonhead h1 {
+        font-size: 13pt;
+        /*        margin: 0px;*/
+        line-height: 22px;
+        padding-left: 10px;
+        padding-right: 10px;
+        position: relative;
+        background: #6e6e6e !important;
+        display: inline-block;
+        width: 100%;
+        float:left;
+        border-bottom: #3e3e3e solid 2px;
+        display:block;
+        text-transform:uppercase;
+    }
+    .ribbon h1 {
+        font-size: 13pt;
+        /*        margin: 0px;*/
+        line-height: 22px;
+        padding-left: 10px;
+        padding-right: 10px;
+        position: relative;
+        background: #6e6e6e !important;
+        display: inline-block;
+        width: 100%;
+        float:left;
+        border-bottom: #3e3e3e solid 2px;
+        display:block;
+        text-transform:uppercase;
+    }
+    .ribbon h2 {
+        font-size: 11pt !important;
+        /*        margin: 0px;*/
+        line-height: 26px;
+        padding-left: 10px;
+        padding-right: 10px;
+        position: relative;
+        display: inline-block;
+        border-bottom: #8e8e8e solid 2px;
+        width: 100%;
+    }
+    .ribbon h3 {
+        font-size: 11pt !important;
+        margin: 0px;
+        line-height: 26px;
+        padding-left: 10px;
+        padding-right: 10px;
+        position: relative;
+        display: inline-block;
+        /*	background:#9e9e9e;*/
+        border-bottom: #8e8e8e solid 1px;
+        width: 100%;
+        font-style:italic;
+        text-transform:capitalize;
+    }
+    #printThisElement h1, #printThisElement h2 {
+        text-transform:uppercase;
+        margin-bottom:0px;
+        margin-top:10px;
+    }
+    #printThisElement h3 {
+        margin-bottom:0px;
+        margin-top:10px;
+    }
+    .small-left-heading
+    {
+        padding-left:10px;
+        font-weight:bold
+    }
+    .table-boder{
+        border:#dddddd solid 1px;
+    }
+    .topborder
+    {
+        border-top:none;
+        border-bottom:none;
+        border-right:0px;
+        border:none;
+    }
+    .table2 td {
+        background:#f5f5f5;
+        border-collapse:collapse;
+        padding-top:10px;
+        padding-bottom:10px;
+    }
+    .table2 tr:nth-child(odd) td {
+        background: #f5f5f5;
+    }
+    .table2 tr:nth-child(even) td {
+        background: #eeeeee;
+    }
+    .table2 td:before {
+        content:"\25A0";
+        font-family:Arial, Helvetica, sans-serif;
+        margin-right:5px;
+        font-size:6pt;
+        margin-left:5px;
+        margin-top:-1px;
+    }
+    .table2 .small-left-heading {
+        padding-top:10px;
+        padding-bottom:10px;
+    }
+    .table-boder .small-left-heading {
+        padding-left:10px;
+    }
+
+    /*    .table-bordered td {
+            background:#f5f5f5;
+            border-collapse:collapse;
+            padding-top:10px;
+            padding-bottom:10px;
+        }
+        .table-bordered tr:nth-child(odd) td {
+            background: #f5f5f5;
+        }
+        .table-bordered tr:nth-child(even) td {
+            background: #eeeeee;
+        }*/
+
+    .list:before {
+        content:"\25A0";
+        font-family:Arial, Helvetica, sans-serif;
+        margin-right:5px;
+        font-size:10pt;
+    }
+    .spe-line {
+        border-bottom: #aaaaaa dashed 1px;
+        text-align:center;
+    }
+    .nopadding {
+        padding:0px;
+    }
+    .inner-table-heading {
+        background:#cccccc !important;
+    }
+
+    .colon
+    {
+        /*        float:right;*/
+        margin-right:15px;
+    }
+    /*    #printThis th, #printThis td {
+            padding: 10px;
+        }*/
+
+}
+
+
+.voucher-table
+{
+    border:#975e1f dotted 1px;
+    border-collapse:collapse;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:15px;
+    margin-bottom:40px;
+}
+
+.voucher-table td, .voucher-table th
+{
+    border:#975e1f dotted 2px;
+    border-collapse:collapse;
+    padding:10px;
+}
+
+.recived-details span
+{
+    border-bottom:#2e2e2e dotted 1px;
+}
+
+.acc
+{
+    width:200px;
+    float:left;
+    border-bottom:#2e2e2e dotted 1px;
+}
+
+.amount
+{
+    width:200px;
+    float:left;
+    border:#2e2e2e dotted 1px;
+    padding:5px;
+}
+
+.sign
+{
+    font-size:18px;
+    font-weight:bold;
+    float:right;
+    text-align:right;
+}
+
+.sign span
+{
+    border:none;
+    font-size:15px;
+    border:none;
+    font-weight:normal;
+}
+
+
+
+/*bill summary*/
+
+
+
+.bill-cont
+{
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:13px;
+    line-height:22px;
+    border:#bbbbbb solid 1px;
+    padding:20px;
+    color:#4e4e4e;
+}
+
+.bill-header
+{
+    width:100%;
+    float:left;
+    border-bottom:#bbbbbb solid 1px;
+    margin-bottom:5px;
+}
+
+#logo {
+    width:35%;
+    float:left;
+    float: left;
+    /*margin-top: 8px;*/
+    margin-bottom:5px;
+}
+
+
+#logo h1
+{
+    font-size:20px;
+}
+
+
+#logo .date {
+    font-size: 1.1em;
+    color: #777777;
+}
+
+.bill-heading
+{
+    width:30%;
+    float:left;
+    text-align:center;
+}
+.bill-heading h1
+{
+    font-weight:normal;
+    font-size:20px;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+#logo img {
+    height: 70px;
+}
+
+#company {
+    float: right;
+    width:35%;
+    text-align: right;
+    margin-bottom:5px;
+}
+
+
+
+#patient-detail {
+    float: left;
+    width:100%;
+    margin-bottom:5px;
+    border-bottom:#bbbbbb solid 1px;
+}
+
+#patient-detail td, #patient-detail th
+{
+    background:none;
+    padding:1px;
+    text-align:left;
+}
+
+#patient-detail .to {
+    color: #777777;
+}
+
+#patient-detail h2
+{
+    margin:0px 0px 10px 0px;
+    padding:0px;
+    color:#0087c3;
+}
+
+
+#invoice {
+    float: right;
+    text-align: right;
+}
+
+#invoice h1 {
+    color: #0087C3;
+    font-size:20px;
+    line-height: 1em;
+    font-weight: normal;
+    margin: 0  0 10px 0;
+}
+
+#invoice .date {
+    font-size: 1.1em;
+    color: #777777;
+}
+
+.bill-cont table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 5px;
+}
+
+.bill-cont table th,
+.bill-cont table td {
+    padding: 5px;
+    /*background: #EEEEEE;*/
+    border-bottom: 1px solid #FFFFFF;
+}
+
+.bill-cont table th {
+    text-transform:uppercase;
+    white-space: nowrap;        
+    font-weight: normal;
+}
+
+
+
+.bill-cont table td h3{
+    color: #0087c3;
+    font-size: 1.2em;
+    font-weight: normal;
+    margin: 0 0 0.2em 0;
+}
+
+.bill-cont table .no {
+    color: #FFFFFF;
+    font-size: 1.6em;
+    background: #0087c3;
+}
+
+
+
+.bill-cont table .unit {
+    background: #DDDDDD;
+}
+
+.bill-cont table .qty {
+}
+
+.bill-cont table .total {
+    background: #0087c3;
+    color: #FFFFFF;
+}
+
+.bill-cont table td.unit,
+.bill-cont table td.qty,
+.bill-cont table td.total {
+    font-size: 1.2em;
+}
+
+.bill-cont table tbody tr:last-child td {
+    border: none;
+}
+
+.bill-cont table tfoot td {
+    padding: 10px 0px;
+    background: #FFFFFF;
+    border-bottom: none;
+    font-size:17px;
+    white-space: nowrap;
+    font-weight:bold;
+
+}
+
+.bill-cont table tfoot tr:first-child td {
+    border-top: none; 
+}
+
+.bill-cont table tfoot tr:last-child td {
+    color: #0087c3;
+
+
+}
+
+.bill-cont table tfoot tr td:first-child {
+    border: none;
+}
+
+#thanks{
+    font-size: 2em;
+    margin-bottom: 50px;
+}
+
+#notices{
+    padding-left: 6px;
+    border-left: 6px solid #0087C3;
+    font-size:12px;
+    margin-top:60px;
+}
+
+#notices .notice {
+    font-size: 1.2em;
+}
+
+/*footer {
+  color: #777777;
+  width: 100%;
+  height: 30px;
+  position: absolute;
+  bottom: 0;
+  border-top: 1px solid #AAAAAA;
+  padding: 8px 0;
+  text-align: center;
+}*/
+
+
+
+.bill-cont
+{
+    width:800px;
+    margin:0px auto;
+}
+
+
+.clearfix
+{
+    clear:both;
+}
+
+.bn td
+{
+    background:#ffffff !important;
+}
+
+
+.bb
+{
+    border-bottom:#bbbbbb solid 1px !important;
+}
+
+.unit2
+{
+    font-size:13px  !important;
+}
+
+.detail-table
+{
+    margin-bottom:40px !important;
+}
+
+
+/*purchase-list*/
+
+.purchase-list-tab
+{
+    background:none;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:13px;
+    border-collapse:collapse !important;
+    margin-bottom:25px;
+}
+
+.purchase-list-tab th,  .purchase-list-tab td
+{
+    background:#ffffff !important;
+    border:#bbbbbb solid 1px;
+    border-collapse:collapse !important;
+    padding:10px;
+}
+
+.purchase-list-tab th
+{
+    font-weight:bold !important;
+    background:#f0f0f0 !important;
+
+}
+
+.purchase-list-tab2 th, .purchase-list-tab2 td 
+{
+    border:none !important;
+}
+
+.purchase-list-tab2 th
+{
+    background:none !important;
+}
+
+.invoice-details1
+{
+    width:270px;
+    float:left;
+    font-size:14px !important;
+}
+
+.invoice-details2
+{
+    width:300px;
+    float:right;
+
+}
+
+.invoice-details3
+{
+    width:330px;
+    float:left;
+    font-size:14px !important;
+}
+
+.invoice-details1 th, .invoice-details1 td , .invoice-details3 th, .invoice-details3 td
+{
+    font-size:15px;
+}
+
+/*prescription*/
+
+.priscription-cont
+{
+    width:800px;
+    margin:0px auto;
+    border:#2e2e2e solid 2px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.priscription-cont span
+{
+    font-weight:normal;
+}
+
+.priscription-cont table td
+{
+    background:none;
+    padding:10px;
+    font-size:14px;
+
+}
+
+
+.priscription-cont table td span
+{
+    font-style:italic;
+    color:#7e7e7e;
+}
+
+.priscription-cont table th
+{
+    border-top:#2e2e2e solid 2px;
+    border-bottom:#2e2e2e solid 2px;
+    padding:10px;
+    font-weight:normal;
+}
+
+.documents{
+    width: 100%;
+}
+
+#printThis {
+    /*padding: 25px 45px;*/
+}
+
+#printThis table {
+    border-collapse: collapse;
+    width:100%;
+}
+
+#printThis table, #printThis th, #printThis td {
+    border: 1px solid #AAAAAA !important;
+}
+/*#printThis th, #printThis td {
+    padding: 5px;
+}*/
+
+/*#printThisElement {
+ font-size: 13px;
+}
+
+#printThisElement h1{
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+#printThisElement h2{
+    margin-top: 10px;
+    margin-bottom: 0px;
+}*/
+
+
+.heading-label {
+    width:auto;
+    float:left;
+    background:url(../img/ribbon.jpg) #4e4e4e right no-repeat;
+    height:36px;
+    color:#ffffff;
+    padding-left:10px;
+    padding-right:25px;
+    line-height:12px;
+    margin-top:10px;
+    -webkit-print-color-adjust: exact; 
+}
+
+.reportpart1
+{
+    width:100%;
+    float:left;
+    margin-bottom:25px;
+    padding-bottom:25px;
+    border-bottom:#dddddd dashed 1px;
+}
+
+.grey-row
+{
+    background:#f5f5f5;
+    -webkit-print-color-adjust: exact;
+    padding-top:10px;
+    padding-bottom:10px;
+    /*	display:block;*/
+}
+#hide_span
+{
+    display: none;
+}
+
+#printThisElement h1, #printThisElement h2, #printThisElement h3 {
+    font-size:18px;
+    font-weight:bold;
+    font-family:Arial, Helvetica, sans-serif;
+    display:block;
+}
+
+.spe-line
+{
+    border-bottom:#bbbbbb dashed 1px;
+}
+@page
+{
+    size: auto;
+    margin:150px 50px 150px 50px;
+}
+.other_document_summary colgroup {
+    display: none;
+}
+
+div#printThis table {
+    width: 100.8%;
+    display:flex;
+    font-family:arial;
+    border:#bbbbbb solid 1px !important;
+    letter-spacing: -1px;
+}
+

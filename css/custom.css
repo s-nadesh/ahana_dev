@@ -1,0 +1,964 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/*
+    Created on : 30 Jan, 2016, 4:06:26 PM
+    Author     : ark-05
+*/
+
+.navi ul.pat_nav li {
+	text-align: center !important;
+}
+.butterbar {
+	z-index: 1026;
+}
+.app-footer {
+	z-index: 999;
+}
+.highlighted {
+	font-weight: 500;
+	text-decoration: underline;
+	background-color: #ffc !important;
+	color: #222 !important;
+}
+.editable-wrap .form-group {
+	margin-left: 0px;
+}
+.patient_aside, .patient_content {
+	margin-top: 105px;
+}
+th[st-sort] {
+	cursor: pointer;
+}
+@media screen {
+#printSection {
+	display: none;
+}
+}
+@media print {
+body * {
+	visibility:hidden;
+}
+#printSection, #printSection * {
+	visibility:visible;
+}
+#printSection {
+	position:absolute;
+	left:0;
+	top:0;
+}
+}
+.bg-success {
+	color: #ffffff;
+}
+.pagination {
+	margin: 0;
+}
+.category_badge {
+	background-color: #119BC0;
+}
+.smaller .patient-row1 {
+	display: none;
+}
+.patient-panel {
+	-webkit-transition: height 0.3s;
+	-moz-transition: height 0.3s;
+	-ms-transition: height 0.3s;
+	-o-transition: height 0.3s;
+	transition: height 0.3s;
+	height: 100px;
+}
+.patient-panel.smaller {
+	height: 35px;
+}
+.headerbg2 {
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	-ms-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;
+}
+.full-cont .patient_aside, .full-cont .patient_content {
+	margin-top: 145px;
+}
+.prescrip-header {
+	width:100%;
+	float:left;
+	padding:10px;
+	padding-bottom:0px;
+	margin-bottom:15px;
+	height:40px
+}
+.linkDisabled {
+	cursor: not-allowed;
+	pointer-events: none;
+	color: grey;
+	opacity: 0.2;
+	filter: alpha(opacity=20); /* For IE8 and earlier */
+}
+.show2 {
+	display: inline-block !important;
+}
+.navi ul.nav li a {
+	width: 100% !important;
+}
+.hms-plus:focus {
+	color: #ffffff !important;
+}
+video {
+	width: 100% !important;
+	height: 100% !important;
+}
+#makeit-full.fullscreen {
+	z-index: 9999;
+	width: 50%;
+}
+.app-aside-right.fullscreen {
+	width: 50%;
+}
+.cropArea {
+	overflow: hidden;
+	width:100%;
+	height:250px;
+}
+.doctor-name > b {
+	line-height: 40px;
+	text-transform:uppercase;
+}
+/* 2016-06-20 */
+.form-group {
+	margin-bottom: 5px;
+}
+.line-lg {
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+.control-label {
+	padding-top: 0px;
+}
+#xmlform h2 {
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+#xmlform .label, #xmlform .badge {
+	color: #ffffff !important;
+	font-size: 15px;
+	font-weight: 600;
+}
+@media print {
+table {
+	overflow: visible !important;
+}
+table {
+	page-break-after:auto !important
+}
+tr {
+	page-break-inside:avoid !important;
+	page-break-after:auto !important
+}
+td {
+	page-break-inside:avoid !important;
+	page-break-after:auto !important
+}
+thead {
+	display:table-header-group !important
+}
+tfoot {
+	display:table-footer-group !important
+}
+}
+.not_yet_discharge {
+	color: #c0c0c0 !important;
+	font-weight: 700;
+	text-align: center;
+}
+.selected_row, .selected_row td {
+	background-color: #F5F5F5 !important;
+}
+/* Smart Table - Sort Option */
+.sort-header {
+	cursor: pointer;
+}
+.sort-header:after {
+	font-family: FontAwesome;
+	content: '  \f0dc';
+	color: lightgrey;
+}
+.st-sort-ascent:before {
+	content: '';
+}
+.st-sort-ascent:after {
+	font-family: FontAwesome;
+	content: '  \f0de';
+	color: black;
+}
+.st-sort-descent:before {
+	content: '';
+}
+.st-sort-descent:after {
+	font-family: FontAwesome;
+	content: '  \f0dd';
+	color: black;
+}
+.patient-image {
+	border-radius: 50%;
+}
+.pb-0 {
+	padding-bottom: 0px !important;
+}
+.pt-10 {
+	padding-top: 10px !important;
+}
+.pb-10 {
+	padding-bottom: 10px !important;
+}
+.mt-10 {
+	margin-top: 10px !important;
+}
+.mb-10 {
+	margin-bottom: 10px !important;
+}
+.wrapper {
+	padding: 5px;
+}
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+	padding: 6px 6px;
+	line-height: 15px;
+}
+.in-patient-table label.i-checks {
+	margin-bottom: 0px;
+}
+.in-patient-table .table > thead > tr > th {
+	line-height: 5px;
+}
+out-patient-table .table > thead > tr > th label.i-checks {
+	margin-top: 5px;
+}
+.out-patient-table th {
+	line-height: 17px !important;
+}
+.panel-heading {
+	padding: 4px 15px;
+}
+.panel {
+	margin-bottom: 10px;
+}
+.panel-body {
+	padding: 7px;
+}
+.billing-panel .form-group {
+	margin-bottom: 10px;
+}
+.custom-warning {
+	color: #cc8324 !important;
+}
+.form-horizontal .form-inline .form-group {
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+}
+.form-horizontal .form-inline .form-group {
+	float: none;
+	width: auto;
+}
+.form-horizontal .form-group .col-sm-9 {
+	padding-right: 8px;
+}
+#notes .text-xs {
+	font-size: 11px;
+}
+.patient-name {
+	font-size: 20px;
+}
+#xmlform .required {
+	color: red;
+}
+.patient-search-result li.selected, .patient-merge-result li.selected {
+	background-color: #eeeeee;
+}
+#prescriptioncont-header li.selected {
+	background: #eee none repeat scroll 0 0;
+}
+#prescriptioncont-header {
+	width: 618px;
+	z-index: 9;
+}
+#prescriptioncont-header a {
+	text-transform: none;
+}
+#prescriptioncont-header li {
+	padding: 5px !important;
+}
+.modalload {
+	position: fixed;
+	z-index: 999;
+	height: 100%;
+	width: 100%;
+	top: 0;
+	background-color: Black;
+	filter: alpha(opacity=60);
+	opacity: 0.6;
+	-moz-opacity: 0.8;
+}
+.center {
+	z-index: 1000;
+	margin: 300px auto;
+	padding: 10px;
+	width: 60px;
+	background-color: White;
+	border-radius: 10px;
+	filter: alpha(opacity=100);
+	opacity: 1;
+	-moz-opacity: 1;
+}
+.center img {
+	height: 40px;
+	width: 40px;
+}
+.category_icon {
+	display: inline-block;
+	font-weight: 600;
+}
+.clinical_heading b {
+	color: #19A9D5 !important;
+}
+.administrative_heading b {
+	color: #27C24C !important;
+}
+.badge.freq {
+	padding: 1px 5px;
+	margin-bottom: 1px;
+	border-radius: 0px;
+	width: 100%;
+}
+.navbar-header-branchswitch {
+	float: left;
+	padding-top: 9px;
+}
+.merge-patientcont {
+	background-clip: padding-box;
+	background-color: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 0px;
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.176);
+	float: left;
+	font-size: 14px;
+	/*left: 23px;*/
+    list-style: outside none none;
+	margin: 2px 0 0;
+	padding: 5px;
+	position: absolute;
+	text-align: left;
+	top: 71%;
+	width: 90%;
+	z-index: 1000;
+}
+.merge-patientcont img {
+	height: auto;
+	width: 100%;
+}
+.merge-patientcont li {
+	list-style: outside none none;
+	padding: 10px 10px 5px;
+}
+.merge-patientcont a {
+	color: #0672ce;
+	text-transform: uppercase;
+}
+.merge-patientcont span {
+	color: #918e8e;
+}
+.merge-result-cont .panel-heading label {
+	margin-bottom: 0px;
+}
+.merge-result-cont .panel-heading {
+	padding: 4px;
+}
+.merge-result-cont .form-horizontal .form-group .col-sm-6 {
+	padding-top: 7px;
+}
+.search-patientcont-header {
+	max-height: 330px;
+	overflow-y: auto;
+}
+.search-patientcont-div {
+	max-height: 508px;
+	overflow-y: auto;
+}
+.merge-patientcont.result-patient-merge {
+	max-height: 500px;
+	overflow-y: auto;
+}
+.merge-patientcont span.admission_details {
+	color: #ffffff;
+	float: right;
+	font-size: 11px;
+	font-weight: normal;
+	white-space: normal;
+	width: auto;
+}
+.editable-wrap.editable-select, .editable-wrap.editable-text {
+	width: 100%;
+}
+.out-patient-table .editable-wrap.editable-select, .editable-wrap.editable-text {
+	width: auto;
+}
+.form-horizontal .panel-body .form-group {
+	margin-right: 0;
+	margin-left: 0;
+}
+#patient-preview-pop-up {
+	left: 140px;
+	position: fixed;
+	top: 53px;
+	z-index: 99;
+}
+#patient-preview-pop-up img {
+/*border-radius: 20px;*/
+    /*border: 5px solid #23b7e5;*/
+}
+.r-v-top > td {
+	vertical-align: top !important;
+}
+.app-content3 .app-content-body {
+	padding-bottom: 0px;
+}
+.out_of_stock td {
+	background-color: #f3c2c2 !important;
+}
+.search-patientcont-header a.text-danger {
+	color: #f05050 !important;
+}
+.out-of-stock {
+	color: red;
+}
+/*11-3-2016*/
+
+
+
+
+.paitent-details2 {
+	margin-top: 6px;
+	padding-left:0px;
+}
+.col-md-1.pati-thumb {
+	width:125px;
+}
+.col-md-11.paitent-details2 {
+	padding-top:0px;
+	width:calc(100% - 125px) !important;
+	float:left;
+	padding-left:0px !important;
+}
+.label, .badge {
+	/*color: #ffffff !important;*/
+    font-size: 14px;
+	display: inline-block;
+	margin-bottom: 5px;
+}
+.prescription-field {
+	width:680px;
+}
+.outpatient-1 {
+}
+.outpatient-2 {
+}
+.outpatient-2 {
+}
+.outpatient-4 {
+}
+.outpatient-5 {
+}
+.outpatient-8 {
+}
+.outpatient-6 {
+}
+.presc-heading {
+	width: 100%;
+	float: left;
+	padding: 10px;
+	padding-bottom: 0px;
+	margin-bottom: 15px;
+}
+.presc-sub-heading {
+	margin-bottom: 0px;
+	padding-top: 0px;
+}
+.w-100 {
+	width: 100px !important;
+}
+.app-header.navbar .nav > li > a:hover, .app-header.navbar .nav > li.topactive a {
+	background:none;
+	border-bottom:#000000 solid 4px;
+	padding-bottom:11px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+	background: #337ab7 !important;
+}
+ul.dropdown-menu.curPrescFreq > li a, .dropdown-submenu > ul > li a {
+	padding: 1px 15px !important;
+}
+ul.dropdown-menu.curPrescFreq > li a:hover, ul.dropdown-menu.curPrescFreq > li a:focus {
+	color: #fff;
+	text-decoration: none;
+	background-color: #0081c2;
+	background-image: -moz-linear-gradient(top, #08c, #0077b3);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08c), to(#0077b3));
+	background-image: -webkit-linear-gradient(top, #08c, #0077b3);
+	background-image: -o-linear-gradient(top, #08c, #0077b3);
+	background-image: linear-gradient(to bottom, #08c, #0077b3);
+	background-repeat: repeat-x;
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
+}
+.prescription-btns {
+	margin-top: -10px;
+}
+.prescription-total {
+	font-size: 20px;
+	color: #AAAAAA;
+}
+.prescription-total-b-l {
+	border-left: #dddddd solid 1px;
+}
+.noborder td, .noborder th {
+	border: none !important;
+}
+#prescription_item .dropdown-toggle {
+	border: none;
+	background-color: transparent;
+	box-shadow: none;
+	padding: 6px 8px;
+}
+.bs-searchbox+.bs-actionsbox {
+	padding: 0 0 4px !important;
+}
+.bs-actionsbox .btn-block {
+	padding-right: 7px;
+	padding-left: 7px;
+}
+.input-sm {
+	height: 31px !important;
+}
+.check_box_list {
+	width: auto;
+	margin-right: 10px;
+	display:inline-flex;
+}
+.drop_down_list {
+	width: auto;
+}
+.vital_bp {
+	width: 43%;
+	float: left;
+}
+.vital_bp_slash {
+	float: left;
+	padding-top: 5px;
+	margin: 0px 12px;
+}
+.word-wrap {
+	word-wrap: break-word;
+}
+.freq_3_times > span, .freq_3_times_adv_form input {
+	width: 33.33% !important;
+	float: left;
+}
+.freq_3_times_adv_form1 input {
+	width: 28.33% !important;
+	float: left;
+}
+.freq_3_times_adv_form1 .dropdown-toggle {
+	background: none;
+	border: none;
+	box-shadow: none;
+}
+.freq_4_times > span {
+	width: 25% !important;
+	float: left;
+}
+.freq_3_times input, .freq_4_times input {
+	width: 100% !important;
+	float: left;
+}
+.curPresForm .editable-error {
+	float: left;
+}
+#RGCompliant > tbody > tr > td > input {
+	margin-bottom: 0px;
+	height: 30px;
+}
+.dropdown-menu a {
+	max-width:100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.other_document_summary colgroup {
+	display: none;
+}
+.other-doc .panel-body {
+	font-family:arial !important;
+}
+.other-doc p {
+	font-family:arial !important;
+}
+/*03.10.2017 New prescription design*/
+.nav-tabs > li:hover > a, .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover {
+	border-color: #dee5e7;
+}
+.nav-tabs > li a {
+	border:#dee5e7 solid 1px;
+	background:#f6f8f8;
+	border-bottom:#dee5e7 solid 1px;
+}
+.prescription-new {
+}
+.prescription-new tab-heading .badge-sm {
+	font-size:12px;
+	border-radius:2px;
+	color:#ffffff !important;
+	margin-bottom: 0px;
+}
+.prescription-new tab-heading {
+	font-size:15px;
+}
+.prescription-new li a {
+	margin-right:-1px;
+	margin-bottom: -1px;
+}
+.prescription-new .nav-tabs > li:last-child a {
+	padding:11px 5px 10px 5px
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+	color: #222222;
+	cursor: default;
+}
+.create-vitals {
+	width:1005;
+	float:left;
+}
+.create-vitals .form-control {
+	border-radius:0px !important
+}
+.create-vitals label, .tab-results-cont label {
+	font-weight:bold;
+}
+.vitals-tab .accordion-toggle span {
+	font-size:20px;
+	font-weight:600;
+}
+.form-inline .form-group {
+	display: inline-block !important;
+	margin-bottom: 0;
+	vertical-align: middle;
+	width:auto;
+}
+.prescription-hightlight {
+	width:100%;
+	float:left;
+	background:#dddddd;
+	padding:5px;
+	margin-bottom:10px;
+	padding-bottom:0px;
+}
+.pres-top-pro {
+	width: 35%;
+}
+.prescrip-dropdown2 {
+	width:550px !important;
+	padding: 0px;
+}
+.pres-top-actions {
+	width: 111px;
+}
+.pres-top-freq {
+	width: 180px;
+}
+.pre-freq-new1 {
+	width: 100%;
+}
+.pre-freq-new1 .dropdown-toggle {
+	background:none;
+	border:none;
+	box-shadow: none;
+	padding: 6px 6px;
+}
+.pre-freq-new1 .open .dropdown-toggle {
+	background: none !important;
+}
+.pre-freq-new1 input {
+	width:28%;
+	float:left;
+}
+#frequency_4 input {
+	width:20.5%;
+	float:left;
+}
+#frequency_txt input {
+	width:85.5%;
+}
+.prescription-hightlight table td {
+	background:none !important;
+}
+.prescription-hightlight table th {
+	border-top:#dddddd solid 1px !important;
+	border-bottom:#dddddd solid 1px !important;
+}
+.graph1 {
+	margin-bottom: 30px;
+}
+.graph1 .panel-body {
+	padding-bottom: 50px;
+}
+.flot-x-axis div {
+	max-width: 52px !important;
+}
+.top-product-search {
+	margin-top: -8px;
+}
+.top-prescription-buttons {
+	top: -3px;
+	position: relative;
+}
+.pres-tab-btn-cont {
+	width: 100%;
+	float: left;
+	text-align: right;
+	margin-bottom:10px;
+}
+.pres-tab-btn-cont1 {
+    width: auto;
+    float: right;
+}
+.graph1 .panel-heading {
+	background:#36C558;
+	color:#ffffff;
+}
+.graph2 .panel-heading {
+	background:#7266BA;
+}
+.graph3 .panel-heading {
+	background:#25B8E5;
+}
+.graph4 .panel-heading {
+	background:#666666;
+}
+.graph5 .panel-heading {
+	background:#7266BA;
+}
+.graph6 .panel-heading {
+	background:#F4AD05;
+}
+.graph7 .panel-heading {
+	background:#EC6363;
+}
+.pres-top-remarks {
+	width: 370px;
+}
+.pres-main-freq {
+	width:135px;
+}
+.pres-top-qty {
+	width: 60px;
+}
+.pres-main-product {
+	width: 200px;
+}
+.pres-main-noofdays {
+	width: 45px;
+	line-height: 10px !important;
+}
+.pres-main-route {
+	width: 125px;
+}
+.pres-main-remarks {
+	width: 152px;
+}
+.freq_3_times, .freq_4_times, .freq_1_times {
+	width: 86.5% !important;
+}
+.freq_1_times > span {
+	width: 100% !important;
+}
+.pres-main-afbf {
+	width: 85px;
+}
+.pres-remarks-field > span {
+	width: 100% !important;
+}
+.top-product-search {
+	width:550px;
+}
+.legend table {
+	position: absolute;
+	bottom: -51px;
+	right: 0px;
+}
+.legend > div {
+	display: none;
+}
+.document-filters .form-inline .form-control {
+	vertical-align: top
+}
+.document-filters select {
+	margin-bottom: 0px;
+}
+.network-mgs {
+	width: 295px;
+	position: relative;
+	z-index: 9999;
+	margin: 1px auto;
+	padding: 7px;
+	text-align: center;
+	color: #222222;
+	border-radius: 0px;
+	-webkit-box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow:    0px 5px 15px 0px rgba(0, 0, 0, 0.4);
+	box-shadow:         0px 5px 15px 0px rgba(0, 0, 0, 0.4);
+	border:#f0c36d solid 1px;
+	background: #f9edbe;
+}
+.network-mgs span {
+	font-weight:600;
+}
+.search-dropdown {
+    width: auto !important;
+    display: inline-block !important;
+}
+.daterangepicker .input-mini {
+    padding-left: 25px !important;
+}
+.patient-dropdown {
+    width: 250px;
+    max-height: 350px;
+    overflow-y: auto;
+}
+.patient-dropdown a {
+    color: #0672ce;
+    text-transform: uppercase;
+}
+.patient-dropdown span {
+    color: #918e8e;
+    font-size: 14px;
+}   
+.patient-dropdown li {
+    width: 100%;
+    float: left;
+    padding: 5px 5px 5px 5px;
+} 
+
+.patient-dropdown li:hover{
+    background: #eeeeee;
+}
+.paitent-details2-CD {
+    float: right;
+    margin-right: 15px;
+}
+ @media (min-width: 1280px) {
+.pre-freq-new1 input {
+	width: 27%;
+	float: left;
+}
+#frequency_txt input {
+	width:83.5%;
+}
+}
+ @media (max-width: 767px) {
+.hidden-xs {
+	display: none !important;
+}
+}
+@media (min-width: 768px) and (max-width: 991px) {
+.prescription-field {
+	width:580px;
+}
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+.pre-freq-new1 input {
+	float: left;
+	width: 26.4%;
+}
+#frequency_4 input {
+	float: left;
+	width: 19.8%;
+	padding:6px 0px !important;
+	text-align: center;
+}
+#frequency_txt input {
+	width: 79.2%;
+}
+.hidden-md {
+	display: none !important;
+}
+.out-patient-table th {
+	font-family: 'Roboto Condensed', sans-serif;
+	font-weight: 400;
+}
+.prescription-1 .pres-inner {
+}
+.outpatient-2 .th-inner {
+	width: 100px !important;
+	padding: 0px !important;
+}
+.outpatient-2 .th-inner .box {
+	padding: 0px !important;
+}
+.outpatient-3 .th-inner {
+	width: 100px !important;
+	padding: 0px !important;
+}
+.pres-main-remarks {
+	width: 125px;
+}
+.pres-main-afbf {
+	width: 105px;
+}
+.freq_3_times, .freq_4_times, .freq_1_times {
+	width: 80.9% !important;
+}
+.pres-main-freq {
+	width: 145px;
+}
+.prescription-hightlight .btn {
+	padding: 5px;
+}
+.top-product-search {
+	width:480px;
+}
+.prescrip-dropdown2 {
+	width: 480px !important;
+}
+.pres-top-pro {
+	width: 480px;
+}
+.pres-top-freq {
+	width: 220px;
+}
+.pres-top-remarks {
+	width: 250px;
+}
+}
+#bg-text
+{
+    color:#000000;
+    font-size:150px;
+    transform:rotate(300deg);
+    -webkit-transform:rotate(300deg);
+    width: 100%;
+    float: left;
+    position: absolute;
+    top: 25%;   
+    opacity: 0.1;
+    filter: alpha(opacity=10); /* For IE8 and earlier */
+}
+
+.prev-h1{
+    padding-left: 0px;
+}
+.i-switch i:before {
+    border: 1px solid #bbb;
+}
+.sale-bill {
+    background-color: #f7f7f7;
+}
