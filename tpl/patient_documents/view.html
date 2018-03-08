@@ -1,0 +1,94 @@
+<div ng-controller="DocumentsController">
+    <div class="bg-light lter b-b wrapper-md">
+        <div class="row">
+            <div class="col-sm-9">
+                <h1 class="m-n h3">View Document</h1>
+            </div>
+            <div class="col-sm-3 text-right">
+                <button class="btn btn-sm btn-info" ng-click="printDocument()">
+                    <i class="fa fa-print"></i> Print
+                </button>
+                <button ng-click="$state.go('patient.document', {id: $state.params.id})" class="btn btn-sm btn-dark">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-md" ng-init="viewDocument();">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div ng-show="isLoading" class="text-center">
+            <i class="fa fa-spin fa-refresh"></i>
+        </div>
+        <div ng-hide="isLoading">
+            <div class="panel panel-default divHeader">
+                <div class="panel-body">
+                    <div class="col-sm-2">
+                        <img width="60" height="60" alt="AHANA HOSPITALS" src="{{app.org_document_logo}}">
+                    </div>
+                    <div class="col-sm-6">
+                        <h3> {{app.org_name}} </h3>
+                    </div>
+                    <div class="col-sm-4 text-right m-t-md">
+                        <b>Date:</b> {{created_at| moment:'DD/MM/YYYY - hh:mm A'}}
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body" ng-if="document_type == 'MCH'" ng-show="pastMedical.length > 0">
+                <div class="panel panel-default">
+                    <div class="panel-heading bg-default">
+                        <b>Past Medical History</b>
+                    </div>
+                    <div class="panel-body" style="height:150px;overflow:scroll;overflow-x:hidden;overflow-y:scroll;">
+                        <table width='100%' class="table table-striped b-t b-light">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Encounter</th>
+                                    <th>Past Medical Notes</th>
+                                    <th>Created By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="past in pastMedical">
+                                    <td>{{past.created_at| moment:'DD/MM/YYYY - hh:mm A'}}</td>
+                                    <td>{{past.encounter_id}}</td>
+                                    <td>{{past.past_medical}}</td>
+                                    <td>{{past.created_by}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div ng-bind-html="xml | xslt:xslt | sanitize" class="document-content"></div>
+
+            <!-- Document Print Content-->
+            <div ng-hide="true" id='printThisElement'>
+                <table id='print_medical_case' style="width:100%">
+                    <!--                   <thead>
+                                           <tr>
+                                               <th>
+                                                   <img width="60" height="60" alt="AHANA HOSPITALS" src="css/images/ah-logo.png" />
+                                               </th>
+                                               <th>
+                                                   {{app.org_name}} 
+                                               </th>
+                                               <th>
+                                                   <b>Date:</b> {{created_at| moment:'DD/MM/YYYY - hh:mm A'}}
+                                               </th>
+                                           </tr>
+                                       </thead>-->
+                    <tbody>
+                        <tr>
+                            <td colspan="3" ng-bind-html="xml | xslt:printxslt | sanitize">
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

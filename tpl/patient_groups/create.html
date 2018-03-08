@@ -1,0 +1,20 @@
+<div ng-controller="PatientGroupsController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Create Patient Group</h1>
+    </div>
+    
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-6" ng-init="data = {}; data.formtype = 'add'; data.status = '1'; data.patient_cat_color = '#FFFFFF'">
+                <form name="patientGroupForm" class="form-horizontal form-validation" novalidate="">
+                    <div ng-include="'tpl/patient_groups/_form.html'">
+                        {% include 'tpl/patient_groups/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

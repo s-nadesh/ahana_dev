@@ -1,0 +1,20 @@
+<div ng-controller="ExtraConcessionController" ng-init="initForm()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3" ng-show="$state.params.mode == 'E'">Update Extra Amount</h1>
+        <h1 class="m-n h3" ng-show="$state.params.mode == 'C'">Update Concession Amount</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="data.formtype = 'update'; loadForm();" novalidate="">
+                <form name="ecChargesForm" class="form-horizontal form-validation">
+                    <div ng-include="'tpl/patient_extra_concession/_form.html'">
+                        {% include 'tpl/patient_extra_concession/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

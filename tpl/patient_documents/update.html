@@ -1,0 +1,60 @@
+<div ng-controller="DocumentsController">
+    <style>
+        .ui-datepicker-calendar {
+            display: none;
+        }
+    </style>
+    <div class="bg-light lter b-b wrapper-md">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1 class="m-n h3">Update Document</h1>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-sm btn-dark pull-right" ng-click="$state.go('patient.document', {id: $state.params.id})">
+                    <i class="fa fa-arrow-left"></i> Back
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-md" ng-init="initFormUpdate();">
+        <div class="panel-body" ng-if="document_type == 'MCH'" ng-show="pastMedical.length > 0">
+            <div class="panel panel-default">
+                <div class="panel-heading bg-default">
+                    <b>Past Medical History</b>
+                </div>
+                <div class="panel-body" style="height:150px;overflow:scroll;overflow-x:hidden;overflow-y:scroll;">
+                    <table width='100%' class="table table-striped b-t b-light">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Encounter</th>
+                                <th>Past Medical Notes</th>
+                                <th>Created By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="past in pastMedical">
+                                <td>{{past.created_at| moment:'DD/MM/YYYY - hh:mm A'}}</td>
+                                <td>{{past.encounter_id}}</td>
+                                <td>{{past.past_medical}}</td>
+                                <td>{{past.created_by}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div ng-show="isLoading" class="text-center">
+            <i class="fa fa-spin fa-refresh"></i>
+        </div>
+        <div ng-hide="isLoading">
+            <div ng-bind-html="xml | xslt:xslt | sanitize"></div>
+            <footer class="panel-footer text-right bg-light lter">
+                <input type="submit" class="btn m-b-xs  btn-success save-btn" id="btn_sub" name="btn_sub" value="Submit" ng-click="document_type == 'CH' ? submitXsl(doc_id) : savemedicalForm(doc_id)"  />
+            </footer>
+        </div>
+    </div>
+</div>

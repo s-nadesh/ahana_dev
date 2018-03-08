@@ -1,0 +1,80 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Encounter # </label>
+            <div class="col-sm-9">
+                {{encounter.encounter_id}}
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Category </label>
+            <div class="col-sm-9">
+                {{data.type}}
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{{data.ec_type == 'P' ? 'Procedure' : 'Consultant'}} </label>
+            <div class="col-sm-9">
+                {{data.headers}}
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Charge Amount </label>
+            <div class="col-sm-9">
+                {{data.total_charge}}
+            </div>
+        </div>
+
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div ng-if="$state.params.mode == 'E'">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Concession Amount </label>
+                <div class="col-sm-9">
+                    {{data.concession_amount || '0.00'}}
+                </div>
+            </div>
+
+            <div class="line line-dashed b-b line-lg "></div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Extra Amount</label>
+                <div class="col-sm-9">
+                    <input type="text" ng-model="data.extra_amount" maxlength="50" class="form-control" placeholder="Charge" number-mask="">
+                </div>
+            </div>
+            
+            <div class="line line-dashed b-b line-lg "></div>
+        </div>
+        <div ng-if="$state.params.mode == 'C'">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Extra Amount </label>
+                <div class="col-sm-9">
+                    {{data.extra_amount || '0.00'}}
+                </div>
+            </div>
+
+            <div class="line line-dashed b-b line-lg "></div>
+            
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Concession Amount</label>
+                <div class="col-sm-9">
+                    <input type="text" ng-model="data.concession_amount" maxlength="50" class="form-control" placeholder="Charge" number-mask="">
+                </div>
+            </div>
+            <div class="line line-dashed b-b line-lg "></div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.billing', {id: $state.params.id})"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

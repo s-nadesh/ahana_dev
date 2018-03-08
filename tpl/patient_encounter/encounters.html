@@ -1,0 +1,234 @@
+<div ng-controller="EncounterController">
+
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3"> Encounters</h1>
+
+
+    </div>
+    <div class="wrapper-md" ng-init="loadPatientEncounters('Current');">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="panel panel-default">
+            <div class="row wrapper pb-10">
+                <div class="{{class1}} m-b-xs">
+                    <button class="btn btn-sm btn-grey" ng-show="encounterView == 'Current'" ng-click="loadPatientEncounters('Current');"> &nbsp; &nbsp; <i class="fa fa-repeat"></i>  &nbsp; &nbsp; </button>
+                    <button class="btn btn-sm btn-grey" ng-show="encounterView == 'Previous'" ng-click="loadPatientEncounters('Previous');"> &nbsp; &nbsp; <i class="fa fa-repeat"></i>  &nbsp; &nbsp; </button>
+                    &nbsp; &nbsp
+                    <button ng-click="$state.go('patient.modifyCaseSheetNo', {id: $state.params.id})" class="btn btn-sm btn-grey">
+                        Modify Case Sheet No
+                    </button>
+                    &nbsp; &nbsp
+
+                    <div ng-if="more_li.length > 0 && (key + 1) <= more_max" ng-repeat="(key, li) in more_li" class="btn-group">
+                        <button check-access-custom2 ng-if="li.mode == 'sref'" ui-sref="{{li.href}}" class="btn btn-sm btn-grey"> {{li.name}}</button>
+                        <button check-access-custom3 ng-if="li.mode == 'click'" ng-click="{{li.href}}" class="btn btn-sm btn-grey" data-url='{{li.url}}'> {{li.name}}</button>    &nbsp; &nbsp
+                    </div>
+
+                    <div class="btn-group" dropdown is-open="status.isopen" ng-if="more_li.length > more_max">
+                        <button type="button" class=" btn btn-sm btn-grey" dropdown-toggle>
+                            More &nbsp;&nbsp;<span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li ng-if="(key + 1) > more_max" ng-repeat="(key, li) in more_li">
+                                <a check-access-custom2 ng-if="li.mode == 'sref'" ui-sref="{{li.href}}">{{li.name}}</a>
+                                <a check-access-custom3 ng-if="li.mode == 'click'" ng-click="{{li.href}}" data-url='{{li.url}}'>{{li.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="{{class2}}" ng-hide="isLoading">
+                    <button ng-if="activeEncounter == null" ng-click="$state.go('patient.admission', {id: $state.params.id})" class="btn btn-info"><i class="fa fa-plus"></i> New Admission </button>
+                    <button ng-if="activeEncounter == null || activeIPEncounter.length == 0" ng-click="$state.go('patient.appointment', {id: $state.params.id})" class="btn btn-primary"><i class="fa fa-plus"></i> New Appointment </button>
+                    <!--<button class="btn btn-default"><i class="fa fa-print"></i> Print</button>-->
+                </div>
+
+                <div class="{{class3}} text-right" ng-hide="isLoading">
+                    <!--                            <div class="input-group">
+                                                    <input placeholder="Filter by date" prevent-enter type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="filterdate" is-open="opened" datepicker-options="dateOptions" close-text="Close" max-date="maxDate" date-disabled="disabled(date, mode)" ng-change="loadPatientEncounters('Current', filterdate);"/>
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                    </span>
+                                                </div>-->
+                    <select class="form-control search-dropdown" ng-model="day" ng-options="day.value as day.label for day in days">
+                        <option value="">DD</option>
+                    </select>
+                    <select class="form-control search-dropdown" ng-model="month" ng-options="month.value as month.label for month in months">
+                        <option value="">MM</option>
+                    </select>
+                    <select class="form-control search-dropdown" ng-model="year" ng-options="year.value as year.label for year in years">
+                        <option value="">YYYY</option>
+                    </select>
+                    <button class="btn m-b-xs btn-grey"  ng-disabled=" (day && month && year) ? false : true" ng-click="loadPatientEncounters('Current', year + '-' + month + '-' + day)">
+                        &nbsp; &nbsp; <i class="fa fa-search"></i> &nbsp; &nbsp;
+                    </button>
+
+                    <button title="Clear" ng-click="day = ''; month = ''; year = ''; loadPatientEncounters('Current')" class="btn m-b-xs  btn-dark">
+                        <i class="fa fa-times"></i>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="table-responsive in-patient-table">
+                <script type="text/ng-template" id="myModalContent.html">
+                    <div ng-include="'tpl/inpatient.edit.html'"></div>
+                </script>
+                <table st-table="displayedCollection"  st-safe-src="rowCollection"  class="table table-striped b-t b-light">
+                    <thead>
+                        <tr>
+                            <th>
+                                <button class="btn btn-sm btn-default" type="button" ng-click="ctrl.expandAll(allExpanded = !allExpanded)">
+                                    <i ng-if="!allExpanded" class="fa fa-plus text"></i>
+                                    <i ng-if="allExpanded" class="fa fa-minus text"></i>
+                                </button>
+                            </th>
+                            <th>Encounter ID </th>
+                            <th>Branch Name</th>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Details</th>
+                            <th>Doctors Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-hide="isLoading">
+                        <tr ng-repeat-start="(main_key, encounter) in displayedCollection" ng-init="expanded = (encounter.status == 1) ? true : false;">
+                            <td>
+                                <button ng-click="expanded = !expanded" expand class="btn btn-sm btn-default hms-plus">
+                                    <i ng-if="!expanded" class="fa fa-plus text"></i>
+                                    <i ng-if="expanded" class="fa fa-minus text"></i>
+                                </button>
+                            </td>
+                            <td colspan="7">
+                                <b>
+                                    <!--<span class="badge bg-success">Branch: {{encounter.tenant}}</span>-->
+                                    <span class="badge bg-primary">Encounter: {{encounter.encounter_id}}</span>&nbsp; &nbsp;
+                                    <span class="badge bg-black">Date: {{encounter.date| moment:'DD/MM/YYYY'}}</span>&nbsp; &nbsp;
+                                    <span class="badge bg-success">{{encounter.encounter_type}}</span>&nbsp; &nbsp;
+                                    <span class="badge bg-info">Doctor: {{encounter.doctor}}</span>
+                                </b>
+                            </td>
+                        </tr>
+                        <tr ng-repeat-end ng-show="expanded" ng-repeat="(key, item) in encounter.all">
+                            <td>
+                                <label ng-if="item.tenant_id == app.logged_tenant_id" ng-show="(item.status == 1 || item.type == 'Seen') && encounter.last_row_sts != 'CD'" class="i-checks m-b-none"><input id="enc_{{item.encounter_id}}{{key}}" class="enc_chk enc_chk_{{item.encounter_id}}" type="checkbox" name="b[]" ng-click="moreOptions(key, item.encounter_id, item.encounter_type, item.row_sts, item.id, item.status, item.is_swap)"><i></i></label>
+                            </td>
+                            <td> {{encounter.encounter_id}} </td>
+                            <td> {{item.tenant_name}} </td>
+                            <td>
+                                <!--Datetime picker-->
+                                <!-- Hide by Nadesh -- >
+                                <!--                                <div class="input-group" ng-if="item.type == 'Booked' && encounter.all.length == 1">
+                                                                    <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                                                        <div class="input-group">
+                                                                            <span editable-text="item.date" e-name="date" e-form="hiddenform">
+                                                                                {{item.date| moment:'DD/MM/YYYY'}} &nbsp;
+                                                                                <span class="label bg-light dk">{{item.date| moment:'hh:mm A'}}</span>
+                                                                            </span>
+                                                                        </div>
+                                                                    </a>
+                                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                                                        <datetimepicker data-ng-model="arr_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-on-set-time="onTimeSet(newDate, oldDate, main_key, key)"/>
+                                                                    </ul>
+                                                                </div>
+
+                                                                <div ng-if="item.type !== 'Booked' || encounter.all.length > 1">
+                                                                    {{item.date| moment:'DD/MM/YYYY'}} &nbsp;
+                                                                    <span class="label bg-light dk">{{item.date| moment:'hh:mm A'}}</span>
+                                                                </div>-->
+                                <div>
+                                    {{item.date| moment:'DD/MM/YYYY'}} &nbsp;
+                                    <span class="label bg-light dk">{{item.date| moment:'hh:mm A'}}</span>
+                                </div>
+                            </td>
+                            <td>
+
+                                <div ng-if="item.type !== 'Booked' || encounter.all.length > 1" ng-show="item.type !== 'Arrived'">
+                                    {{item.type}} <span ng-if="item.is_swap == 1">( Swapping )</span>
+                                </div>
+
+                                <!--Static (Hard code)-->
+                                <div ng-show="item.type == 'Arrived' && encounter.all.length > 2">
+                                    {{item.type}}
+                                </div>
+                                <!--Booked to Arrival Form-->
+                                <div ng-if="item.type == 'Booked' && encounter.all.length == 1 && item.is_future">
+                                    Booked
+                                </div>
+                                <div ng-if="item.type == 'Booked' && encounter.all.length == 1 && item.is_future == false">
+                                    <form editable-form name="rowform" onbeforesave="changeAppointmentStatus({
+                                          'patient_id': item.patient_id,
+                                          'encounter_id': item.encounter_id,
+                                          'consultant_id': item.consultant_id,
+                                          'appt_status': 'A',
+                                          }, key)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == item">
+                                        <span editable-select="statuses[0].value" e-name="sts_status" e-form="rowform" e-ng-options="s.value as s.text for s in statuses" e-class="form-control">
+                                            {{item.sts_status|| 'empty' }}
+                                        </span>
+                                        <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary btn-sm">
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        </button>
+                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel();
+                                            setTimings(key, 'unset')" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </form>
+                                    <div class="buttons" ng-show="!rowform.$visible">
+                                        <a ng-if="item.tenant_id == app.logged_tenant_id" ng-click="rowform.$show();
+                                            setTimings(key, 'set')" class="ng-scope ng-binding editable editable-click"> Booked </a>
+                                        <span ng-if="item.tenant_id != app.logged_tenant_id"> Booked </span>
+                                        <br />
+                                        <!--<span class="text-danger-dk">Waiting!</span>-->
+                                    </div>
+                                </div>
+                                <!--Arrived to Seen Form-->
+                                <div ng-if="item.type == 'Arrived' && encounter.all.length == 2">
+                                    <form editable-form name="rowform" onbeforesave="$state.go('patient.changeStatus', {id: $state.params.id, enc_id: item.encounter_id})" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == item">
+                                        <span editable-select="arr_statuses[0].value" e-name="sts_status" e-form="rowform" e-ng-options="s.value as s.text for s in arr_statuses" e-class="form-control">
+                                            {{item.sts_status|| 'empty' }}
+                                        </span>
+                                        <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary btn-sm">
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        </button>
+                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel();" class="btn btn-default btn-sm">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </form>
+                                    <div class="buttons" ng-show="!rowform.$visible">
+                                        <a ng-if="item.tenant_id == app.logged_tenant_id" ng-click="rowform.$show();" class="ng-scope ng-binding editable editable-click"> Arrived </a>
+                                        <span ng-if="item.tenant_id != app.logged_tenant_id"> Arrived </span><br />
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span ng-if="item.encounter_type == 'OP'" class="label bg-primary">{{item.details}}</span>
+                                <span ng-if="item.encounter_type == 'IP'" class="label bg-success">{{item.details}}</span>
+                            </td>
+                            <td> {{item.doctor}} </td>
+                            <td>
+                                <button tooltip="Print Bill"  class="label bg-primary dk" ng-show="(item.type == 'Seen')" ng-click="printOPBill(item)">
+                                    <i class="fa fa-print"></i>
+                                </button>
+
+                                <a ng-if="item.tenant_id == app.logged_tenant_id" check-access-custom3 tooltip="Cancel Clinical Discharge" class="label bg-danger dk" ng-show="(item.status == 1 && item.row_sts == 'CD')"  ng-click="cancelAdmission(item.encounter_id, item.id, item.row_sts)" data-url='patient.cancelLastEncounter'>
+                                    <i class="fa fa-remove"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody ng-show="isLoading">
+                        <tr>
+                            <td colspan="7" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div ng-include="'tpl/patient_appointment/_print_op_seen_bill.html'">
+        {% include 'tpl/patient_appointment/_print_op_seen_bill.html' %}
+    </div>
+</div>

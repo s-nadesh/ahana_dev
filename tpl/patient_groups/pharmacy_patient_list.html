@@ -1,0 +1,141 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n h3">Patient Groups</h1>
+</div>
+
+<div class="wrapper-md" ng-controller="PatientGroupsController" ng-init="loadPharmacyPatientGroupsList()">
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-8">
+                    <button class="btn btn-sm btn-grey" ng-click="loadPharmacyPatientGroupsList()"> 
+                        &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+                    </button>
+                    <input id="filter" type="text" placeholder="Search" class="form-control input-sm w-sm inline m-r" ng-model="form_filter"/>
+                    <button class="btn btn-sm btn-grey" ng-click="loadPharmacyPatientGroupsList()">
+                        &nbsp; &nbsp; <i class="fa fa-search"></i> &nbsp; &nbsp;
+                    </button>
+                    <button class="btn btn-sm btn-dark" title="clear filter" ng-click="form_filter = '';loadPharmacyPatientGroupsList()">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <div class="col-sm-4">
+                    <button check-access-button ng-click="$state.go('configuration.patientgroupCreate')" class="btn btn-sm btn-info pull-right hide show2">
+                        <i class="fa fa-plus"></i> &nbsp; Add New Patient Group
+                    </button>
+                    <div class="dataTables_length show2">
+                        <label>Show
+                            <select id="ddlPageSize" class=" "  
+                                    ng-model="pageSizeSelected"  
+                                    ng-change="changePageSize()">  
+                                <option value="10">10</option>  
+                                <option value="25">25</option>  
+                                <option value="50">50</option>
+                                <option value="100">100</option>  
+                            </select> entries
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <table class="table m-b-none default">
+                <!--<table data-filter="#filter" data-filtering="true" ui-jq="footable" class="table m-b-none footable-loaded footable default">-->
+                <thead>
+                    <tr>
+                        <th align="left" valign="top" data-toggle="true">
+                            <button class="btn btn-sm btn-default" type="button" ng-click="ctrl.expandAll(allExpanded = !allExpanded)">
+                                <i ng-if="!allExpanded" class="fa fa-plus text"></i>
+                                <i ng-if="allExpanded" class="fa fa-minus text"></i>
+                            </button>
+                        </th>
+                        <th>Group name</th>
+                    </tr>
+                </thead>
+                <tbody ng-if="isLoading == false">
+                    <tr ng-repeat-start="row in rowCollection| orderBy: group_name">
+                        <td align="left" valign="top" width="5%">
+                            <button ng-click="expanded = !expanded" expand class="btn btn-sm btn-default hms-plus">
+                                <i ng-if="!expanded" class="fa fa-plus text"></i>
+                                <i ng-if="expanded" class="fa fa-minus text"></i>
+                            </button>
+                        </td>
+                        <td>
+                            {{row.group_name}}
+                        </td>
+                    </tr>
+
+                    <tr ng-repeat-end ng-show="expanded" data-value="{{row.group_name}}">
+                        <td data-value="{{row.group_name}}">&nbsp;</td>
+
+                        <td colspan="2" data-value="{{row.group_name}}">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="panel panel-default inner-panel">
+                                        <div class="panel-heading">
+                                            <b> Patients </b> 
+                                            <button class="label bg-primary pull-right" ng-click="rowform.$show();
+                                                        addSubRow(row.patient_group_id)" type="button">Add Row
+                                            </button>
+                                        </div>
+
+                                        <ul class="list-group no-radius">
+                                            <li class="list-group-item" ng-repeat="patient in row.patients">
+                                                <span class="pull-right" ng-show="!rowform.$visible"> 
+                                                    <!--<button ng-click="rowform.$show()" class="badge bg-dark ng-binding">Edit</button>-->  
+                                                    <button ng-click="deleteSubRow(row.patient_group_id, patient.global_patient_id, patient.temp_patient_group_id);" class="badge bg-danger ng-binding">Delete</button>
+                                                </span>
+
+                                                <form editable-form name="rowform" onbeforesave="updatePatient($data, patient.global_patient_id, row.patient_group_id, patient.temp_patient_group_id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == patient">
+                                                    <span class="pull-right">
+                                                        <button type="submit" ng-disabled="rowform.$waiting" class="badge bg-success">
+                                                            Save
+                                                        </button>
+                                                        &nbsp;&nbsp;
+                                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="badge bg-danger">
+                                                            Cancel
+                                                        </button>
+                                                    </span>
+                                                </form>
+
+                                                <span 
+                                                    editable-text="patient.global_patient_id" 
+                                                    e-name="patient" 
+                                                    e-form="rowform" 
+                                                    onbeforesave="checkInput($data)"
+                                                    e-typeahead-editable="false" 
+                                                    e-typeahead="patient as patient.name_with_int_code for patient in getPatients($viewValue) | filter:{name_with_int_code:$viewValue} | limitTo: 10"
+                                                    >
+                                                    {{patient.fullname_globalcode|| 'empty' }}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody ng-if="isLoading == true">
+                    <tr>
+                        <td colspan="2" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>  
+                        <td align="center" colspan="2">  
+                            <div class="pull-right">  
+                                <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex" max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>  
+                            </div>  
+                        </td>  
+                    </tr> 
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+
+</div>

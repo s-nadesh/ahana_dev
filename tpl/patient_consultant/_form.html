@@ -1,0 +1,64 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Encounter #</label>
+            <div class="col-sm-5" ng-if="all_encounters.length > 1">
+                <select class="form-control" ng-model="data.encounter_id" ng-options="all_encounter.encounter_id as all_encounter.encounter_id for all_encounter in all_encounters| orderBy: encounter_id">
+                </select>
+            </div>
+            <div class="col-sm-9" ng-if="all_encounters.length == 1">
+                {{data.encounter_id}}
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Date of Consultant Visit * </label>
+            <div class="col-sm-9">
+                <div class="input-group w-md">
+                    <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                        <div class="input-group">
+                            <input type="text" class="form-control" data-ng-model="data.consult_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <datetimepicker data-ng-model="data.consult_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-before-render="beforeRender($view, $dates, $leftDate, $upDate, $rightDate)"/>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Consultant * </label>
+            <div class="col-sm-9">
+                <select class="form-control selectpicker" data-live-search="true" ng-model="data.consultant_id" ng-options="doctor.user_id  as doctor.consult_speciality_name for doctor in doctors| orderBy: 'name'" >
+                    <option value="">Select Consultant</option>
+                </select>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Description  </label>
+            <div class="col-sm-9">
+                <textarea placeholder="Description" class="form-control" ng-model="data.notes"></textarea>
+            </div>
+        </div>
+        
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Privacy</label>
+            <div class="col-sm-9">
+                <label class="i-checks "> 
+                    <input type="checkbox" name="status" ng-true-value="'1'" ng-false-value="'0'" ng-model="data.privacy"> 
+                    <i></i> 
+                </label> &nbsp; &nbsp;
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.consultant', {id: $state.params.id})"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

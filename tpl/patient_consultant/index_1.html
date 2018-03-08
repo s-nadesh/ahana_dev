@@ -1,0 +1,90 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n h3">Consultation</h1>
+</div>
+<div class="wrapper-md tab-btn">
+    <div class="row">
+    </div>
+</div>
+<div class="wrapper-md" ng-controller="PatConsultantsController" ng-init="initPatConsultantIndex()">
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+    <div class="panel panel-default"> 
+        <!--<div class="panel-heading">
+      Responsive Table
+    </div>-->
+        <div class="row wrapper">
+            <div class="col-sm-1 m-b-xs">
+                <button class="btn btn-sm btn-grey" ng-click="loadPatConsultantsList(enc.selected.encounter_id)"> 
+                    &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+                </button>
+            </div>
+            <div class="col-sm-3 m-b-xs">
+                <ui-select ng-model="enc.selected" theme="bootstrap">
+                    <ui-select-match placeholder="Select Encounter Id">{{$select.selected.encounter_id}}</ui-select-match>
+                    <ui-select-choices repeat="item in encounters | filter: $select.search | orderBy: 'encounter_id' : true">
+                        <div ng-bind-html="item.encounter_id | highlight: $select.search"></div>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-sm-4 pull-right right">
+                <button ng-show="enc.selected.status == '1'" ng-click="$state.go('patient.consultantCreate', {id: $state.params.id, enc_id: enc.selected.encounter_id})" class="btn btn-sm btn-info pull-right">
+                    <i class="fa fa-plus"></i> &nbsp; Add new Consultant
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive in-patient-table">
+            <div class="wrapper-md">
+                <div class="row">
+                    <table st-table="displayedCollection"  st-safe-src="rowCollection"  class="table table-striped b-t b-light">
+                        <thead>
+                            <tr>
+                                <th width="22" > &nbsp;</th>
+                                <th width="169">Date Of Visit</th>
+                                <th width="600">Consultant</th>
+                                <th width="150">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-hide="isLoading">
+                            <tr ng-repeat-start="(key, value) in displayedCollection | groupBy: 'consultant_id'">
+                                <td> <button ng-click="expanded = !expanded" expand class="btn btn-sm btn-default hms-plus">
+                                        <i ng-if="!expanded" class="fa fa-plus text"></i>
+                                        <i ng-if="expanded" class="fa fa-minus text"></i>
+                                    </button></td>
+                                <td colspan="3"> <b> <span class="badge bg-primary ng-binding"> Consultant : {{value[0]['consultant_name']}}; ({{value.length}}) </span> </b> </td>
+                            </tr>
+                            <tr ng-repeat-end ng-show="expanded" ng-repeat="patConsultant in value">
+                                <td>&nbsp;</td>
+                                <td> {{patConsultant.consult_date| moment:'DD/MM/YYYY'}} &nbsp;<span class="label bg-light dk">{{patConsultant.consult_date| moment:'hh:mm A'}}</span> </td>
+                                <td> {{patConsultant.consultant_name}} </td>
+                                <td>
+                                    <div ng-if="patConsultant.tenant_id != null">
+                                        <a title="Edit" check-access  ui-sref="patient.consultantUpdate({id: $state.params.id, cons_id: patConsultant.pat_consult_id})" class="label bg-info dk">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>&nbsp;&nbsp;&nbsp;
+                                        <a title="Delete" ng-click="removeRow(patConsultant)" class="label bg-dark dk">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="6" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    <!--<div st-items-by-page="itemsByPage" st-pagination="" st-template="tpl/patient/pagination.custom.html"></div>-->
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
