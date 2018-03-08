@@ -1,0 +1,209 @@
+<div>
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Add Product</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="data.status = '1'">
+                <form name="descForm" class="form-horizontal form-validation" novalidate="">
+                    <div class="modal-body wrapper-lg">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Product Name * </label>
+                                    <div class="col-sm-8">
+                                        <div class="col-sm-3">
+                                            <input type="text" name="product_name" ng-model="data.product_name" class="form-control" placeholder="Product Name">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" name="product_unit_count" ng-model="data.product_unit_count" class="form-control" placeholder="Unit">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <select class="form-control" ng-model="data.product_unit" ng-options="productUnit.product_unit as productUnit.product_unit for productUnit in productUnits| orderBy: label">
+                                                <option value="">Select</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-0">
+                                            <button type="button" class="btn btn-primary" ng-click="openProductunit()">
+                                                <i class="fa fa-plus text ng-scope"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- hidden textbox for product description -->
+                                <div class="form-group" ng-show='product_unit'>
+                                    <label class="col-sm-4 control-label">&nbsp;</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" ng-model='popupdata.product_unit' id='product_type_textbox' type="text" placeholder="Product Unit">
+                                    </div>
+                                    <button class="btn m-b-xs  btn-success save-btn" ng-disabled="!popupdata.product_unit" ng-click="addProductunit()">Save</button>
+                                    &nbsp;
+                                    <button class="btn m-b-xs  btn-dark" ng-click="productunitCancel()"><i class="fa fa-times"></i> Cancel</button>
+                                </div>
+
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Product Type * </label>
+                                    <div class="col-sm-6">
+                                        <select class="selectpicker" data-live-search="true" ng-model="data.product_description_id" ng-options="productDescription.description_id as productDescription.description_name for productDescription in productDescriptions| orderBy: description_name"">
+                                            <option value="">Select Product Type</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-0">
+                                        <button type="button" class="btn btn-primary" ng-click="openProducttype()">
+                                            <i class="fa fa-plus text ng-scope"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- hidden textbox for product description -->
+                                <div class="form-group" ng-show='product_type'>
+                                    <label class="col-sm-4 control-label">&nbsp;</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" ng-model='popupdata.textdescription_name' id='product_type_textbox' type="text" placeholder="Product Type">
+                                    </div>
+                                    <button class="btn m-b-xs  btn-success save-btn" ng-disabled="!popupdata.textdescription_name" ng-click="addProduct()">Save</button>
+                                    &nbsp;
+                                    <button class="btn m-b-xs  btn-dark" ng-click="productCancel()"><i class="fa fa-times"></i> Cancel</button>
+                                </div>
+
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Brand Name * </label>
+                                    <div class="col-sm-6">
+                                        <select class="selectpicker" data-live-search="true" ng-model="data.brand_id" ng-options="brand.brand_id as brand.brand_name for brand in brands| orderBy: brand_name"">
+                                            <option value="">Select Brand Name</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-0">
+                                        <button type="button" class="btn btn-primary" ng-click="openBrandtextbox()">
+                                            <i class="fa fa-plus text ng-scope"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- hidden textbox for brand name -->
+                                <div ng-show='addBrandname'>
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">&nbsp;</label>
+                                        <div class="col-sm-4">
+                                            <input class="form-control" ng-model='popupdata.textbrand_name' id='brand_name_textbox' type="text" placeholder="Brand Name">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" >
+                                        <label class="col-sm-4 control-label">&nbsp;</label>
+                                        <div class="col-sm-4">
+                                            <input class="form-control" ng-model='popupdata.brand_code' id='brand_code_textbox' type="text" placeholder="Brand Code">
+                                        </div>
+                                        <button class="btn m-b-xs  btn-success save-btn" ng-disabled="!popupdata.textbrand_name || !popupdata.brand_code" ng-click="addBrand()">Save</button>
+                                        &nbsp;
+                                        <button class="btn m-b-xs  btn-dark" ng-click="brandCancel()"><i class="fa fa-times"></i> Cancel</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Brand Division * </label>
+                                    <div class="col-sm-6">
+                                        <select class="selectpicker" data-live-search="true" ng-model="data.division_id" ng-options="division.division_id as division.division_name for division in divisions| orderBy: division_name"">
+                                            <option value="">Select Brand Division</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-0">
+                                        <button type="button" class="btn btn-primary" ng-click="openDivisiontextbox()">
+                                            <i class="fa fa-plus text ng-scope"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-show='adddivision'>
+                                    <label class="col-sm-4 control-label">&nbsp;</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" ng-model='popupdata.textdivision_name' id='division_name_textbox' type="text" placeholder="Division Name">
+                                    </div>
+                                    <button class="btn m-b-xs  btn-success save-btn" ng-disabled="!popupdata.textdivision_name" ng-click="addDivision()">Save</button>
+                                    &nbsp;
+                                    <button class="btn m-b-xs  btn-dark" ng-click="divisionCancel()"><i class="fa fa-times"></i> Cancel</button>
+                                </div>
+
+
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Generic Name * </label>
+                                    <div class="col-sm-6">
+                                        <select class="selectpicker" data-live-search="true" ng-model="data.generic_id" ng-options="generic.generic_id as generic.generic_name for generic in generics| orderBy: generic_name"" ng-change="getDrugByGeneric()">
+                                            <option value="">Select Generic Name</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-0">
+                                        <button type="button" class="btn btn-primary" ng-click="openGenerictextbox()">
+                                            <i class="fa fa-plus text ng-scope"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" ng-show='addgeneric'>
+                                    <label class="col-sm-4 control-label">&nbsp;</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" ng-model='popupdata.textgeneric_name' id='generic_name_textbox' type="text" placeholder="Generic Name">
+                                    </div>
+                                    <button class="btn m-b-xs  btn-success save-btn" ng-disabled="!popupdata.textgeneric_name" ng-click="addGeneric()">Save</button>
+                                    &nbsp;
+                                    <button class="btn m-b-xs  btn-dark" ng-click="genericCancel()"><i class="fa fa-times"></i> Cancel</button>
+                                </div>
+
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div ng-show="data.drug_name">
+                                    <div class="form-group" >
+                                        <label class="col-sm-4 control-label">Drug Class </label>
+                                        <div class="col-sm-6">
+                                            <input type="text" ng-value="data.drug_name" maxlength="50" class="form-control" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-show="showDrugDropdown">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Drug Class </label>
+                                        <div class="col-sm-6">
+                                            <select class="selectpicker" data-live-search="true" ng-model="data.drug_class_id" ng-options="drugClass.drug_class_id as drugClass.drug_name for drugClass in drugClasses| orderBy: drug_name"">
+                                                <option value="">Select Drug Class</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-0">
+                                            <button type="button" class="btn btn-primary" ng-click="openDrugtextbox()">
+                                                <i class="fa fa-plus text ng-scope"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-show='adddrug'>
+                                    <label class="col-sm-4 control-label">&nbsp;</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" ng-model='popupdata.textdrug_name' id='drug_name_textbox' type="text" placeholder="Drug Name">
+                                    </div>
+                                    <button class="btn m-b-xs  btn-success save-btn" ng-disabled="!popupdata.textdrug_name" ng-click="addDrug()">Save</button>
+                                    &nbsp;
+                                    <button class="btn m-b-xs  btn-dark" ng-click="drugCancel()"><i class="fa fa-times"></i> Cancel</button>
+                                </div>
+
+
+                            </div>
+                            <footer class="panel-footer text-right bg-light lter">
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()">Save</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+                                &nbsp;
+                            </footer>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

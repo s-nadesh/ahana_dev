@@ -1,0 +1,148 @@
+<div ng-controller="ProcedureController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Add Procedure</h1>
+    </div>
+    <div class="wrapper-md tab-btn">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="btn-group op-btn-group">
+                    <button class="btn btn-info IP-op-patient" ng-click="loadPatientsList('IP')">
+                        <i class="fa fa-user-md"></i>&nbsp;&nbsp;In Patient
+                    </button>
+                    <button class="btn btn-info OP-op-patient" ng-click="loadPatientsList('OP')">
+                        <i class="fa fa-user-md"></i>&nbsp;&nbsp;Out Patient
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper-md">
+        <div class="row">
+            <div class="col-sm-12">
+                <form name="patientProcform" class="form-horizontal form-validation" novalidate="">
+                    <div class="row" ng-init="loadPatientsList('IP')">
+                        <div class="col-sm-3" style="height:70vh; overflow-y: auto; overflow-x: hidden;">
+                            <div class="panel panel-default">
+                                <div class="panel-heading font-bold">
+                                    All Patient
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-striped b-t b-light">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:2px;">
+                                                    <label class="i-checks">
+                                                        <input ng-model="selectall" ng-true-value="'1'" ng-false-value="'0'" ng-click="updateCheckbox()" type="checkbox" name="checkall" class="">
+                                                        <i></i>
+                                                    </label>&nbsp; &nbsp;
+                                                </th>
+                                                <th style="width:1px;">Patient</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody ng-if="isLoading == false">
+                                            <tr ng-if='rowCollection.length > 0' ng-repeat="(ip_key, row) in rowCollection">
+                                                <td style="width:2px;">
+                                                    <label class="i-checks">
+                                                        <input ng-model="row.selected" ng-checked="row.selected == '1'"  ng-click="moreOptions(ip_key, row)" ng-true-value="'1'" ng-false-value="'0'" class="iplistcheckbox iplistcheckbox_{{ip_key}}" id="iplist_{{ip_key}}" type="checkbox" name="status">
+                                                        <i></i>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <img width="30" height="30" class="pull-left patient-image" src="img/man-icon.png" ng-attr-lazy-img="{{ row.apptPatientData.patient_img_url ? row.apptPatientData.patient_img_url : ($even ? 'img/man-icon.png' : 'img/man-icon2.png') }}" />
+                                                    <a ui-sref="patient.view({id: row.apptPatientData.patient_guid})" tooltip="{{row.apptPatientData.fullcurrentaddress}}">
+                                                        {{row.apptPatientData.fullname}}
+                                                    </a>({{row.apptPatientData.patient_age_ym}})<br/>
+                                                    {{row.apptPatientData.patient_global_int_code}}
+                                                </td>
+                                            </tr>
+                                            <tr ng-if='rowCollection.length == 0'>
+                                                <td colspan="2">No Patient Found</td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody ng-if="isLoading == true">
+                                            <tr>
+                                                <td colspan="2" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-9" ng-init="initForm()">
+                            <div class="panel panel-default">
+                                <div class="panel-heading font-bold">
+                                    Procedure
+                                </div>
+                                <div class="panel-body">
+                                    <div ng-include="'tpl/blocks/alert.html'">
+                                        {% include 'tpl/blocks/alert.html' %}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Procedure Date * </label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group w-md">
+                                                <a class="dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" data-ng-model="data.proc_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                                    </div>
+                                                </a>
+                                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                                    <datetimepicker data-ng-model="data.proc_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown2' }" data-before-render="beforeRender($view, $dates, $leftDate, $upDate, $rightDate)" prevent-enter="true" />
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Procedure *</label>
+                                        <div class="col-lg-6">
+                                            <select class="form-control" ng-model="data.charge_subcat_id" ng-options="procedure.charge_subcat_id as procedure.charge_subcat_name for procedure in procedures| orderBy: charge_subcat_name" required>
+                                                <option value="">Select Procedure</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Consultants</label>
+                                        <div class="col-lg-6">
+                                            <ui-select multiple ng-model="data.consultant_ids" theme="bootstrap">
+                                                <ui-select-match placeholder="Select doctor...">{{$item.name}} ({{$item.speciality_name}})</ui-select-match>
+                                                <ui-select-choices group-by="someGroupFn" repeat="doctor in doctors | propsFilter: {name: $select.search, age: $select.search}">
+                                                    <div ng-bind-html="doctor.name | highlight: $select.search"></div>
+                                                    <small>
+                                                        Speciality: {{doctor.speciality_name}}
+                                                    </small>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Description</label>
+                                        <div class="col-lg-6">
+                                            <textarea class="form-control" ng-model="data.proc_description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <footer class="panel-footer text-right bg-light lter">
+                                    <button class="btn m-b-xs  btn-success" ng-disabled="patientProcform.$invalid || checkboxes.items.length == 0" ng-click="saveForm()">Save</button>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

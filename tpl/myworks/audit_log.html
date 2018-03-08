@@ -1,0 +1,167 @@
+<div ng-controller="AuditController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Audit Log</h1>
+    </div>
+
+    <div class="wrapper-md" ng-init="loadAllauditlog();">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body p-b">
+                        <div class="form-group">
+                            <ul>
+                                <li>If Date not selected, report will be generated only for recent 1000 activity.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-9 form-group">
+                                <button class="btn btn-sm btn-grey" ng-click="loadAllauditlog()">
+                                    &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp;
+                                </button>
+                                <input prevent-enter id="filter1" type="text" placeholder="Date" class="form-control input-sm w-sm inline filter-date" ng-model="date" datepicker-popup="yyyy-MM-dd" is-open="opened" datepicker-options="dateOptions" close-text="Close"/>
+                                <button type="button" class="btn btn-sm btn-default" ng-click="open($event, 'opened')">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                                <select class="selectpicker" data-live-search="true" ng-model="user_id" ng-options="user.user_id as user.fullname for user in users| orderBy: 'name'">
+                                    <option value="">Select User</option>
+                                </select>
+                                <input id="filter" type="text" placeholder="Search" class="form-control w-sm inline" ng-model="form_filter"/>
+                                <button ng-show="report_menu" ng-click="getReport()" class="btn btn-info">
+                                    Get Report
+                                </button>
+                                <button ng-show="report_menu" class="btn btn-dark" ng-click="clearReport()">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="log_status == 'grid'">
+                        <table st-table="displayedCollection" st-safe-src="rowCollection" class="table m-b-none">
+                            <thead>
+                                <tr>
+                                    <th>Tenant</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                    <th>Activity</th>
+                                    <th>IP Address</th>
+                                    <th>Date Time</th>
+                                </tr>
+                            </thead>
+                            <tbody ng-hide="isLoading">
+                                <tr ng-repeat="log in displayedCollection">
+                                    <td>{{log.tenant}}</td>
+                                    <td>{{log.user}}</td>
+                                    <td>{{log.action}}</td>
+                                    <td>{{log.activity}}</td>
+                                    <td>{{log.ip_address}}</td>
+                                    <td>{{log.created_at}}</td>
+                                </tr>
+                            </tbody>
+                            <tbody ng-show="isLoading">
+                                <tr>
+                                    <td colspan="6" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>  
+                                    <td align="center" colspan="6">  
+                                        <div class="pull-right">  
+                                            <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex" max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>  
+                                        </div>  
+                                    </td>  
+                                </tr> 
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div ng-show="log_status == 'report'">
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="col-sm-4 m-b-xs">
+                                    <span>
+                                        <b>Report Name : </b>  Audit Log <br>
+                                    </span>
+                                    <span ng-show="data.from != '' && data.to != ''">
+                                        <b> Date / Duration : </b>{{ date | date:'dd-MM-yyyy'}} 
+                                    </span>
+                                </div>
+                                <div class="col-sm-4 m-b-xs">
+                                    <span ng-show="generated_on != ''">
+                                        <b>Generated On : </b> {{generated_on}} <br>
+                                    </span>
+                                    <span ng-show="app.username != ''">
+                                        <b>Generated By : </b> {{app.username}} <br>
+                                    </span>
+                                </div>
+                                <div class="col-sm-4 text-right"> 
+                                    <p>
+                                        <button ng-click="tablesToExcel(['audit_log_report'], ['{{app.org_name}}'], 'AuditLogReport.xls', 'Excel');" class="btn btn-sm btn-icon btn-danger"><i class="fa fa-file-excel-o"></i></button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="audit_log_report">
+                            <table style="display: none;" class="table table-bordered">
+                                <tr>
+                                    <th>Report Name</th>
+                                    <th>Date / Duration</th>
+                                    <th>Generated On</th>
+                                    <th>Generated By</th>
+                                </tr>
+                                <tr>
+                                    <td>Audit Log</td>
+                                    <td>{{ date | date:'dd-MM-yyyy'}}</td>
+                                    <td>{{generated_on}}</td>
+                                    <td>{{app.username}}</td>
+                                </tr>
+                                <tr>
+                                </tr>
+                            </table>
+                            <div class="panel panel-default" ng-if='records.length == 0'>
+                                <div class="panel-body">No Records Found</div>
+                            </div>
+                            <div class="panel panel-default" ng-if='records.length > 0'>
+                                <div class="panel-heading font-bold">
+                                    {{app.org_name}}
+                                </div>
+                                <div class="panel-body">
+                                    <table class="export-table print-table table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th id="work-base-grid_c0">S.No</th>
+                                                <th id="work-base-grid_c1">User</th>
+                                                <th id="work-base-grid_c1">Action</th>
+                                                <th id="work-base-grid_c2">Activity</th>
+                                                <th id="work-base-grid_c2">IP Address</th>
+                                                <th id="work-base-grid_c3">Date Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="(key, record) in records">
+                                                <td>{{key + 1}}</td>
+                                                <td>{{record.user}}</td>
+                                                <td>{{record.action}}</td>
+                                                <td>{{record.activity}}</td>
+                                                <td>{{record.ip_address}}</td>
+                                                <td>{{record.created_at}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

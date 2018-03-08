@@ -1,0 +1,185 @@
+<div>
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Create Refund Amount</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="data.status = '1'">
+                <form name="descForm" class="form-horizontal form-validation" novalidate="">
+                    <div class="modal-body wrapper-lg">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Total Amount</label>
+                                    <div class="col-sm-8">
+                                        <label>{{calculation.total_charge | number:2}}</label>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Total Paid</label>
+                                    <div class="col-sm-8">
+                                        <label>{{calculation.total_paid}}</label>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Balance</label>
+                                    <div class="col-sm-8">
+                                        <label>{{calculation.balance | number:2}}</label>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Refund Amount * </label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-model="data.refund_amount" maxlength="50" class="form-control" placeholder="Refund Amount" readonly="true">
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Refund Date * </label>
+                                    <div class="col-sm-8">
+                                        <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" data-ng-model="data.refund_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                            </div>
+                                        </a>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                            <datetimepicker data-ng-model="data.refund_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown3' }" data-on-set-time="onTimeSet(newDate, oldDate)"/>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Payment Mode * </label>
+                                        <div class="col-sm-8">
+                                            <label class="i-checks" ng-repeat="paymentMode in paymentModes">
+                                                <input type="radio" checked="" value="{{paymentMode.value}}" ng-model="data.payment_mode">
+                                                <i></i>
+                                                {{paymentMode.label}}&nbsp; &nbsp;
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <!-- CARD -->
+                                    <div ng-show="data.payment_mode == 'CD'">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Card Type *</label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control" ng-model="data.card_type" ng-options="cardType.value as cardType.label for cardType in cardTypes| orderBy: label">
+                                                    <option value="">Select Card Type</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="line line-dashed b-b line-lg "></div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Card Number *<br><em class="text-muted">(Last 4 Digits)</em></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" ui-mask="9999" ng-model="data.card_number" placeholder="XXXX" class="form-control m-b">
+                                            </div>
+                                        </div>
+                                        <div class="line line-dashed b-b line-lg "></div>
+                                    </div>
+
+                                    <!-- Cheque -->
+                                    <div ng-show="data.payment_mode == 'CH'">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Bank Name *</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" ng-model="data.bank_name" maxlength="100" class="form-control" placeholder="Bank Name">
+                                            </div>
+                                        </div>
+                                        <div class="line line-dashed b-b line-lg "></div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Cheque Number *</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" ng-model="data.cheque_number" maxlength="100" class="form-control" placeholder="Cheque Number">
+                                            </div>
+                                        </div>
+                                        <div class="line line-dashed b-b line-lg "></div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Date *</label>
+                                            <div class="col-sm-8">
+                                                <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" data-ng-model="data.bank_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                                    </div>
+                                                </a>
+                                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                                    <datetimepicker data-ng-model="data.bank_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown3' }" data-on-set-time="onTimeSet(newDate, oldDate)"/>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="line line-dashed b-b line-lg "></div>
+
+                                    </div>
+
+                                    <!-- Online -->
+                                    <div ng-show="data.payment_mode == 'ON'">
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Bank Name *</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" ng-model="data.bank_name" maxlength="100" class="form-control" placeholder="Bank Name">
+                                            </div>
+                                        </div>
+                                        <div class="line line-dashed b-b line-lg "></div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Ref No *</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" ng-model="data.ref_no" maxlength="100" class="form-control" placeholder="Ref No">
+                                            </div>
+                                        </div>
+                                        <div class="line line-dashed b-b line-lg "></div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-4 control-label">Date *</label>
+                                            <div class="col-sm-8">
+                                                <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" data-ng-model="data.bank_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                                    </div>
+                                                </a>
+                                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                                    <datetimepicker data-ng-model="data.bank_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown3' }" data-on-set-time="onTimeSet(newDate, oldDate)"/>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="line line-dashed b-b line-lg "></div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <footer class="panel-footer text-right bg-light lter">
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()">Save</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+                                &nbsp;
+                            </footer>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

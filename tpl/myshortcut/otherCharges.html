@@ -1,0 +1,131 @@
+<div ng-controller="OtherchargeController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Add Charges</h1>
+    </div>
+
+    <div class="wrapper-md">
+        <div class="row">
+            <div class="col-sm-12">
+                <form name="otherChargesForm" class="form-horizontal form-validation" novalidate="">
+                    <div class="row" ng-init="loadPatientsList('IP');initForm();">
+                        <div class="col-sm-3" style="height:70vh; overflow-y: auto; overflow-x: hidden;">
+                            <div class="panel panel-default">
+                                <div class="panel-heading font-bold">
+                                    All Patient
+                                </div>
+                                <div class="panel-body">
+                                    <table class="table table-striped b-t b-light">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:2px;">
+                                                    <label class="i-checks">
+                                                        <input ng-model="selectall" ng-true-value="'1'" ng-false-value="'0'" ng-click="updateCheckbox()" type="checkbox" name="checkall" class="">
+                                                        <i></i>
+                                                    </label>&nbsp; &nbsp;
+                                                </th>
+                                                <th style="width:1px;">Patient</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody ng-if="isLoading == false">
+                                            <tr ng-if='rowCollection.length > 0' ng-repeat="(ip_key, row) in rowCollection">
+                                                <td style="width:2px;">
+                                                    <label class="i-checks">
+                                                        <input ng-model="row.selected" ng-checked="row.selected == '1'"  ng-click="moreOptions(ip_key, row)" ng-true-value="'1'" ng-false-value="'0'" class="iplistcheckbox iplistcheckbox_{{ip_key}}" id="iplist_{{ip_key}}" type="checkbox" name="status">
+                                                        <i></i>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <img width="30" height="30" class="pull-left patient-image" src="img/man-icon.png" ng-attr-lazy-img="{{ row.apptPatientData.patient_img_url ? row.apptPatientData.patient_img_url : ($even ? 'img/man-icon.png' : 'img/man-icon2.png') }}" />
+                                                    <a ui-sref="patient.view({id: row.apptPatientData.patient_guid})" tooltip="{{row.apptPatientData.fullcurrentaddress}}">
+                                                        {{row.apptPatientData.fullname}}
+                                                    </a>({{row.apptPatientData.patient_age_ym}})<br/>
+                                                    {{row.apptPatientData.patient_global_int_code}}
+                                                </td>
+                                            </tr>
+                                            <tr ng-if='rowCollection.length == 0'>
+                                                <td colspan="2">No Patient Found</td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody ng-if="isLoading == true">
+                                            <tr>
+                                                <td colspan="2" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="panel panel-default">
+                                <div class="panel-heading font-bold">
+                                    Other Charges
+                                </div>
+                                <div class="panel-body">
+                                    <div ng-include="'tpl/blocks/alert.html'">
+                                        {% include 'tpl/blocks/alert.html' %}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Charge Category*</label>
+                                        <div class="col-lg-6">
+                                            <select class="form-control" ng-model="data.charge_cat_id" ng-options="Category.value as Category.label for Category in chargecategory| orderBy: label" ng-change="updateSubcategory();">
+                                                <option value="">Select Charge Category</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Charge Subcategory*</label>
+                                        <div class="col-lg-6">
+                                            <select class="form-control" ng-model="data.charge_subcat_id" ng-options="subCategory.value as subCategory.label for subCategory in availableSubcategory| orderBy: charge_subcat_name">
+                                                <option value="">Select Charge Type</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Charge * </label>
+                                        <div class="col-sm-3">
+                                            <input type="text" ng-model="data.charge_amount" maxlength="50" class="form-control" placeholder="Charge" number-mask="">
+                                        </div>
+                                    </div>
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Repeat </label>
+                                        <div class="input-group w-md">
+                                            <label class="i-checks">
+                                                <input type="radio" checked="" value="until_discharge" name="repeat" ng-model="data.untill_discharge" ng-click="repeat = 'discharge'">
+                                                <i></i>
+                                                Until Discharge&nbsp; &nbsp;
+                                            </label>
+                                            <label class="i-checks">
+                                                <input type="radio" checked="" value="days" name="repeat" ng-model="data.next" ng-click="repeat = 'next'">
+                                                <i></i>
+                                                Next &nbsp; &nbsp; 
+                                            </label>
+                                            <span ng-show="repeat == 'next'">
+                                                <select style="float: none" class="form-control search-dropdown" ng-model="data.no_of_days" ng-options="day.value as day.label for day in days">
+                                                </select> Days
+                                            </span><div class="pull-right"><a class="label bg-primary" ng-click="updateEmptyrepeat(); repeat = 'discharge'">Clear</a></div>
+                                        </div>
+                                    </div>
+                                    <div class="line line-dashed b-b line-lg "></div>
+                                    <footer class="panel-footer text-right bg-light lter">
+                                        <button class="btn m-b-xs  btn-success save-btn" ng-disabled="checkboxes.items.length == 0" ng-click="saveForm()">Save</button>
+                                    </footer>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

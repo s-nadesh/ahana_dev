@@ -1,0 +1,71 @@
+<!-- main header -->
+<div class="bg-light lter b-b wrapper-md">
+    <div class="row">
+        <div class="col-sm-6 col-xs-12">
+            <h1 class="m-n font-thin h3 text-black">Dashboard</h1>
+        </div>
+    </div>
+</div>
+<!-- / main header -->
+<div class="wrapper-md ng-scope" ng-controller="MyworksController" ng-init="loadCity()">
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+    <div class="ng-scope" ng-init="loadData()">
+<!--        <button ng-click="openPdf()">Open Pdf</button>
+        <button ng-click="downloadPdf()">Download Pdf</button>
+        <button ng-click="printPdf()">Print Pdf</button>-->
+        <h4 class="text-center">Hi {{app.username}}, Welcome to {{app.name}} ({{app.org_name}}) !!!</h4>
+
+<!--        <input type="button" id="sendData" value="send data" ng-click="treeSubmit()"/>
+        <div id="pk-family-tree"></div>-->
+    </div>
+
+<!--    <table class="table">
+        <thead>
+            <tr>
+        <th><div class="votingButton" ng-click="sortChanged('city_id asc');">
+            <i class="glyphicon glyphicon-chevron-up"></i>
+        </div>
+        City Id
+        <div class="votingButton" ng-click="sortChanged('city_id desc');">
+            <i class="glyphicon glyphicon-chevron-down"></i>
+        </div></th>
+        
+        <th><div class="votingButton" ng-click="sortChanged('city_name asc');">
+            <i class="glyphicon glyphicon-chevron-up"></i>
+        </div>
+        City Name
+        <div class="votingButton" ng-click="sortChanged('city_name desc');">
+            <i class="glyphicon glyphicon-chevron-down"></i>
+        </div></th>
+        </tr>
+        </thead>    
+        <tbody>
+            <tr ng-repeat="row in rowCollection">
+                <td>{{row.city_id}}</td>
+                <td>{{row.city_name}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>  
+                <td align="center" colspan="2">  
+                    <span class="form-group pull-left page-size form-inline">  
+                        <select id="ddlPageSize" class="form-control control-color"  
+                                ng-model="pageSizeSelected"  
+                                ng-change="changePageSize()">  
+                            <option value="5">5</option>  
+                            <option value="10">10</option>  
+                            <option value="25">25</option>  
+                            <option value="50">50</option>  
+                        </select>  
+                    </span>  
+                    <div class="pull-right">  
+                        <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex" max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>  
+                        <a class="btn btn-primary">Page: {{pageIndex}} / {{numPages}}</a>  
+                    </div>  
+                </td>  
+            </tr> 
+        </tfoot>
+    </table>-->
+</div>

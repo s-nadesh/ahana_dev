@@ -1,0 +1,302 @@
+<!-- main header -->
+<div class="bg-light lter b-b wrapper-md">
+    <div class="row">
+        <div class="col-sm-6 col-xs-12">
+            <h1 class="m-n font-thin h3 text-black">Patients Merge</h1>
+        </div>
+    </div>
+</div>
+<!-- / main header -->
+<div class="wrapper-md ng-scope">
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+    <div ng-controller="PatientMergeController" class="ng-scope">
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading font-bold" ng-show="!show_loader">Patient Search</div>
+                    <div class="panel-heading font-bold" ng-show="show_loader">
+                        <i class="fa fa-spin fa-refresh"></i>&nbsp;&nbsp;Please Wait...Loading..
+                    </div>
+                    <div class="panel-body">
+                        <form role="form">
+                            <div class="form-group">
+                                <input ng-model="patient" id="patient-search" type="text" class="form-control patient_merge_input" autocomplete="off">
+                            </div>
+                            <div class="patient-merge-result" id="patient-merge-result" ng-if="patient != '' && patient_search_result.length > '0'">
+                                <ul class="merge-patientcont result-patient-merge" id='patient-merge'>
+                                    <li ng-repeat="(key, patient) in patient_search_result| filter:filterFn" class="{{key == 0 ? 'selected' : ''}}">
+                                        <div class="row" ng-click="displayPatient(patient.Patient.patient_global_guid)">
+                                            <div class="col-xs-12 col-sm-2 col-md-2">
+                                                <img class="patient-image" src="img/man-icon.png" ng-attr-lazy-img="{{ patient.Patient.patient_img_url ? patient.Patient.patient_img_url : ($even ? 'img/man-icon.png' : 'img/man-icon2.png') }}" />
+                                            </div>
+                                            <div class="col-xs-12 col-sm-5 col-md-6">
+                                                <div class="row ng-binding">
+                                                    <a tooltip="{{patient.Patient.fullcurrentaddress|| patient.Patient.fullpermanentaddress}}" ng-bind-html="patient.Patient.fullname | highlight:patient" href="javascript:void(0)" ng-click="displayPatient(patient.Patient.patient_global_guid)" class="ng-binding">
+                                                    </a>
+                                                    <b ng-if="patient.Patient.patient_age_ym">({{patient.Patient.patient_age_ym}}) </b>
+                                                    <br>
+                                                    <span class="pull-left" ng-bind-html="patient.Patient.patient_global_int_code | highlight:patient"></span> &nbsp; &nbsp;
+                                                    <span ng-bind-html="patient.Patient.patient_mobile | highlight:patient"> </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-xs-12 col-sm-5 col-md-4 pull-right right" ng-if="patient.PatientActiveEncounter != null">
+                                                <span class="label label-primary admission_details" ng-show="patient.PatientActiveEncounter.searchEncData.isAdmission != false">
+                                                    {{patient.PatientActiveEncounter.searchEncData.isAdmission.floor_name}} > {{patient.PatientActiveEncounter.searchEncData.isAdmission.room_name}} > {{patient.PatientActiveEncounter.searchEncData.isAdmission.room_type_name}}
+                                                </span>
+                                                <span class="label label-primary admission_details" ng-show="patient.PatientActiveEncounter.searchEncData.isAppointment == true">
+                                                    Booked
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7 text-right" ng-if="selected_patients.length > 0">
+                <button ng-click="saveForm()" class="btn btn-lg m-t btn-info">
+                    <i class="fa fa-users"></i> Merge Patients
+                </button>
+            </div>
+        </div>
+
+        <div class="row merge-result-cont" ng-if="selected_patients.length > 0">
+            <div class="col-sm-4" ng-repeat="(selected_key, selected_patient) in  selected_patients">
+                <div class="panel panel-default">
+                    <div class="panel-heading font-bold">
+                        <label class="i-checks">
+                            <input type="radio" name="a" ng-value="true" ng-model="selected_patient.is_primary" ng-change="choosePrimary(selected_key)">
+                            <i></i> Primary
+                        </label>
+                        <button ng-click="removeMergePatient($index)" class="btn btn-xs btn-danger pull-right">
+                            <i class="fa fa-remove"></i>
+                        </button>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" class="form-horizontal form-validation">
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Registration Date:</label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.patient_reg_date}}  </p>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Name:</label>
+                                <div class="col-sm-6">
+                                    <p> {{selected_patient.Patient.fullname}} </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Patient ID:</label>
+                                <div class="col-sm-6">
+                                    <p> {{selected_patient.Patient.patient_global_int_code}} </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Last Name:   </label>
+                                <div class="col-sm-6">
+                                    <p> {{selected_patient.Patient.patient_lastname}} </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label"> Sex: </label>
+                                <div class="col-sm-6">
+                                    <p>  {{app.patientDetail.patientSex}}  </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label"> Age: </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.patient_age_ym}}  </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label"> DOB: </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.patient_dob}}  </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Mobile No.:     </label>
+                                <div class="col-sm-6">
+                                    <p>{{selected_patient.Patient.patient_mobile}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Blood Group:</label>
+                                <div class="col-sm-6">
+                                    <p> {{selected_patient.Patient.blood_group}} </p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Secondary Contact:</label>
+                                <div class="col-sm-6">
+                                    <p>{{selected_patient.Patient.patient_secondary_contact}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Care Taker:</label>
+                                <div class="col-sm-6">
+                                    <p>{{selected_patient.Patient.care_taker}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Care Taker Name:</label>
+                                <div class="col-sm-6">
+                                    <p>{{selected_patient.Patient.patient_care_taker_name}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Marital Status:</label>
+                                <div class="col-sm-6">
+                                    <p> {{selected_patient.Patient.marital_status}} </p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Occupation:</label>
+                                <div class="col-sm-6">
+                                    <p>{{selected_patient.Patient.patient_occupation}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Email:</label>
+                                <div class="col-sm-6">
+                                    <p>{{selected_patient.Patient.patient_email}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Referral Hospital:</label>
+                                <div class="col-sm-6">
+                                    <p>{{selected_patient.Patient.patient_ref_hospital}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Referral Doctor:</label>
+                                <div class="col-sm-6">
+                                    <p>{{selected_patient.Patient.patient_ref_doctor}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Current Address:  </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.address.addr_current_address}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">City:  </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.address.city_name}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">State: </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.address.state_name}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Country: </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.address.country_name}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Zip: </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.address.addr_zip}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Permanent Address:  </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.address.addr_perm_address}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">City:  </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.address.perm_city_name}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">State: </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.address.perm_state_name}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Country: </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.address.perm_country_name}}</p>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-6 control-label">Zip: </label>
+                                <div class="col-sm-6">
+                                    <p>  {{selected_patient.Patient.address.addr_perm_zip}}</p>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
