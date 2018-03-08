@@ -1,0 +1,87 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Drug Class & Generic Names</h1>
+</div>
+<div class="wrapper-md" ng-controller="drugGenericController" ng-init="loaddrugGenericList()">
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <button class="btn btn-sm btn-grey" ng-click="loaddrugGenericList()"> 
+                &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+            </button>
+            <button check-access-button ng-click="$state.go('configuration.drugGenericCreate')" class="btn btn-sm btn-info pull-right">
+                <i class="fa fa-plus"></i> &nbsp; Add new Drug Class & Generic
+            </button>
+        </div>
+        <div class="constrained" style="height: 500px;overflow: auto;">
+            <table st-table="displayedCollection" st-safe-src="rowCollection" class="table m-b-none table-striped default" infinite-scroll='loadmoredrugGenericList()' infinite-scroll-container='".constrained"'>
+            <thead>
+                <tr>
+                    <th style="width: 5%">
+                        <button class="btn btn-sm btn-default" type="button" ng-click="ctrl.expandAll(allExpanded = !allExpanded)">
+                            <i ng-if="!allExpanded" class="fa fa-plus text"></i>
+                            <i ng-if="allExpanded" class="fa fa-minus text"></i>
+                        </button>
+                    </th>
+                    <th st-sort="drug_name">Drug Class name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat-start="(key, row) in displayedCollection | orderBy: drug_name" class="footable-even">
+                    <td style="width: 5%">
+                        <button ng-click="expanded = !expanded" expand class="btn btn-sm btn-default hms-plus">
+                            <i ng-if="!expanded" class="fa fa-plus text"></i>
+                            <i ng-if="expanded" class="fa fa-minus text"></i>
+                        </button>
+                    </td>
+                    <td>
+                        {{row.drug_name}}
+                    </td>
+                </tr>
+                <tr ng-repeat-end ng-show="expanded" class="footable-even">
+                    <td></td>
+                    <td class="footable-visible"><div class="row">
+                            <div class="col-sm-6">
+                                <div class="panel panel-default inner-panel">
+                                    <div class="panel-heading"><b> Generic Names </b>
+                                        <button type="button" ng-click="rowform.$show();
+                                                    addSubRow(row.drug_class_id)" class="label bg-primary pull-right">Add Row</button>
+                                    </div>
+                                    <div class="panel-body doc-timing">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">                                            
+                                            <tr ng-repeat="(gKey, genericname) in row.genericnames | orderBy: genericname">
+                                                <td>
+                                                    <span editable-select="genericname.generic_id" e-name="generic_id" e-form="rowform" onbeforesave="checkInput($data)" e-ng-options="s.value as s.text for s in generics">
+                                                        {{ showGeneric(genericname.generic_id)}}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <form editable-form name="rowform" onbeforesave="updateName($data, row.drug_class_id, key, gKey)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == genericname">
+                                                        <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-success">
+                                                            Save
+                                                        </button>
+                                                        &nbsp;&nbsp;
+                                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-dark">
+                                                            Cancel
+                                                        </button>
+                                                    </form>
+                                                    <div class="buttons" ng-show="!rowform.$visible">
+                                                        <!--<button class="btn btn-sm btn-info" ng-click="rowform.$show()">Edit</button>-->
+                                                        &nbsp;&nbsp;
+                                                        <button class="badge bg-danger ng-binding" ng-click="deleteSubRow(row.drug_class_id, genericname.generic_id, genericname.temp_drug_class_id);">Delete</button>
+                                                    </div> 
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div></td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>

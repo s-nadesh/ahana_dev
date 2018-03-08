@@ -1,0 +1,25 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Brands</h1>
+</div>
+<div class="wrapper-md" ng-controller="BrandsController as phaBrands">
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b> Brand Management </b>
+                </div>
+                <div class="panel-body b-b b-light">                   
+                    <button check-access-button ng-click="$state.go('configuration.brandCreate')" class="btn btn-sm btn-info pull-right">
+                        <i class="fa fa-plus"></i> &nbsp; Add new Brand
+                    </button>
+                </div>
+                <div>
+                    <table datatable="" dt-options="phaBrands.dtOptions" dt-columns="phaBrands.dtColumns" class="row-border hover"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
