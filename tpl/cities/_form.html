@@ -1,0 +1,42 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-lg-4 control-label">Country *</label>
+            <div class="col-lg-8">
+                <select class="form-control" name="Country" ng-model="data.country_id" ng-options="country.value as country.label for country in countries | orderBy: label" data-ng-change="updateState()">
+                    <option value="">Select Country</option>
+                </select>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-lg-4 control-label">State *</label>
+            <div class="col-lg-8">
+                <select class="form-control" name="State" ng-model="data.state_id" ng-options="state.value as state.label for state in availableStates | orderBy: label" data-ng-change="updateCity()">
+                    <option value="">Select State</option>
+                </select>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+
+        <div class="form-group">
+            <label class="col-sm-4 control-label">City Name * </label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="data.city_name" maxlength="50" name="cityName" class="form-control" placeholder="City Name">
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Status</label>
+            <div class="col-sm-8">
+                <label class="i-checks "> <input type="checkbox" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="data.status" ng-checked="data.status == '1'"> <i></i> </label> &nbsp; &nbsp;
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.cities')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

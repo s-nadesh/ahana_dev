@@ -1,0 +1,19 @@
+<div ng-controller="DoctorSchedulesController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Make Doctor Schedule</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-6" ng-init="data = {}; data.formtype = 'add'; data.status = '1'; initForm();">
+                <form editable-form name="tableform" name="DoctorScheduleForm" class="form-horizontal form-validation" onaftersave="saveForm('add')" novalidate="">
+                    <div ng-include="'tpl/doctor_schedule/_form.html'">
+                        {% include 'tpl/doctor_schedule/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

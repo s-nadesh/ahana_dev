@@ -1,0 +1,68 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Category * </label>
+            <div class="col-sm-9">
+                <select class="form-control" ng-model="data.charge_cat_id" ng-options="category.charge_cat_id as category.charge_cat_name for category in categories | orderBy: charge_cat_name" data-ng-change="updateSubCateogry()">
+                    <option value="">Select Category</option>
+                </select>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Category Items *</label>
+            <div class="col-lg-9">
+                <select class="form-control" ng-model="data.charge_code_id" ng-options="subcategory.charge_subcat_id as subcategory.charge_subcat_name for subcategory in availableSubcategories | orderBy: 'charge_subcat_name'">
+                    <option value="">Select Code / Names</option>
+                </select>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Default </label>
+            <div class="col-sm-9">
+                <input type="text" ng-model="data.charge_default" maxlength="50" class="form-control" placeholder="Default">
+            </div>
+        </div>
+        
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Out-Patient Department</label>
+            <div class="col-sm-9">
+                <table class="table table-bordered table-hover table-condensed bg-white-only">
+                    <tr style="font-weight: bold">
+                        <td style="width:70%">Name</td>
+                        <td style="width:30%"><span>Amount</span></td>
+                    </tr>
+                    <tr ng-repeat="patient_category in patient_categories">
+                        <td ng-bind-html="patient_category.patient_cat_name"></td>
+                        <td><input type="text" ng-model="patient_category.amount" maxlength="50" class="form-control" placeholder="" number-mask="" /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">In-Patient Department</label>
+            <div class="col-sm-9">
+                <table class="table table-bordered table-hover table-condensed bg-white-only">
+                    <tr style="font-weight: bold">
+                        <td style="width:70%">Name</td>
+                        <td style="width:30%"><span>Amount</span></td>
+                    </tr>
+                    <tr ng-repeat="room_type in room_types">
+                        <td ng-bind-html="room_type.room_type_name"></td>
+                        <td><input type="text" ng-model="room_type.amount" maxlength="50" class="form-control" placeholder="" number-mask="" /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.chargePerCategory')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

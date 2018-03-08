@@ -1,0 +1,112 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Doctor *</label>
+            <div class="col-sm-9">
+                <select class="form-control selectpicker" data-live-search="true" ng-model="data.user_id" ng-options="user.user_id as user.fullname for user in doctors | orderBy: 'name'">
+                    <option value="">Select Doctor</option>
+                </select>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Interval *</label>
+            <div class="col-sm-9">
+                <select class="form-control" ng-model="data.interval" ng-options="interval.value as interval.label for interval in intervals">
+                    <option value="">Select Interval</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Select Day * </label>
+            <div class="col-sm-9">
+                <div class="radio">
+                    <label class="i-checks">
+                        <input type="radio" ng-model="day_type.name" value="A" ng-click="is_show = false;
+                                checkDays(true);">
+                        <i></i>
+                        All Day
+                    </label>
+                </div>
+                <div class="radio">
+                    <label class="i-checks">
+                        <input type="radio" ng-model="day_type.name" value="C" ng-click="is_show = true;
+                                checkDays(false);">
+                        <i></i>
+                        Custom
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="days_div" ng-show="is_show">
+            <div class="line line-dashed b-b line-lg "></div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Days</label>
+                <div class="col-sm-9">
+                    <div class="panel panel-default">
+                        <!--                    <div class="panel-heading">
+                                                Choose Days
+                                            </div>-->
+                        <div class="table-responsive">
+                            <table class="table table-striped b-t b-light">
+                                <tbody>
+                                    <tr ng-repeat="day in days">
+                                        <td style="width:20px;"><label class="i-checks m-b-none"><input type="checkbox" ng-model="day.checked" ng-checked="day.checked"><i></i></label></td>
+                                        <td>{{day.label}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        
+        
+
+        <div class="row">
+        <div class="col-sm-12">
+           <div class="panel panel-default inner-panel">
+              <div class="panel-heading"><b> Timings</b> 
+                <span class="pull-right">  
+                    <button type="button" ng-click="tableform.$show();addRow()" class="label bg-primary">Add Row</button>
+                    &nbsp;
+                    <button type="button" ng-click="tableform.$show();" class="label bg-primary" ng-show="!tableform.$visible">Edit All</button>
+                </span>
+              </div>
+              <div class="panel-body doc-timing">
+                 <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+                    <tr>
+                       <th>Time In</th>
+                       <th>Time Out</th>
+                       <th></th>
+                    </tr>
+                    <tr ng-repeat="timing in timings" ng-init="tableform.$show();">
+                    <td> <span editable-text="timing.schedule_time_in" e-name="schedule_time_in" e-form="nameform" onbeforesave="checkInput($data)" onshow="initTimepicker();" e-class="timepicker" e-onkeydown="return false;">
+                            {{ timing.schedule_time_in || 'empty' }}
+                        </span>
+                    </td>
+                    <td><span editable-text="timing.schedule_time_out" e-name="schedule_time_out" e-form="nameform" onbeforesave="checkInput($data)" onshow="initTimepicker();" e-class="timepicker" e-onkeydown="return false;">
+                        {{ timing.schedule_time_out || 'empty' }}
+                        </span>
+                    </td>
+                       <td><button type="button" ng-click="removeTime($index)" class="badge bg-danger ng-binding">Delete</button></td>  
+                    </tr>
+                 </table>
+              </div>
+           </div>
+        </div>
+        </div>
+      
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" >Save</button>
+        &nbsp;
+        <button type="button" class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.docSchedule')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>
+

@@ -1,0 +1,192 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Charges for Category</h1>
+</div>
+
+<div class="wrapper-md" ng-controller="ChargePerCategoriesController" ng-init="loadChargePerCategoriesList()">
+
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <button class="btn btn-sm btn-grey" ng-click="loadChargePerCategoriesList()"> 
+                &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+            </button>
+            <input id="filter" type="text" class="form-control input-sm w-sm inline m-r" placeholder="Search" ng-model="form_filter"/>
+            <button check-access-button ng-click="$state.go('configuration.chargePerCategoryCreate')" class="btn btn-sm btn-info pull-right">
+                <i class="fa fa-plus"></i> &nbsp; Add new Charges for Category
+            </button>
+        </div>
+        <table data-filter="#filter" data-filtering="true" ui-jq="footable" class="table m-b-none footable-loaded footable default">
+            <thead>
+                <tr>
+                    <th>
+                        <button class="btn btn-sm btn-default" type="button" ng-click="ctrl.expandAll(allExpanded = !allExpanded)">
+                            <i ng-if="!allExpanded" class="fa fa-plus text"></i>
+                            <i ng-if="allExpanded" class="fa fa-minus text"></i>
+                        </button>
+                    </th>
+                    <th>Category</th>
+                    <th>Code / Names</th>
+                    <th style="width: 30%;">Default</th>
+                </tr>
+            </thead>
+            <tbody ng-hide="isLoading">
+                <tr ng-repeat-start="row in displayedCollection| orderBy: charge_cat_name">
+                    <td>
+                        <button ng-click="expanded = !expanded" expand class="btn btn-sm btn-default hms-plus">
+                            <i ng-if="!expanded" class="fa fa-plus text"></i>
+                            <i ng-if="expanded" class="fa fa-minus text"></i>
+                        </button>
+                    </td>
+                    <td>
+                        {{row.charge_cat_name}}
+                    </td>
+                    <td>
+                        {{row.charge_code_name}}
+                    </td>
+                    <td>
+                        <table class="table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <span editable-text="row.charge_default" e-name="charge_default" e-form="mainform" e-number-mask="">
+                                            {{ row.charge_default || 'empty' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <form editable-form name="mainform" onbeforesave="updateDefaultAmount($data, row.charge_id)" ng-show="mainform.$visible" class="form-buttons form-inline" shown="inserted == row">
+                                            <button type="submit" ng-disabled="mainform.$waiting" class="btn btn-sm btn-success">
+                                                Save
+                                            </button>
+                                            &nbsp;&nbsp;
+                                            <button type="button" ng-disabled="mainform.$waiting" ng-click="mainform.$cancel()" class="btn btn-sm btn-dark">
+                                                Cancel
+                                            </button>
+                                        </form>
+                                        <div class="buttons" ng-show="!mainform.$visible">
+                                            <button class="btn btn-sm btn-info" ng-click="mainform.$show()">Edit</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr ng-repeat-end ng-show="expanded" data-value="{{row.charge_cat_name}} {{row.charge_code_name}} {{row.charge_default}}">
+                    <td data-value="{{row.charge_cat_name}} {{row.charge_code_name}} {{row.charge_default}}"></td>
+                    <td colspan="3" data-value="{{row.charge_cat_name}} {{row.charge_code_name}} {{row.charge_default}}">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="panel panel-default inner-panel">
+                                    <div class="panel-heading">
+                                        <b> Out-Patient </b>
+                                    </div>
+                                    <div class="panel-body doc-timing"> 
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+                                            <tr>
+                                                <th>Department</th>
+                                                <th>Amount</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            <tr ng-repeat="op in patient_categories">
+                                                <td>{{op.patient_cat_name}}</td>
+                                                <td>
+                                                    <span editable-text="allSubCategories['OP'][row.charge_cat_type][row.charge_code_id][op.patient_cat_id]['amount']" e-name="charge_amount" e-form="rowform" e-number-mask="">
+                                                        {{ allSubCategories['OP'][row.charge_cat_type][row.charge_code_id][op.patient_cat_id]['amount'] || 'empty' }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <form editable-form name="rowform" onbeforesave="updateAmount($data, allSubCategories['OP'][row.charge_cat_type][row.charge_code_id][op.patient_cat_id]['id'], row.charge_id, 'OP', op.patient_cat_id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == op">
+                                                        <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-success">
+                                                            Save
+                                                        </button>
+                                                        &nbsp;&nbsp;
+                                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-dark">
+                                                            Cancel
+                                                        </button>
+                                                    </form>
+                                                    <div class="buttons" ng-show="!rowform.$visible">
+                                                        <button class="btn btn-sm btn-info" ng-click="rowform.$show()">Edit</button>
+                                                    </div> 
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="panel panel-default inner-panel">
+                                    <div class="panel-heading">
+                                        <b> In-Patient </b>
+                                    </div>
+                                    <div class="panel-body doc-timing"> 
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table">
+                                            <tr>
+                                                <th>Department</th>
+                                                <th>Amount</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            <tr ng-repeat="ip in room_types">
+                                                <td>{{ip.room_type_name}}</td>
+                                                <td>
+                                                    <span editable-text="allSubCategories['IP'][row.charge_cat_type][row.charge_code_id][ip.room_type_id]['amount']" e-name="charge_amount" e-form="rowform" e-number-mask="">
+                                                        {{ allSubCategories['IP'][row.charge_cat_type][row.charge_code_id][ip.room_type_id]['amount'] || 'empty' }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <form editable-form name="rowform" onbeforesave="updateAmount($data, allSubCategories['IP'][row.charge_cat_type][row.charge_code_id][ip.room_type_id]['id'], row.charge_id, 'IP', ip.room_type_id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == ip">
+                                                        <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-sm btn-success">
+                                                            Save
+                                                        </button>
+                                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-sm btn-dark">
+                                                            Cancel
+                                                        </button>
+                                                    </form>
+                                                    <div class="buttons" ng-show="!rowform.$visible">
+                                                        <button class="btn btn-sm btn-info" ng-click="rowform.$show()">Edit</button>
+                                                    </div> 
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            
+            <tbody ng-show="isLoading">
+                <tr>
+                    <td colspan="4" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                </tr>
+            </tbody>
+            
+<!--            <tfoot>
+                <tr>
+                    <td colspan="4 class="text-center">
+                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                    </td>
+                </tr>
+            </tfoot>-->
+        </table>
+
+    </div>
+
+    <!--    <script type="text/ng-template" id="myModalContent.html">
+            <div ng-include="'tpl/modal.html'"></div>
+        </script>
+        <div class="panel-heading b-b b-light">Modal</div>
+        <div class="panel-body">
+            <button class="btn btn-success" ng-click="open()">Open me!</button>
+            <button class="btn btn-default" ng-click="open('lg')">Large modal</button>
+            <button class="btn btn-default" ng-click="open('sm')">Small modal</button>
+        </div>-->
+
+</div>

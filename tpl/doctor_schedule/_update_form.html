@@ -1,0 +1,91 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Doctor *</label>
+            <div class="col-sm-9">
+                NAme
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Timings</label>
+            <div class="col-sm-9">
+                <table class="table table-bordered table-hover table-condensed bg-white-only" id="timing_table">
+                    <tr style="font-weight: bold">
+                        <td style="width:35%">Time In</td>
+                        <td style="width:35%">Time Out</td>
+                        <td style="width:30%"><span>Action</span></td>
+                    </tr>
+                    <tr ng-repeat="timing in timings" ng-init="tableform.$show();">
+                        <td>
+                            <!-- editable username (text with validation) -->
+                            <span editable-text="timing.schedule_time_in" e-name="schedule_time_in" e-form="nameform" onbeforesave="checkInput($data)" onshow="initTimepicker();" e-class="timepicker">
+                                {{ timing.schedule_time_in || 'empty' }}
+                            </span>
+
+                        </td>
+                        <td>
+                            <!-- editable username (text with validation) -->
+                            <span editable-text="timing.schedule_time_out" e-name="schedule_time_out" e-form="nameform" onbeforesave="checkInput($data)" onshow="initTimepicker();" e-class="timepicker">
+                                {{ timing.schedule_time_out || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="removeTime($index)" class="btn btn-sm btn-danger pull-right">Delete</button>
+                        </td>
+                    </tr>
+                </table>
+                <div class="btn-form">
+                    &nbsp;
+                    <button type="button" ng-click="tableform.$show();
+                            addRow()" class="btn btn-default pull-left btn-primary">Add Row</button>
+                    <button type="button" class="btn btn-default btn-info" ng-click="tableform.$show();" ng-show="!tableform.$visible">Edit All</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Timings</label>
+            <div class="col-sm-9">
+                <table class="table table-bordered table-hover table-condensed bg-white-only" id="timing_table">
+                    <tr style="font-weight: bold">
+                        <td style="width:35%">Time In</td>
+                        <td style="width:35%">Time Out</td>
+                        <td style="width:30%"><span>Action</span></td>
+                    </tr>
+                    <tr ng-repeat="timing in timings" ng-init="tableform.$show();">
+                        <td>
+                            <!-- editable username (text with validation) -->
+                            <span editable-text="timing.schedule_time_in" e-name="schedule_time_in" e-form="nameform" onbeforesave="checkInput($data)" onshow="initTimepicker();" e-class="timepicker">
+                                {{ timing.schedule_time_in || 'empty' }}
+                            </span>
+
+                        </td>
+                        <td>
+                            <!-- editable username (text with validation) -->
+                            <span editable-text="timing.schedule_time_out" e-name="schedule_time_out" e-form="nameform" onbeforesave="checkInput($data)" onshow="initTimepicker();" e-class="timepicker">
+                                {{ timing.schedule_time_out || 'empty' }}
+                            </span>
+                        </td>
+                        <td>
+                            <button type="button" ng-click="removeTime($index)" class="btn btn-sm btn-danger pull-right">Delete</button>
+                        </td>
+                    </tr>
+                </table>
+                <div class="btn-form">
+                    &nbsp;
+                    <button type="button" ng-click="tableform.$show();
+                            addRow()" class="btn btn-default pull-left btn-primary">Add Row</button>
+                    <button type="button" class="btn btn-default btn-info" ng-click="tableform.$show();" ng-show="!tableform.$visible">Edit All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" >Save</button>
+        &nbsp;
+        <button type="button" class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.docSchedule')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>
+
+<script src="js/jquery.timepicker.min.js"></script>
