@@ -1,0 +1,19 @@
+<div ng-controller="ReordersController" ng-init="showform = false;">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Reorder History Update</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="initForm();">
+                <form editable-form name="tableform" class="form-horizontal form-validation" onaftersave="saveForm('add'); tableform.$show();" novalidate="" oncancel="cancel()" shown="true">
+                    <div ng-show="showform" ng-include="'tpl/pharmacy_reorder/_form.html'">
+                        {% include 'tpl/pharmacy_reorder/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

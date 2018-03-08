@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Country Name * </label>
+            <div class="col-sm-8">
+                <!--<select ui-jq="chosen" class="form-control" ng-model="data.country_id" ng-options="country.value as country.label for country in countries | orderBy: label" required>-->
+                <select class="form-control" ng-model="data.country_id" ng-options="country.value as country.label for country in countries | orderBy: label" required>
+                    <option value="">Select Country</option>
+                </select>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">State Name * </label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="data.state_name" maxlength="50" name="stateName" class="form-control" placeholder="State Name">
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Status</label>
+            <div class="col-sm-8">
+                <label class="i-checks "> <input type="checkbox" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="data.status" ng-checked="data.status == '1'"> <i></i> </label> &nbsp; &nbsp;
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.states')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

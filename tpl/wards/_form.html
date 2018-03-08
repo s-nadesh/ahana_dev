@@ -1,0 +1,32 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Floor Name * </label>
+            <div class="col-sm-9">
+                <select class="form-control" name="Floor" ng-model="data.floor_id" ng-options="floor.floor_id as floor.floor_name for floor in floors | orderBy: floor_name">
+                    <option value="">Select Floor</option>
+                </select>
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Ward Name * </label>
+            <div class="col-sm-9">
+                <input type="text" ng-model="data.ward_name" maxlength="50" name="wardName" class="form-control" placeholder="Ward Name">
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Status</label>
+            <div class="col-sm-9">
+                <label class="i-checks "> <input type="checkbox" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="data.status" ng-checked="data.status == '1'"> <i></i> </label> &nbsp; &nbsp;
+            </div>
+        </div>
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.wards')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

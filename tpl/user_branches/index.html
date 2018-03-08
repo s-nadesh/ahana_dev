@@ -1,0 +1,57 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n h3">Assign User Branches</h1>
+</div>
+
+<div class="wrapper-md">
+    <div ng-controller="UserBranchesController" ng-init="initData()">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <form name="userBranchesForm" class="form-horizontal form-validation">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"> Health Organization </label>
+                                <div class="col-sm-8">
+                                    {{organization.tenant_name}}
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Username * </label>
+                                <div class="col-sm-8">
+                                    <select class="form-control selectpicker" data-live-search="true" ng-model="data.user_id" ng-options="user.user_id as user.fullname for user in users | orderBy: fullname" ng-change="getSavedBranches()">
+                                        <option value="" label="Select User">Select User</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Branches * </label>
+                                <div class="col-sm-8">
+                                    <div ng-repeat="branch in branches track by branch.tenant_id">
+                                        <label class="i-checks ">
+                                            <input type="checkbox" ng-disabled="branch.tenant_id == default_branch" ng-checked="selectedBranches.containsObjectWithProperty('tenant_id', branch.tenant_id)" ng-click="toggleSelection(branch)" /> 
+                                            <i></i>
+                                            {{branch.tenant_name}}
+                                        </label> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer class="panel-footer text-right bg-light lter">
+                            <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()">Assign</button>
+                            &nbsp;
+                            <button class="btn m-b-xs  btn-dark" ng-click="reset()"><i class="fa fa-times"></i> Cancel</button>
+                            &nbsp;
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

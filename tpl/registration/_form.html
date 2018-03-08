@@ -1,0 +1,155 @@
+<div class="row">
+
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Name *</label>
+                    <div class="col-lg-9">
+                        <div class="form-group">
+                            <div class="col-lg-3">
+                                <select class="form-control" name="Title" ng-model="data.title_code" ng-options="title_code.value as title_code.label for title_code in title_codes"></select>
+                            </div>
+                            <div class="col-lg-9">
+                                <input type="text" placeholder="Name" class="form-control" ng-model="data.name">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Designation *</label>
+                    <div class="col-lg-9">
+                        <input type="text" placeholder="Designation" class="form-control" ng-model="data.designation">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Email *</label>
+                    <div class="col-lg-9">
+                        <input type="text" placeholder="Email" class="form-control" ng-model="data.email">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Mobile *</label>
+                    <div class="col-lg-9">
+                        <input type="text" placeholder="Mobile" class="form-control" maxlength='10' ng-model="data.mobile" only-digits="">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Contact1</label>
+                    <div class="col-lg-9">
+                        <input type="text" placeholder="Contact1" class="form-control" ng-model="data.contact1" only-digits="">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Contact2</label>
+                    <div class="col-lg-9">
+                        <input type="text" placeholder="Contact2" class="form-control" ng-model="data.contact2" only-digits="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Care Provider </label>
+                    <div class="col-lg-9">
+                        <div class="input-group m-b">
+                            <span class="input-group-addon">
+                                <input type="checkbox" ng-model="data.care_provider" ng-true-value="'1'" ng-false-value="'0'">
+                            </span>
+                            <select class="form-control" ng-model="data.speciality_id" ng-disabled="data.care_provider == '0'" ng-options="speciality.speciality_id as speciality.speciality_name for speciality in specialities | orderBy: speciality_name">
+                                <option value="">Select Speciality</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Address *</label>
+                    <div class="col-lg-9">
+                        <textarea placeholder="Address" class="form-control" ng-model="data.address"></textarea>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Country *</label>
+                    <div class="col-lg-8">
+                        <select class="form-control" name="Country" ng-model="data.country_id" ng-options="country.value as country.label for country in countries | orderBy: label" data-ng-change="updateState2();
+                                data.state_id = '';
+                                data.city_id = '';">
+                            <option value="">Select Country</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-0">
+                        <script type="text/ng-template" id="CountryModalContent.html">
+                            <div ng-include="'tpl/modal_form/modal.country.html'"></div>
+                        </script>
+                        <button type="button" class="btn btn-primary" ng-click="openModal('lg', 'CountryModalInstanceCtrl', 'CountryModalContent.html', '')">
+                            <i class="fa fa-plus text ng-scope"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">State *</label>
+                    <div class="col-lg-8">
+                        <select class="form-control" name="State" ng-model="data.state_id" ng-options="state.value as state.label for state in availableStates2 | orderBy: label" data-ng-change="updateCity2();
+                                data.city_id = '';">
+                            <option value="">Select State</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-0">
+                        <script type="text/ng-template" id="StateModalContent.html">
+                            <div ng-include="'tpl/modal_form/modal.state.html'"></div>
+                        </script>
+                        <button type="button" class="btn btn-primary" ng-click="openModal('lg', 'StateModalInstanceCtrl', 'StateModalContent.html', '')">
+                            <i class="fa fa-plus text ng-scope"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">City *</label>
+                    <div class="col-lg-8">
+                        <select class="form-control" name="City" ng-model="data.city_id" ng-options="city.value as city.label for city in availableCities2 | orderBy: label">
+                            <option value="">Select City</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-0">
+                        <script type="text/ng-template" id="CityModalContent.html">
+                            <div ng-include="'tpl/modal_form/modal.city.html'"></div>
+                        </script>
+                        <button type="button" class="btn btn-primary" ng-click="openModal('lg', 'CityModalInstanceCtrl', 'CityModalContent.html', '')">
+                            <i class="fa fa-plus text ng-scope"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Zip *</label>
+                    <div class="col-lg-9">
+                        <input type="text" placeholder="Zip" class="form-control" maxlength='6' ng-model="data.zip" only-digits="">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formrole)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.registration')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

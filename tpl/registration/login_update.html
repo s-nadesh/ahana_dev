@@ -1,0 +1,68 @@
+<div ng-controller="UsersController" ng-init="loadLoginForm();">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Login Credentials: {{data.name}}</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <form name="loginForm" class="form-horizontal form-validation" novalidate="">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Username *</label>
+                                <div class="col-lg-6">
+                                    <input type="text" placeholder="Username" class="form-control" ng-model="data.username">
+                                </div>
+                                <a class="btn btn-primary" ng-show="data.form_type == 'update'" ng-click="data.change_password = true">Change Password</a>
+                            </div> 
+                            <div ng-show="((data.form_type == 'add') || ((data.form_type == 'update') && data.change_password))" class="form-group">
+                                <label class="col-lg-2 control-label" ng-show="data.form_type == 'add'">Password *</label>
+                                <label class="col-lg-2 control-label" ng-show="data.form_type == 'update'">Password </label>
+                                <div class="col-lg-6">
+                                    <input type="{{ showPassword ? 'text' : 'password' }}" placeholder="Password" class="form-control" ng-model="data.password" value="">
+                                </div>
+                                <div class="col-lg-3">
+                                    <button class="btn btn-sm btn-icon btn-info" ng-show="!showPassword" ng-click="showPassword = true"><i class="fa fa-eye"></i></button>
+                                    <button class="btn btn-sm btn-icon btn-info" ng-show="showPassword" ng-click="showPassword = false"><i class="fa fa-eye-slash"></i></button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Activation Date</label>
+                                <div class="col-lg-6">
+                                    <div class="input-group w-md">
+                                        <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.activation_date" is-open="opened1" datepicker-options="dateOptions" close-text="Close"  min-date="minDate" prevent-enter ng-click="open($event, 'opened1')" ng-focus="open($event, 'opened1')"/>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Inactivation Date</label>
+                                <div class="col-lg-6">
+                                    <div class="input-group w-md">
+                                        <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.Inactivation_date" is-open="opened2" datepicker-options="dateOptions" close-text="Close" min-date="minDate" prevent-enter ng-click="open($event, 'opened2')" ng-focus="open($event, 'opened2')"/>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <footer class="panel-footer text-right bg-light lter">
+                    <button class="btn m-b-xs  btn-success save-btn" ng-click="saveLogin()">Save</button>
+                    &nbsp;
+                    <button class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.registration')"><i class="fa fa-times"></i> Cancel</button>
+                    &nbsp;
+                </footer>
+            </div>
+        </form>
+    </div>
+</div>

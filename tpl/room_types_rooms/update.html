@@ -1,0 +1,49 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n h3">Assign Room and Bed Types</h1>
+</div>
+
+<div class="wrapper-md">
+    <div ng-controller="RoomTypesRoomsController" ng-init="getRoomandRoomTypes();">
+
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <form name="roomsRoomTypesForm" class="form-horizontal form-validation">
+                    <input type="hidden" ng-model="data.room_id">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> Bed No. </label>
+                                <div class="col-sm-9">
+                                    {{selectedRoom.bed_name}}
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Bed Types *</label>
+                                <div class="col-sm-9">
+                                    <div ng-repeat="roomtype in roomtypes track by roomtype.room_type_id">
+                                        <label class="i-checks">
+                                            <input type="checkbox" ng-checked="selectedRoomandRoomTypes.containsObjectWithProperty('room_type_id', roomtype.room_type_id)" name="status" ng-click="toggleSelection(roomtype)" /> 
+                                            <i></i> 
+                                        </label> {{roomtype.room_type_name}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer class="panel-footer text-right bg-light lter">
+                            <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()">Assign</button>
+                            &nbsp;
+                            <button class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.roomTypeRoom')"><i class="fa fa-times"></i> Cancel</button>
+                            &nbsp;
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

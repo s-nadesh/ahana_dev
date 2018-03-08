@@ -1,0 +1,20 @@
+<div ng-controller="SaleReturnController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Update Sale Return</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="data.formtype = 'update';
+                            initForm();" novalidate="">
+                <form editable-form name="tableform" name="SaleReturnForm" class="form-horizontal form-validation" onaftersave="saveForm('update'); tableform.$show();" novalidate="" oncancel="cancel()" shown="true">
+                    <div ng-include="'tpl/pharmacy_sale_return/_form.html'">
+                        {% include 'tpl/pharmacy_sale_return/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

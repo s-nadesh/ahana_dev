@@ -1,0 +1,20 @@
+<div ng-controller="ReordersController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Update Reorder: {{data.Reorder_name}}</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-6" ng-init="data.formtype = 'update'; initForm(); loadForm();" novalidate="">
+                <form name="alertForm" class="form-horizontal form-validation">
+                     <input type="hidden" ng-model="data.Reorder_id">
+                    <div ng-include="'tpl/pharmacy_Reorder/_form.html'">
+                        {% include 'tpl/pharmacy_Reorder/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

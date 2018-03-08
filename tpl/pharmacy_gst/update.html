@@ -1,0 +1,20 @@
+<div ng-controller="GstController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Update Gst</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-4" ng-init="data.formtype = 'update'; loadForm();" novalidate="">
+                <form name="vatForm" class="form-horizontal form-validation">
+                    <input type="hidden" ng-model="data.gst_id">
+                    <div ng-include="'tpl/pharmacy_gst/_form.html'">
+                        {% include 'tpl/pharmacy_gst/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

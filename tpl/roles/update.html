@@ -1,0 +1,20 @@
+<div ng-controller="RolesController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Update Role: {{data.description}}</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-6" ng-init="data.formrole = 'update'; loadForm();" novalidate="">
+                <form name="roleForm" class="form-horizontal form-validation">
+                     <input type="hidden" ng-model="data.role_id">
+                    <div ng-include="'tpl/roles/_form.html'">
+                        {% include 'tpl/roles/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,142 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n h3">Charge Categories</h1>
+</div>
+
+<div class="wrapper-md" ng-controller="RoomChargeCategoriesController" ng-init="loadRoomChargeCategoriesList()">
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+    <div class="panel panel-default">
+        <div class="row wrapper">
+            <div class="col-sm-1 m-b-xs">
+                <button class="btn btn-sm btn-grey" ng-click="loadRoomChargeCategoriesList()"> 
+                    &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+                </button>
+            </div>
+             <div class="col-sm-5 m-b-xs">  <div class="row"></div><input id="filter" type="text" class="form-control input-sm w-sm inline m-r" placeholder="Search" ng-model="form_filter"/>   </div>
+           
+            <div class="col-sm-4 pull-right right">
+                <button check-access-button ng-click="$state.go('configuration.roomChargeCategoryCreate')" class="btn btn-sm btn-info pull-right">
+                    <i class="fa fa-plus"></i> &nbsp; Add New Charge Category
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <table data-filter="#filter" data-filtering="true" ui-jq="footable" class="table m-b-none footable-loaded footable default">
+                <thead>
+                    <tr>
+                        <th align="left" valign="top" data-toggle="true">
+                            <button class="btn btn-sm btn-default" type="button" ng-click="ctrl.expandAll(allExpanded = !allExpanded)">
+                                <i ng-if="!allExpanded" class="fa fa-plus text"></i>
+                                <i ng-if="allExpanded" class="fa fa-minus text"></i>
+                            </button>
+                        </th>
+                        <th>Charge Category name</th>
+                        <th>Charge Category Description</th>
+                        <th>Charge Category Code</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat-start="row in rowCollection | orderBy: charge_cat_name">
+                        <td align="left" valign="top">
+                            <button ng-click="expanded = !expanded" expand class="btn btn-sm btn-default hms-plus">
+                                <i ng-if="!expanded" class="fa fa-plus text"></i>
+                                <i ng-if="expanded" class="fa fa-minus text"></i>
+                            </button>
+                        </td>
+                        <td>
+                            {{row.charge_cat_name}}
+                        </td>
+                        <td>
+                            {{row.charge_cat_description}}
+                        </td>
+                        <td>
+                            {{row.charge_cat_code}}
+                        </td>
+                        <td>
+                            <div ng-if="row.tenant_id != null">
+                                <label class="i-checks "> 
+                                    <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="row.status" ng-change='updateStatus("CoRoomChargeCategory", row.charge_cat_id)'> 
+                                    <i></i>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <div ng-if="row.tenant_id != null">
+                                <a class="btn btn-dark" title="Edit" check-access  ui-sref="configuration.roomChargeCategoryUpdate({id: '{{row.charge_cat_id}}'})">
+                                    <i class="fa fa-pencil"></i>
+                                </a>&nbsp;&nbsp;&nbsp;
+                                <a class="hide" title="Delete" ng-click="removeRow(row)">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr ng-repeat-end ng-show="expanded" data-value="{{row.charge_cat_name}} {{row.charge_cat_description}} {{row.charge_cat_code}}">
+                        <td data-value="{{row.charge_cat_name}} {{row.charge_cat_description}} {{row.charge_cat_code}}">&nbsp;</td>
+
+                        <td colspan="3" data-value="{{row.charge_cat_name}} {{row.charge_cat_description}} {{row.charge_cat_code}}">
+                            <div class="row" ng-if="row.charge_cat_code == 'PRF'">
+                                <div class="col-sm-12">
+                                    <ul>
+                                        <li ng-repeat="subcat in row.subcategories">
+                                            <span class="pull-right">
+                                                <a class="btn btn-primary" ui-sref="configuration.registration({mode: 'C'})">View</a>
+                                            </span>
+                                            {{subcat.charge_subcat_name}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="row" ng-if="row.charge_cat_code != 'PRF'">
+                                <div class="col-sm-6">
+                                    <div class="panel panel-default inner-panel">
+                                        <div class="panel-heading">
+                                            <b> Sub Categories </b> 
+                                            <button class="label bg-primary pull-right" ng-click="rowform.$show();
+                                                        addSubRow(row.charge_cat_id)" type="button">Add Row
+                                            </button>
+                                        </div>
+
+                                        <ul class="list-group no-radius">
+                                            <li class="list-group-item" ng-repeat="subcat in row.subcategories">
+                                                <span class="pull-right" ng-show="!rowform.$visible"> 
+                                                    <button ng-click="rowform.$show()" class="badge bg-dark ng-binding">Edit</button>  
+                                                    <button ng-click="deleteSubRow(row.charge_cat_id, subcat.charge_subcat_id, subcat.temp_charge_cat_id);" class="badge bg-danger ng-binding">Delete</button>
+                                                </span>
+
+                                                <form editable-form name="rowform" onbeforesave="updateName($data, subcat.charge_subcat_id, row.charge_cat_id, subcat.temp_charge_cat_id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == subcat">
+                                                    <span class="pull-right">
+                                                        <button type="submit" ng-disabled="rowform.$waiting" class="badge bg-success">
+                                                            Save
+                                                        </button>
+                                                        &nbsp;&nbsp;
+                                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="badge bg-danger">
+                                                            Cancel
+                                                        </button>
+                                                    </span>
+                                                </form>
+
+                                                <span editable-text="subcat.charge_subcat_name" e-name="charge_subcat_name" e-form="rowform" onbeforesave="checkInput($data)">
+                                                    {{subcat.charge_subcat_name|| 'empty' }}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td colspan="2" data-value="{{row.charge_cat_name}} {{row.charge_cat_description}} {{row.charge_cat_code}}"></td>
+                    </tr>
+                </tbody>
+                <tfoot class="hide-if-no-paging"></tfoot>
+            </table>
+        </div>
+    </div>
+</div>

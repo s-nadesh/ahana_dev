@@ -1,0 +1,173 @@
+<div ng-controller="PurchaseController" ng-init="loadPurchaseItemList('CA')">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n font-thin h3">Purchase List - {{purchase_payment_type_name}}</h1>
+    </div>
+    <div class="wrapper-md tab-btn">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="btn-group btn-group-justified">
+                    <a class="btn btn-info" ng-class="{active : activeMenu === 'CA'}" ng-click="loadPurchaseItemList('CA')">
+                        <i class="fa fa-money"></i>  Cash
+                    </a>
+                    <a class="btn btn-info" ng-class="{active : activeMenu === 'CR'}" ng-click="loadPurchaseItemList('CR')">
+                        <i class="fa fa-list-alt"></i>
+                        Credit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <button class="btn btn-sm btn-grey" ng-click="loadPurchaseItemList(purchase_payment_type)">
+                            &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp;
+                        </button>
+                        <input id="filter" type="text" placeholder="Search" class="form-control input-sm w-sm inline m-r" ng-model="form_filter"/>
+                        <!--                        <input prevent-enter id="filter1" type="text" placeholder="Filter by date" class="form-control input-sm w-sm inline filter-date" ng-model="form_filter1" datepicker-popup="yyyy-MM-dd" is-open="opened1" datepicker-options="dateOptions" close-text="Close"/>
+                                                <button type="button" class="btn btn-sm btn-default" ng-click="open($event, 'opened1')">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>-->
+                        <select class="form-control search-dropdown" ng-model="day" ng-options="day.value as day.label for day in days">
+                            <option value="">DD</option>
+                        </select>
+                        <select class="form-control search-dropdown" ng-model="month" ng-options="month.value as month.label for month in months">
+                            <option value="">MM</option>
+                        </select>
+                        <select class="form-control search-dropdown" ng-model="year" ng-options="year.value as year.label for year in years">
+                            <option value="">YYYY</option>
+                        </select>
+                        <button class="btn btn-sm btn-grey" ng-click="loadPurchaseItemList(purchase_payment_type)">
+                            &nbsp; &nbsp; <i class="fa fa-search"></i> &nbsp; &nbsp;
+                        </button>
+                        <button class="btn btn-sm btn-dark" title="clear filter" ng-click="form_filter = '';day='';month='';year='';loadPurchaseItemList(purchase_payment_type)">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="col-sm-3">
+                        <button check-access-button ng-click="$state.go('pharmacy.purchaseCreate')" class="btn btn-sm btn-info pull-right">
+                            <i class="fa fa-plus"></i> &nbsp; Add new Purchase
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <table class="table m-b-none default" infinite-scroll='loadMorePurchaseItemList(purchase_payment_type)'>
+                <thead>
+                    <tr>
+                        <th data-sort-ignore="true">
+                            <button class="btn btn-sm btn-default hms-plus" type="button" ng-click="ctrl.expandAll(allExpanded = !allExpanded)">
+                                <i ng-if="!allExpanded" class="fa fa-plus text"></i>
+                                <i ng-if="allExpanded" class="fa fa-minus text"></i>
+                            </button>
+                        </th>
+                        <th>GR No</th>
+                        <th>Invoice Date</th>
+                        <th>Invoice No.</th>
+                        <th>Supplier Name</th>
+                        <th>Total Purchase Amount</th>
+                        <th>Total Vat Amount</th>
+                        <th>Disc. %</th>
+                        <th>Disc Amount</th>
+                        <th>Roundoff Amount</th>
+                        <th>net Amount</th>
+                        <th style="width: 8%" data-sort-ignore="true">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat-start="(key, row) in displayedCollection">
+                        <td style="width: 5%" data-sort-ignore="true">
+                            <button ng-click="expanded = !expanded" expand class="btn btn-sm btn-default hms-plus">
+                                <i ng-if="!expanded" class="fa fa-plus text"></i>
+                                <i ng-if="expanded" class="fa fa-minus text"></i>
+                            </button>
+                        </td>
+                        <td><span class="badge bg-primary ng-binding">{{row.gr_num}}</span></td>
+                        <td>{{row.invoice_date}}</td>
+                        <td><span class="badge bg-success ng-binding">{{row.invoice_no}}</span></td>
+                        <td>{{row.supplier_name}}</td>
+                        <td><span class="badge bg-info ng-binding">{{row.total_item_purchase_amount}}</span></td>
+                        <td>{{row.total_item_vat_amount}}</td>
+                        <td>{{row.discount_percent}}</td>
+                        <td>{{row.discount_amount}}</td>
+                        <td>{{row.roundoff_amount}}</td>
+                        <td>{{row.net_amount}}</td>
+                        <td>
+                            <a class="label bg-dark" title="Edit" check-access  ui-sref="pharmacy.purchaseUpdate({id: '{{row.purchase_id}}'})">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <span ng-if="row.payment_type == 'CR' && row.payment_status != 'C'">
+                                <a class="label bg-dark" title="Make Payment" ng-click="make_payment(row.purchase_id)" data-button="pharmacy.makePayment" check-access-custom>
+                                    <i class="fa fa-money"></i>
+                                </a>
+                            </span>
+                            <button tooltip="Print Bill"  class="label bg-primary dk" ng-click="printPurchaseBill(row.purchase_id)">
+                                <i class="fa fa-print"></i>
+                            </button>
+                            <!--check-access-custom / hide-->
+                            <a data-button="pharmacy.deletepurchasebill"  title="Delete Purchase" ng-click="removeRow(row.purchase_id)" class="label bg-dark dk" check-access-custom>
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr ng-repeat-end ng-show="expanded">
+                        <td>&nbsp;</td>
+                        <td colspan="12">
+                            <table class="table table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Batch No</th>
+                                        <th>Exp Date</th>
+                                        <th>Qty</th>
+                                        <th>Free</th>
+                                        <th>F. Unit</th>
+                                        <th>MRP</th>
+                                        <th>P.Price</th>
+                                        <th>Amt</th>
+                                        <th>Dis %</th>
+                                        <th>Dis Amt</th>
+                                        <th>P.Vat</th>
+                                        <th>Vat Amt</th>
+                                        <th>P.Unit</th>
+                                        <th>Total Amt</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(gKey, purchaseitem) in row.items | orderBy: purchaseitem">
+                                        <td>{{ purchaseitem.product.full_name}}</td>
+                                        <td>{{ purchaseitem.batch.batch_no}}</td>
+                                        <td>{{ purchaseitem.batch.expiry_date | moment:'MMM YYYY' || 'empty' }}</td>
+                                        <td>{{ purchaseitem.quantity}}</td>
+                                        <td>{{ purchaseitem.free_quantity}}</td>
+                                        <td>{{ purchaseitem.free_quantity_unit}}</td>
+                                        <td>{{ purchaseitem.mrp}}</td>
+                                        <td>{{ purchaseitem.purchase_rate}}</td>
+                                        <td>{{ purchaseitem.purchase_amount}}</td>
+                                        <td>{{ purchaseitem.discount_percent}}</td>
+                                        <td>{{ purchaseitem.discount_amount}}</td>
+                                        <td>{{ purchaseitem.vat_percent}}</td>
+                                        <td>{{ purchaseitem.vat_amount}}</td>
+                                        <td>{{ purchaseitem.package_name}}</td>
+                                        <td>{{ purchaseitem.total_amount}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot ng-if="isLoading == true">
+                    <tr>
+                        <td colspan="13" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,201 @@
+<div ng-controller="saleReportController" ng-init="initReport();">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Sale Report</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body p-b">
+                        <div class="form-group report-inst">
+                            <ul>
+                                <li>This report will be generated only for a 15 days.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body p-b form-horizontal">
+                        <form role="form" class="form-inline" name="searchForm">
+                            <div class="form-group">
+                                <label>From  :</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.from" is-open="opened1" datepicker-options="dateOptions" close-text="Close" max-date="fromMaxDate" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event, 'opened1')">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>To :</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.to" is-open="opened2" datepicker-options="dateOptions" close-text="Close" min-date="toMinDate" />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event, 'opened2')">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <select id="payment_type" class="selectpicker" ng-model="data.payment_type" ng-options="paymentType.value as paymentType.label for paymentType in paymentTypes">
+                                    <option value="">Select Payment Type</option>
+                                </select>
+                            </div>
+                            <div class="form-group" ng-show="data.payment_type == 'CR' && saleGroupsLength > 0">
+                                <select id="patient_group" class="selectpicker" data-actions-box="true" data-selected-text-format="count" data-live-search="true"  ng-model="data.patient_group_name" ng-options="key as value for (key , value) in saleGroups" multiple>
+                                </select>
+                            </div>
+                            <button class="btn btn-success get-report" ng-disabled="searchForm.$invalid" ng-click="loadReport()">Get Report</button>
+                            <button class="btn btn-dark" ng-click="clearReport()">Clear</button>
+                        </form>
+                    </div>    
+                </div>
+            </div>
+
+            <div class="col-sm-12" ng-if='showTable && records.length == 0'>
+                <div class="panel panel-default">
+                    <div class="panel-body">No Records Found</div>
+                </div>
+            </div>
+
+            <div class="col-sm-12" ng-if='showTable && records.length > 0'>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-sm-4 m-b-xs">
+                            <span>
+                                <b>Report Name : </b>  Sale Report <br>
+                            </span>
+                            <span ng-show="data.from != '' && data.to != ''">
+                                <b> Date / Duration : </b>{{ data.from | date:'dd-MM-yyyy'}} - {{ data.to | date:'dd-MM-yyyy'}} <br>
+                            </span>
+                        </div>
+                        <div class="col-sm-4 m-b-xs">
+                            <span ng-show="generated_on != ''">
+                                <b>Generated On : </b> {{generated_on}} <br>
+                            </span>
+                            <span ng-show="app.username != ''">
+                                <b>Generated By : </b> {{app.username}} <br>
+                            </span>
+                        </div>
+                        <div class="col-sm-4 text-right"> 
+                            <p>
+                                <button ng-click="printReport();" class="btn btn-sm btn-icon btn-info"><i class="fa fa-print"></i></button>
+                                <button ng-click="tablesToExcel({{tableid}}, {{sheet_name}}, 'SaleReport.xls', 'Excel');" class="btn btn-sm btn-icon btn-danger"><i class="fa fa-file-excel-o"></i></button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12" ng-show='showTable && records.length > 0'>
+                <div id="sale_report">
+                    <table style="display: none;" class="table table-bordered">
+                        <tr>
+                            <th>Report Name</th>
+                            <th>Date / Duration</th>
+                            <th>Generated On</th>
+                            <th>Generated By</th>
+                        </tr>
+                        <tr>
+                            <td>Purchase VAT Report</td>
+                            <td>{{ data.from | date:'dd-MM-yyyy'}} - {{ data.to | date:'dd-MM-yyyy'}}</td>
+                            <td>{{generated_on}}</td>
+                            <td>{{app.username}}</td>
+                        </tr>
+                        <tr>
+                        </tr>
+                    </table>
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">
+                            {{app.org_name}}
+                        </div>
+                        <div class="panel-body" ng-init="sale = {}">
+                            <table class="export-table print-table table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th id="work-base-grid_c0">S.No</th>
+                                        <th id="work-base-grid_c1">Bill No</th>
+                                        <th id="work-base-grid_c2">Patient Name</th>
+                                        <th id="work-base-grid_c3">UHID</th>
+                                        <th id="work-base-grid_c4">Group</th>
+                                        <th id="work-base-grid_c5">Sale Date</th>
+                                        <th id="work-base-grid_c6">Payment Type</th>
+                                        <th id="work-base-grid_c7">Payment Mode</th>
+                                        <th id="work-base-grid_c8">Sale Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(key, record) in records">
+                                        <td>{{key + 1}}</td>
+                                        <td>{{record.bill_no}}</td>
+                                        <td>{{record.patient_name}}</td>
+                                        <td>{{record.patient_uhid}}</td>
+                                        <td>{{record.patient_group_name|| '-'}}</td>
+                                        <td>{{record.sale_date| date:'dd-MM-yyyy'}}</td>
+                                        <td>{{salePaymentType(record.payment_type)}}</td>
+                                        <td>{{record.sale_bill_paid_type|| '-'}}</td>
+                                        <td data-type="Number" ng-init="sale.total_amount = sale.total_amount + parseFloat(record.bill_amount);">
+                                            {{record.bill_amount}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th class="text-right"><b>Total Sale Value</b></th>
+                                        <td data-type="Number"><b>{{sale.total_amount| number:2}}</b></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12" ng-show='showTable && records.length > 0'>
+                <div id="table_datewise_report">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">
+                            Date Wise Summary
+                        </div>
+                        <div class="panel-body">
+                            <table class="export-table print-table table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th id="work-base-grid_c1">Date</th>
+                                        <th id="work-base-grid_c1">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(date, record) in records | groupBy: 'sale_date' | orderBy:'sale_date'" ng-init="sale_date = {}">
+                                        <td>{{date| date:'dd-MM-yyyy'}}</td>
+                                        <td data-type="Number">
+                                            <span ng-repeat="(key, report) in record" ng-init="row_bill_total = parseFloat(report.bill_amount);
+                                                sale_date.total = sale_date.total + row_bill_total;">
+                                            </span>
+                                            {{sale_date.total| number:2}}  
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

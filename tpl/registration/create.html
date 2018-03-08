@@ -1,0 +1,19 @@
+<div ng-controller="UsersController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Create User</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="data = {}; data.care_provider='0';data.formrole = 'add'; initForm();">
+                <form name="userForm" class="form-horizontal form-validation" novalidate="">
+                    <div ng-include="'tpl/registration/_form.html'">
+                        {% include 'tpl/registration/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

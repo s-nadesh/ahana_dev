@@ -1,0 +1,47 @@
+<div ng-controller="SaleReturnController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">New Sale Return</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="data = {}; data.formtype = 'add';
+                            data.payment_type = 'CA';
+                            initForm();">
+                <form editable-form name="tableform" name="SaleReturnForm" class="form-horizontal form-validation" onaftersave="saveForm('add'); tableform.$show();" novalidate="" oncancel="cancel()" shown="true">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Select Bill No. / UHID</label>
+                                        <div class="col-lg-4">
+                                            <input autocomplete="off"
+                                               placeholder="Bill No."
+                                               type="text"
+                                               class="form-control"
+                                               ng-model="select_sale_id"
+                                               typeahead="sale as sale.bill_no_with_patient for sale in getSaleinvoices($viewValue) | orderBy: bill_no"
+                                               typeahead-on-select="getSaleReturnItems($item, $model, $label)"
+                                               typeahead-wait-ms="400"
+                                               />
+                                               <!--typeahead="patient as patient.name_with_int_code for patient in getPatients($viewValue) | filter:{name_with_int_code:$viewValue} | limitTo: 10"-->
+<!--                                            <select class="form-control selectpicker" data-live-search="true" ng-model="data.sale_id" ng-options="sale.sale_id as sale.bill_no_with_patient for sale in saleinvoice | orderBy: invoice_no"  data-ng-change="getSaleReturnItems()">
+                                            <option value="">Select Bill No.</option>
+                                        </select>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-include="'tpl/pharmacy_sale_return/_form.html'" ng-show="data.sale_id">
+                        {% include 'tpl/pharmacy_sale_return/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

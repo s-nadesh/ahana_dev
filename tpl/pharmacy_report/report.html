@@ -1,0 +1,172 @@
+<div ng-controller="reportController" ng-init="initReport();">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">{{report_title}}</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-show='show_search'>
+                <div class="panel panel-default">
+                    <div class="panel-body p-b form-horizontal">
+                        <form role="form" class="form-inline" name="searchForm">
+                            <div class="form-group">
+                                <label>From  :</label>
+                                <div class="input-group ">
+                                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.from" is-open="opened1" datepicker-options="dateOptions" close-text="Close" max-date="fromMaxDate" 
+/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>To :</label>
+                                <div class="input-group ">
+                                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.to" is-open="opened2" datepicker-options="dateOptions" close-text="Close" min-date="toMinDate"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-if='show_search_consultant'>
+                                <select class="form-control selectpicker" data-live-search="true" ng-model="data.consultant_id" ng-options="doctor.user_id as doctor.fullname for doctor in doctors | orderBy: fullname" data-ng-change="changeGetConsultant()">
+                                    <option value="">All</option>
+                                </select>
+                            </div>
+
+                            <button class="btn btn-success get-report" ng-click="loadReport()">Get Report</button>
+                            <button class="btn btn-dark" ng-click="data.from = '';
+                                        data.to = '';
+                                        showTable = false;">Cancel
+                            </button>
+                        </form>
+                    </div>    
+                </div>
+            </div>
+
+            <div class="col-sm-12" ng-show='showTable'>
+                <div class="panel panel-default">
+                    <div class="panel-heading font-bold">{{app.name}} ({{app.org_name}}) - {{report_title}} </div>
+                    <div class="row wrapper">
+                        <div class="col-sm-4 m-b-xs"> <b> Report Generated On : </b> {{ date}} </div>
+                        <div class="col-sm-2 m-b-xs" ng-show="data.from != ''"> <b> From Date  : </b>{{ data.from | date:'dd-MM-yyyy'}}</div>
+                        <div class="col-sm-2 m-b-xs" ng-show="data.to != ''"> <b> To Date  : </b> {{ data.to | date:'dd-MM-yyyy'}} </div>
+                        <div class="col-sm-4 pull-right right"> 
+                            <!-- modal -->
+                            <div class="text-right">
+<!--                                <div class="btn-group dropdown" dropdown>
+                                    <button class="btn btn-danger" dropdown-toggle> <i class="fa fa-download"></i> Export <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a ng-click="exportAction('excel')">EXCEL</a></li>
+                                        <li><a ng-click="exportAction('pdf')">PDF</a></li>
+                                        <li><a ng-click="exportAction('doc')">DOC</a></li>
+                                        <li><a ng-click="exportAction('png')">PNG</a></li>
+                                        <li><a ng-click="exportAction('powerpoint')">POWER POINT</a></li>
+                                    </ul>
+                                </div>-->
+                                &nbsp;
+                                <button class="btn btn-primary" ng-click="printReport()">
+                                    <i class="fa fa-print"></i> Print
+                                </button>
+                            </div>
+                            <!-- /modal --> 
+                        </div>
+                    </div>
+                    <div>
+                        <div ng-if="mode == 'purchase'">
+                            <div ng-include="'tpl/pharmacy_report/_purchase_report.html'">
+                                {% include 'tpl/pharmacy_report/_purchase_report.html' %}
+                            </div>
+                        </div>
+                        <div ng-if="mode == 'sale'">
+                            <div ng-include="'tpl/pharmacy_report/_sale_report.html'">
+                                {% include 'tpl/pharmacy_report/_sale_report.html' %}
+                            </div>
+                        </div>
+                        <div ng-if="mode == 'stock'">
+                            <div ng-include="'tpl/pharmacy_report/_stock_report.html'">
+                                {% include 'tpl/pharmacy_report/_stock_report.html' %}
+                            </div>
+                        </div>
+                        <div ng-if="mode == 'purchasevat'">
+                            <div ng-include="'tpl/pharmacy_report/_purchase_vat_report.html'">
+                                {% include 'tpl/pharmacy_report/_purchase_vat_report.html' %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="printThisElement" ng-hide="true">
+                        <div ng-if="mode == 'purchase'" class="reports">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th id="work-base-grid_c0" ng-show="data.from != ''">From: {{ data.from | date:'dd-MM-yyyy'}}</th>
+                                        <th id="work-base-grid_c1" ng-show="data.to != ''">To: {{ data.to | date:'dd-MM-yyyy'}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th id="work-base-grid_c0">Product</th>
+                                        <th id="work-base-grid_c1">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(key, record) in records">
+                                        <td>{{record.product_name}}</td>
+                                        <td>{{record.total_amount}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-if="mode == 'sale'" class="reports">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th id="work-base-grid_c0" ng-show="data.from != ''">From: {{ data.from | date:'dd-MM-yyyy'}}</th>
+                                        <th id="work-base-grid_c1" colspan="2" ng-show="data.to != ''">To: {{ data.to | date:'dd-MM-yyyy'}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th id="work-base-grid_c0">Product</th>
+                                        <th id="work-base-grid_c1">Amount</th>
+                                        <th id="work-base-grid_c1">Consultant</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(key, record) in records">
+                                        <td>{{record.product_name}}</td>
+                                        <td>{{record.total_amount}}</td>
+                                        <td>{{record.consultant_name}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-if="mode == 'stock'" class="reports">
+                            <table class="table table-striped" width='100%'>
+                                <thead>
+                                    <tr>
+                                        <th id="work-base-grid_c0">Product Code</th>
+                                        <th id="work-base-grid_c0">Product Name</th>
+                                        <th id="work-base-grid_c1">Price per Unit</th>
+                                        <th id="work-base-grid_c1">Net Stock</th>
+                                        <th id="work-base-grid_c1">Stock Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(key, record) in records">
+                                        <td>{{record.product_code}}</td>
+                                        <td>{{record.product_name}}</td>
+                                        <td>{{record.mrp}}</td>
+                                        <td>{{record.available_qty}}</td>
+                                        <td>{{record.stock_value}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

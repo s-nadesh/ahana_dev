@@ -1,0 +1,26 @@
+<div ng-controller="PurchaseController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">New Purchase</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="initForm('add');">
+                <form 
+                    editable-form
+                    name="tableform"
+                    class="form-horizontal form-validation" 
+                    onaftersave="saveForm('add'); tableform.$show();" 
+                    novalidate="" 
+                    oncancel="cancel()" 
+                    shown="true">
+                    <div ng-include="'tpl/pharmacy_purchase/_form.html'">
+                        {% include 'tpl/pharmacy_purchase/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

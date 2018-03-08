@@ -1,0 +1,60 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Charge Category Name * </label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="data.charge_cat_name" maxlength="50" name="roomChargeCategoryName" class="form-control" placeholder="Room Charge Category Name">
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Charge Category Description * </label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="data.charge_cat_description" maxlength="50" name="roomChargeCategoryName" class="form-control" placeholder="Room Charge Category Code">
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Charge Category Code </label>
+            <div class="col-sm-8">
+                <input type="text" ng-model="data.charge_cat_code" maxlength="50" name="roomChargeCategoryName" class="form-control" placeholder="Room Charge Category Code">
+            </div>
+        </div>
+        <div class="line line-dashed b-b line-lg "></div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Status</label>
+            <div class="col-sm-8">
+                <label class="i-checks "> <input type="checkbox" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="data.status" ng-checked="data.status == '1'"> <i></i> </label> &nbsp; &nbsp;
+            </div>
+        </div>
+
+        <div class="line line-dashed b-b line-lg "></div>
+        
+        <div class="form-group">         
+            <div class="col-sm-12">
+              <div class="panel panel-default inner-panel">
+                <div class="panel-heading"><b> Sub Categories </b>                    
+                  <button type="button" ng-click="tableform.$show(); addRow()" class="label bg-primary pull-right">Add Row</button>  
+                </div>
+                <ul class="list-group no-radius" ng-repeat="subcategory in subcategories">
+                  <li class="list-group-item"> <span class="pull-right">
+                    <button type="button" ng-click="removeSubcat($index, subcategory.charge_subcat_id)" class="badge bg-danger ng-binding">Delete</button>
+                      </span>
+                     <span editable-text="subcategory.charge_subcat_name" e-name="charge_subcat_name" e-form="nameform" onbeforesave="checkInput($data)">
+                        {{ subcategory.charge_subcat_name || 'empty' }}
+                    </span>
+                  </li>
+                  
+                </ul>
+              </div>
+            </div>
+        </div>
+        
+    </div>
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" >Save</button>
+        &nbsp;
+        <button type="button" class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.roomChargeCategory')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

@@ -1,0 +1,72 @@
+<div>
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Make Payment</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <form name="makePaymentForm" class="form-horizontal form-validation" novalidate="">
+                    <div class="modal-body wrapper-lg">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Bill Amount</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                            {{bill_amount| number:2}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Paid</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                            {{paid| number:2}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Balance</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                            {{balance| number:2}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Date </label>
+                                    <div class="col-sm-9">
+                                        {{paid_date}}
+<!--                                        <div class="input-group">
+                                            <input type="text" name="dob" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.paid_date" is-open="opened" datepicker-options="dateOptions" close-text="Close" max-date="maxDate" required/>
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            </span>
+                                        </div>-->
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                            </div>
+                            <footer class="panel-footer text-right bg-light lter">
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()">Pay Now</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+                                &nbsp;
+                            </footer>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,22 @@
+<div ng-controller="GenericNameController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Update Generic Name</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" novalidate="" ng-init="
+                            data.formtype = 'update';
+                            loadForm();" >
+                <form name="genericNameForm" class="form-horizontal form-validation">
+                    <input type="hidden" ng-model="data.generic_id">
+                    <div ng-include="'tpl/pharmacy_generic_name/_form.html'">
+                        {% include 'tpl/pharmacy_generic_name/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

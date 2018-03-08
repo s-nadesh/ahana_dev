@@ -1,0 +1,20 @@
+<div ng-controller="RoomChargeCategoriesController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Update Charge Category: {{data.charge_cat_name}}</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-6" ng-init="data.formtype = 'update'; loadForm();" novalidate="">
+                <form editable-form name="tableform" name="roomChargeCategoryForm" class="form-horizontal form-validation" onaftersave="saveForm('update')" editable-form shown="true">
+                     <input type="hidden" ng-model="data.charge_cat_id">
+                    <div ng-include="'tpl/room_charge_category/_form.html'">
+                        {% include 'tpl/room_charge_category/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

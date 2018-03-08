@@ -1,0 +1,145 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Purchase Return List</h1>
+</div>
+<div class="wrapper-md" ng-controller="PurchaseReturnController" ng-init="loadPurchaseReturnItemList()">
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-8">
+                    <button class="btn btn-sm btn-grey" ng-click="loadPurchaseReturnItemList()"> 
+                        &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+                    </button>
+                </div>
+                <div class="col-sm-4">
+                    <button check-access-button ng-click="$state.go('pharmacy.purchaseReturnCreate')" class="btn btn-sm btn-info pull-right">
+                        <i class="fa fa-plus"></i> &nbsp; Add New Purchase Return
+                    </button>
+                    <div class="dataTables_length">
+                        <label>Show
+                            <select id="ddlPageSize" class=" "  
+                                    ng-model="pageSizeSelected"  
+                                    ng-change="changePageSize()">  
+                                <option value="10">10</option>  
+                                <option value="25">25</option>  
+                                <option value="50">50</option>
+                                <option value="100">100</option>  
+                            </select> entries
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table st-table="displayedCollection"  st-safe-src="rowCollection" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th style="width: 5%">
+                        <button class="btn btn-sm btn-default" type="button" ng-click="ctrl.expandAll(allExpanded = !allExpanded)">
+                            <i ng-if="!allExpanded" class="fa fa-plus text"></i>
+                            <i ng-if="allExpanded" class="fa fa-minus text"></i>
+                        </button>
+                    </th>
+                    <th st-sort="purchase_return_code">Purchase Return #</th>
+                    <th st-sort="invoice_date">Invoice Date</th>
+                    <th st-sort="invoice_no">Invoice No.</th>
+                    <th st-sort="supplier.supplier_name">Supplier Name</th>
+                    <th st-sort="total_item_purchase_ret_amount">Total Purchase Ret. Amount</th>
+                    <th st-sort="total_item_vat_amount">Total Vat Amount</th>
+                    <th st-sort="total_item_discount_amount">Total Product Disc. Amount</th>
+                    <th st-sort="discount_percent">Disc. %</th>
+                    <th st-sort="discount_amount">Disc Amount</th>
+                    <th st-sort="roundoff_amount">Roundoff Amount</th>
+                    <th st-sort="net_amount">Net Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody ng-if="isLoading == false">
+                <tr ng-repeat-start="(key, row) in displayedCollection">
+                    <td style="width: 5%">
+                        <button ng-click="expanded = !expanded" expand class="btn btn-sm btn-default">
+                            <i ng-if="!expanded" class="fa fa-plus text"></i>
+                            <i ng-if="expanded" class="fa fa-minus text"></i>
+                        </button>
+                    </td>
+                    <td>{{row.purchase_ret_code}}</td>
+                    <td>{{row.invoice_date}}</td>
+                    <td>{{row.invoice_no}}</td>
+                    <td>{{row.supplier.supplier_name}}</td>
+                    <td>{{row.total_item_purchase_ret_amount}}</td>
+                    <td>{{row.total_item_vat_amount}}</td>
+                    <td>{{row.total_item_discount_amount}}</td>
+                    <td>{{row.discount_percent}}</td>
+                    <td>{{row.discount_amount}}</td>
+                    <td>{{row.roundoff_amount}}</td>
+                    <td>{{row.net_amount}}</td>
+                    <td>
+                        <a class="label bg-dark" title="Edit" check-access  ui-sref="pharmacy.purchaseReturnUpdate({id: '{{row.purchase_ret_id}}'})">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </td>
+                </tr>
+                <tr ng-repeat-end ng-show="expanded">
+                    <td></td>
+                    <td colspan="12">
+                        <table class="table table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Batch No</th>
+                                    <th>Exp Date</th>
+                                    <th>Qty</th>
+                                    <th>Free</th>
+                                    <th>F. Unit</th>
+                                    <th>MRP</th>
+                                    <th>P.Price</th>
+                                    <th>Amt</th>
+                                    <th>Dis %</th>
+                                    <th>Dis Amt</th>
+                                    <th>P.Vat</th>
+                                    <th>Vat Amt</th>
+                                    <th>P.Unit</th>
+                                    <th>Total Amt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="(gKey, purchasereturnitem) in row.items | orderBy: purchasereturnitem">
+                                    <td>{{ purchasereturnitem.product.full_name}}</td>
+                                    <td>{{ purchasereturnitem.batch.batch_no}}</td>
+                                    <td>{{ purchasereturnitem.batch.expiry_date | moment:'MMM YYYY' || 'empty' }}</td>
+                                    <td>{{ purchasereturnitem.quantity}}</td>
+                                    <td>{{ purchasereturnitem.free_quantity}}</td>
+                                    <td>{{ purchasereturnitem.free_quantity_unit}}</td>
+                                    <td>{{ purchasereturnitem.mrp}}</td>
+                                    <td>{{ purchasereturnitem.purchase_ret_rate}}</td>
+                                    <td>{{ purchasereturnitem.purchase_ret_amount}}</td>
+                                    <td>{{ purchasereturnitem.discount_percent}}</td>
+                                    <td>{{ purchasereturnitem.discount_amount}}</td>
+                                    <td>{{ purchasereturnitem.vat_percent}}</td>
+                                    <td>{{ purchasereturnitem.vat_amount}}</td>
+                                    <td>{{ purchasereturnitem.package_name}}</td>
+                                    <td>{{ purchasereturnitem.total_amount}}</td>
+                                </tr>
+                            </tbody>
+                        </table>                            
+                    </td>
+                </tr>
+            </tbody>
+            <tbody ng-if="isLoading == true">
+                <tr>
+                    <td colspan="13" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>  
+                    <td align="center" colspan="13">  
+                        <div class="pull-right">  
+                            <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex" max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>  
+                        </div>  
+                    </td>  
+                </tr> 
+            </tfoot>
+        </table>
+    </div>
+</div>

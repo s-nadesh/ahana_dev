@@ -1,0 +1,68 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Room Maintenance Details</h1>
+</div>
+
+<div class="wrapper-md" ng-controller="RoomMaintenanceController" ng-init="loadRoomMaintenanceList()">
+
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <button class="btn btn-sm btn-grey" ng-click="loadRoomMaintenanceList()"> 
+                &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+            </button>
+            <button check-access-button ng-click="$state.go('configuration.roomMaintenanceCreate')" class="btn btn-sm btn-info pull-right">
+                <i class="fa fa-plus"></i> &nbsp; Add new item
+            </button>
+        </div>
+
+        <table st-table="displayedCollection"  st-safe-src="rowCollection" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th st-sort="maintain_name">Room Maintenance</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <th>
+                        <input st-search="'maintain_name'" placeholder="search for room maintenance" class="input-sm form-control" type="search"/>
+                    </th>
+                    <th colspan="2">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody ng-hide="isLoading">
+                <tr ng-repeat="row in displayedCollection| orderBy: maintain_name">
+                    <td>
+                        {{row.maintain_name}}
+                    </td>
+                    <td>
+                        <label class="i-checks "> 
+                            <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="row.status" ng-change='updateStatus("CoRoomMaintenance", row.maintain_id)'> 
+                            <i></i>
+                        </label>
+                    </td>                    
+                    <td>
+                        <a title="Edit" check-access  ui-sref="configuration.roomMaintenanceUpdate({id: '{{row.maintain_id}}'})">
+                            <i class="fa fa-pencil"></i>
+                        </a>&nbsp;&nbsp;&nbsp;
+                    </td>
+                </tr>
+            </tbody>
+            <tbody ng-show="isLoading">
+                <tr>
+                    <td colspan="3" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-center">
+                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>

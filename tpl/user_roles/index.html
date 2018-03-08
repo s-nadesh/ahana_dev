@@ -1,0 +1,56 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n h3">Assign User Roles</h1>
+</div>
+
+<div class="wrapper-md">
+    <div ng-controller="UserRolesController">
+
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <form name="roleRightsForm" class="form-horizontal form-validation">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> Health Organization </label>
+
+                                <div class="col-sm-9">
+                                    {{organization.tenant_name}}
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Username * </label>
+                                <div class="col-sm-9">
+                                    <select class="form-control selectpicker" data-live-search="true" ng-model="data.user_id" ng-options="user.user_id as user.fullname for user in users | orderBy: 'name'" ng-change="getSavedRoles()">
+                                        <option value="">Select User</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Access Roles</label>
+                                <div class="col-sm-9">
+                                    <div ng-repeat="role in roles track by role.role_id">
+                                        <label class="i-checks "><input type="checkbox" ng-checked="selectedRoles.containsObjectWithProperty('role_id', role.role_id)" name="status" ng-click="toggleSelection(role)" /> <i></i> {{role.description}}</label> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <footer class="panel-footer text-right bg-light lter">
+                            <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()">Assign</button>
+                            &nbsp;
+                            <button class="btn m-b-xs  btn-dark" ng-click="reset()"><i class="fa fa-times"></i> Cancel</button>
+                            &nbsp;
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

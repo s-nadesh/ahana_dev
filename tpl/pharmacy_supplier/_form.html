@@ -1,0 +1,121 @@
+<div class="row">
+
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Supplier Name *</label>
+                    <div class="col-lg-8">
+                        <input type="text" placeholder="Supplier Name" class="form-control" ng-model="data.supplier_name">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Mobile *</label>
+                    <div class="col-lg-8">
+                        <input type="text" placeholder="Mobile" maxlength='10' class="form-control" ng-model="data.supplier_mobile" only-digits="">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">CST No. *</label>
+                    <div class="col-lg-8">
+                        <input type="text" placeholder="CST No." class="form-control" ng-model="data.cst_no">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">TIN No. *</label>
+                    <div class="col-lg-8">
+                        <input type="text" placeholder="TIN No." class="form-control" ng-model="data.tin_no">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Address *</label>
+                    <div class="col-lg-8">
+                        <textarea placeholder="Address" class="form-control" ng-model="data.supplier_address"></textarea>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Supplier Code </label>
+                    <div class="col-lg-8">
+                        <input type="text" placeholder="Supplier Code" class="form-control" ng-model="data.supplier_code">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Country </label>
+                    <div class="col-lg-8">
+                        <select class="form-control" name="Country" ng-model="data.country_id" ng-options="country.value as country.label for country in countries | orderBy: label" data-ng-change="updateState2();
+                                data.state_id = '';
+                                data.city_id = '';">
+                            <option value="">Select Country</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">State </label>
+                    <div class="col-lg-8">
+                        <select class="form-control" name="State" ng-model="data.state_id" ng-options="state.value as state.label for state in availableStates2 | orderBy: label" data-ng-change="updateCity2();
+                                data.city_id = '';">
+                            <option value="">Select State</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">City </label>
+                    <div class="col-lg-8">
+                        <select class="form-control" name="City" ng-model="data.city_id" ng-options="city.value as city.label for city in availableCities2 | orderBy: label">
+                            <option value="">Select City</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Zip </label>
+                    <div class="col-lg-8">
+                        <input type="text" placeholder="Zip" maxlength='6' class="form-control" ng-model="data.zip" only-digits="">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Phone</label>
+                    <div class="col-lg-8">
+                        <input type="text" placeholder="Phone" maxlength='10' class="form-control" ng-model="data.supplier_phone" only-digits="">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm(data.formtype)">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.supplier')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>

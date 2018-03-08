@@ -1,0 +1,35 @@
+<div ng-controller="PurchaseReturnController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Update Purchase Return:</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="initForm('update');" novalidate="">
+                <form editable-form name="tableform" name="PurchaseReturnForm" class="form-horizontal form-validation" onaftersave="saveForm('update'); tableform.$show();" novalidate="" oncancel="cancel()" shown="true">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Purchase Invoice No.</label>
+                                        <div class="col-lg-4">
+                                            {{data.purchase_invoice_no}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div ng-include="'tpl/pharmacy_purchase_return/_form.html'">
+                        {% include 'tpl/pharmacy_purchase_return/_form.html' %}
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

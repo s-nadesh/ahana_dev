@@ -1,0 +1,592 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold">Sale Details</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Sale Date</label>
+                                    <div class="col-lg-8">
+                                        {{data.sale_date}}
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Patient Name </label>
+                                    <div class="col-lg-8">
+                                        {{data.patient_name}}
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Mobile No </label>
+                                    {{data.patient_mobile}}
+                                </div>
+                                <!--<div class="line line-dashed b-b line-lg "></div>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Payment Type </label>
+                                    <div class="col-lg-8">
+                                        {{data.bill_payment}}
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Patient Group </label>
+                                    <div class="col-lg-8">
+                                        {{data.patient_group_name}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold">Sale Return Details</div>
+            <div class="panel-body">
+                <div class="row">
+
+                    <div class="col-sm-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-lg-2 control-label">Sale Return Date *</label>
+                                    <div class="col-lg-4">
+                                        <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.sale_return_date" is-open="$parent.opened1" datepicker-options="dateOptions" close-text="Close"  min-date="minDate" ng-click="open($event, 'opened1')" ng-focus="open($event, 'opened1')" prevent-enter="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <b>Sale Return Items</b>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <table class="table table-bordered table-hover table-condensed bg-white-only">
+                            <thead class="sales-table-heading">
+                                <tr style="font-weight: bold">
+                                    <td rowspan="2"><span>Product Name</span></td>
+                                    <td rowspan="2"><span>Batch No</span></td>
+                                    <td rowspan="2"><span>Exp Date</span></td>
+                                    <td rowspan="2"><span>Qty</span></td>
+                                    <td rowspan="2"><span>Return Qty</span></td>
+                                    <td rowspan="2"><span>MRP</span></td>
+                                    <td rowspan="2"><span>Hsn No</span></td>
+                                    <td rowspan="2"><span>Disc %</span></td>
+                                    <td rowspan="2"><span>Disc. Amt</span></td>
+                                    <td rowspan="2"><span>Taxable value</span></td>
+
+                                    <th colspan="2" align="center">CGST</th>
+                                    <th colspan="2" align="center">SGST</th>
+
+                                    <td rowspan="2"><span>Total Amt</span></td>
+                                    <!--<td><span>Action</span></td>-->
+                                </tr>
+                                <tr>
+                                    <th> Rate %</th>
+                                    <th> Amount</th>
+                                    <th> Rate %</th>
+                                    <th> Amount</th>
+                                </tr>
+                            </thead>
+
+                            <tr ng-repeat="(key, saleitem) in saleItems">
+                                <td>
+                                    {{ saleitem.full_name || 'empty' }}
+                                </td>
+                                <td>
+                                    {{ saleitem.batch_details || 'empty' }}
+                                </td>
+                                <td>
+                                    {{ saleitem.expiry_date | moment:'MMM YYYY' || 'empty' }}
+                                </td>
+                                <td>
+                                    {{saleitem.total_returned_quantity > 0 ? saleitem.sale_quantity - saleitem.total_returned_quantity + ' (' + saleitem.sale_quantity + ')' : saleitem.sale_quantity}}
+                                </td>
+                                <td>
+                                    <span 
+                                        editable-text="saleitem.quantity" 
+                                        e-number-mask="" 
+                                        e-name="quantity" 
+                                        e-number-mask="" 
+                                        e-form="tableform" 
+                                        onbeforesave="checkReturnQuantity($data, key);" 
+                                        e-ng-keydown="updateColumn($data, key, 'quantity')"  
+                                        e-ng-keyup="updateColumn($data, key, 'quantity')" 
+                                        e-autocomplete="off" 
+                                        e-limit-to="7">
+                                        {{saleitem.quantity|| 0}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        {{saleitem.mrp|| 0}}
+                                    </span>
+                                </td>
+                                <td><span>{{saleitem.hsn_no}}</span></td>
+                                <td>
+                                    <span 
+                                        editable-text="saleitem.discount_percentage" 
+                                        e-number-mask="" 
+                                        e-name="discount_percent" 
+                                        e-number-mask="" 
+                                        e-form="tableform" 
+                                        e-ng-keydown="updateColumn($data, key, 'discount_percentage')"  
+                                        e-ng-keyup="updateColumn($data, key, 'discount_percentage')" 
+                                        e-autocomplete="off" 
+                                        e-limit-to="5">
+                                        {{saleitem.discount_percentage|| 0}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        {{saleitem.discount_amount|| 0}}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span>
+                                        {{saleitem.taxable_value}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        {{saleitem.cgst_percent}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        {{saleitem.cgst_amount}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        {{saleitem.sgst_percent}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        {{saleitem.sgst_amount}}
+                                    </span>
+                                </td>
+
+                                <td><span>{{saleitem.total_amount}}</span></td>
+                                <!--                                <td>
+                                                                    <button type="button" ng-click="removeSaleItem($index)" class="btn btn-sm btn-danger pull-right">Delete</button>
+                                                                </td>-->
+                            </tr>
+                        </table>
+                        <div class="btn-form">
+                            <br>
+                            <!--                            <button type="button" ng-click="tableform.$show();
+                                                            addRow()" class="btn btn-default pull-left btn-primary">Add Product</button>-->
+                            <button type="button" ng-show="!tableform.$visible;" ng-click="tableform.$show();" class="btn btn-default pull-left btn-info">Edit Products</button>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>    
+    </div>
+
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">New Sale Amount</label>
+                    <div class="col-lg-7">
+                        <label class="text-right control-label">{{data.new_sale_amount}}</label>
+                    </div>
+                </div>
+                <div class="form-group" ng-if="allow_sale=='1'">
+                    <label class="col-lg-5 control-label">Allow New Sale</label>
+                    <div class="col-lg-7">
+                        <label class="i-switch m-t-xs m-r"> 
+                            <input type="checkbox" checked=""  name="status" ng-model="allow_sale" ng-change='checkNewSale(allow_sale)'> 
+                            <i></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">Total Item Vat Amount</label>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-value="data.total_item_vat_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">Total Item Sale Return Amount</label>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-value="data.total_item_sale_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Disc %</label>
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control" ng-model="data.total_item_discount_percent" ng-change="updateSaleRate()" maxlength="5" number-mask="">
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-value="data.total_item_discount_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">Total Return Amount</label>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-value="data.total_item_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">Round Off</label>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-value="data.roundoff_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">Bill Amount</label>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-value="data.bill_amount" readonly="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-if="sale_return_sales">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b>New Sale</b>&nbsp;<span ng-bind-html="productloader"></span>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div style="{{css.style}}">
+
+
+                                <table class="table table-bordered table-hover table-condensed bg-white-only">
+                                    <thead class="sales-table-heading">
+                                        <tr>
+                                            <th rowspan="2"><span>Product Name</span></th>
+                                            <th rowspan="2"><span>Batch No</span></th>
+                                            <th rowspan="2"><span>Exp Date</span></th>
+                                            <th rowspan="2"><span>Qty</span></th>
+                                            <th rowspan="2"><span>Unit</span></th>
+                                            <th rowspan="2"><span>MRP</span></th>
+                                            <th rowspan="2"><span>Hsn No</span></th>
+                                            <th rowspan="2"><span>Dis %</span></th>
+                                            <th rowspan="2"><span>Dis Amt</span></th>
+
+                                            <th rowspan="2">Taxable value</th>
+                                            <th colspan="2" align="center">CGST</th>
+                                            <th colspan="2" align="center">SGST</th>
+                                            <th rowspan="2"><span>Total</span></th>
+                                            <th rowspan="2"><span>Action</span></th>
+                                        </tr>
+
+                                        <tr>
+                                            <th> Rate %</th>
+                                            <th> Amount</th>
+                                            <th> Rate %</th>
+                                            <th> Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tr class="r-v-top" ng-repeat="(key, SRsaleitem) in SRsaleItems">
+                                        <td>
+                                            <div id="i_full_name_{{key}}">
+                                                <span
+                                                    editable-text="SRsaleitem.full_name"
+                                                    e-class="fullname"
+                                                    e-name="full_name"
+                                                    e-form="tableform"
+                                                    onbeforesave="checkInput($data, key, $index)"
+                                                    e-typeahead="product as product.full_name for product in saleproducts | filter:{full_name:$viewValue} | limitTo:8"
+                                                    e-typeahead-min-length=0
+                                                    e-typeahead-editable="false"
+                                                    e-typeahead-on-select="SRupdateProductRow($item, $model, $label, key)"
+                                                    e-autocomplete="off"
+                                                    data-e-id="full_name"
+                                                    e-ng-change="clearProductRow($data, key)"
+                                                    >
+                                                    {{ SRsaleitem.full_name || 'empty' }}
+                                                </span>
+                                            </div>
+                                            <span id="t_full_name_{{key}}" class="hide">
+                                                {{ SRsaleitem.full_name || 'empty' }}
+                                            </span>
+                                            <span ng-if="SRsaleitem.product_location">
+                                                <b>Location:</b> {{SRsaleitem.product_location}}
+                                            </span>
+                                            <div class="text-danger" style="" ng-show="SRsaleitem.out_of_stock_msg"> 
+                                                {{SRsaleitem.out_of_stock_msg}}
+                                            </div>
+                                            <div class="custom-warning" style="" ng-show="SRsaleitem.min_reorder_msg"> 
+                                                {{SRsaleitem.min_reorder_msg}}
+                                            </div>
+                                            <div id="i_alternate_medicine_{{key}}" class="hide">
+                                                <span
+                                                    editable-select="SRsaleitem.alternate_product"
+                                                    e-name="alternate_product"
+                                                    e-form="tableform"
+                                                    e-ng-options="product as product.full_name for product in SRsaleitem.alternateproducts | filter:$viewValue"
+                                                    e-ng-change="updateAlternateProductRow($data, key, $index)"
+                                                    >
+                                                    {{ showAlternateProduct(SRsaleitem) || 'empty'}}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div id="i_batch_details_{{key}}">
+                                                <span
+                                                    editable-select="SRsaleitem.batch_details"
+                                                    data-e-id="batch_details"
+                                                    e-name="batch_details"
+                                                    e-form="tableform"
+                                                    onbeforesave="checkInput($data, key, $index)"
+                                                    e-ng-options="batch.batch_details as batch.batch_details for batch in SRsaleitem.product_batches | filter:$viewValue | limitTo:8"
+                                                    e-ng-change="SRupdateBatchRow($data, key, $index)">
+                                                    {{ showBatch($data, key)}}
+                                                </span>
+                                            </div>
+                                            <span id="t_batch_details_{{key}}" class="hide">
+                                                {{ SRsaleitem.batch_details || 'empty' }}
+                                            </span>
+                                            <div class="custom-warning" style="" ng-show="SRsaleitem.exp_warning"> 
+                                                {{SRsaleitem.exp_warning}}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                {{ showExpiryDate(SRsaleitem)}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span
+                                                editable-text="SRsaleitem.quantity"
+                                                e-number-mask=""
+                                                e-name="quantity"
+                                                e-form="tableform"
+                                                onbeforesave="checkInput($data, key, $index); checkAmount($data, key, $index); checkQuantity($data, key)"
+                                                e-ng-keydown="SRupdateColumn($data, key, 'quantity')"
+                                                e-ng-keyup="SRupdateColumn($data, key, 'quantity')"
+                                                e-autocomplete="off"
+                                                e-limit-to="7"
+                                                data-e-id="quantity"
+                                                ng-click="addRowWhenFocus(key)"
+                                                e-select-on-click="">
+                                                {{SRsaleitem.quantity|| 0}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                {{ SRsaleitem.package_name || 'empty' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                {{SRsaleitem.mrp|| 0}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span
+                                                editable-select="SRsaleitem.hsn_no"
+                                                data-e-id="hsn_no"
+                                                onbeforesave="checkHsn($data, key, $index)"
+                                                e-form="tableform"
+                                                e-name="hsn_no"
+                                                e-ng-options="s.hsn_no as s.hsn_no for s in hsncodes">
+                                                {{ SRsaleitem.hsn_no}}
+                                            </span>
+
+                                        </td>
+                                        <td>
+                                            <span
+                                                editable-text="saleitem.discount_percentage"
+                                                e-name="discount_percentage"
+                                                e-index ="{{SRsaleitem.key}}"
+                                                e-number-mask=""
+                                                e-form="tableform"
+                                                onbeforesave="checkInput($data, key, $index); checkTotalpercentage($data, key, $index);"
+                                                e-ng-keydown="SRupdateColumn($data, key, 'discount_percentage',tableform)"
+                                                e-ng-keyup="SRupdateColumn($data, key, 'discount_percentage',tableform)"
+                                                e-autocomplete="off"
+                                                e-maxlength="5"
+                                                >
+                                                {{SRsaleitem.discount_percentage|| 0}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span
+                                                editable-text="saleitem.discount_amount"
+                                                e-name="discount_amount"
+                                                e-index ="{{SRsaleitem.key}}"
+                                                e-number-mask=""
+                                                e-form="tableform"
+                                                e-ng-keydown="SRupdateColumn($data, key, 'discount_amount',tableform)"
+                                                e-ng-keyup="SRupdateColumn($data, key, 'discount_amount',tableform)"
+                                                e-autocomplete="off"
+                                                e-maxlength="5">
+                                                {{SRsaleitem.discount_amount|| 0}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                {{SRsaleitem.taxable_value}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                {{SRsaleitem.cgst_percent}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                {{SRsaleitem.cgst_amount}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                {{SRsaleitem.sgst_percent}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span>
+                                                {{SRsaleitem.sgst_amount}}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {{SRsaleitem.total_amount}}
+                                        </td>
+                                        <td>
+                                            <a ng-if="formtype == 'add'" ng-click="SRremoveSaleItem($index)" title="Delete">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                            <a ng-if="formtype == 'update'" ng-click="updateremoveSaleItem($index, SRsaleitem.sale_item_id)" title="Delete">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                            <div class="btn-form">
+                                <br>
+                                <button type="button" ng-click="tableform.$show();
+                                    addSaleRow(true)" class="btn btn-default pull-left btn-primary">Add Product</button>
+                                <button id="edit_products" type="button" ng-show="!tableform.$visible;" ng-click="tableform.$show();" class="btn btn-default pull-left btn-info">Edit Products</button>
+                                <span class="btn" style="color: #a94442">{{sale_item_error}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-offset-6 col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <!--                <div class="form-group">
+                                        <label class="col-lg-5 control-label">Total Item Vat Amount</label>
+                                        <div class="col-lg-7">
+                                            <input type="text" class="form-control text-right" ng-value="data.total_item_vat_amount" readonly="" tabindex="-1">
+                                        </div>
+                                    </div>-->
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label">Total Item Sale Amount</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control text-right" ng-value="SRdata.total_item_sale_amount" readonly="" tabindex="-1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">Disc %</label>
+                        <div class="col-lg-2">
+                            <input type="text" class="form-control text-right" ng-model="SRdata.total_item_discount_percent" ng-change="SRupdateSaleRate('percentage')" maxlength="2" number-mask="">
+                        </div>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control text-right" ng-model="SRdata.total_item_discount_amount" ng-change="SRupdateSaleRate('amount')" tabindex="-1">
+                            <span style="color:#a94442" ng-if="percentageErrormessage">{{percentageErrormessage}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label">Total Amount</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control text-right" ng-value="SRdata.total_item_amount" readonly="" tabindex="-1">
+                        </div>
+                    </div>
+                    <div class="form-group hide">
+                        <label class="col-lg-5 control-label">Welfare Amount</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control text-right" ng-model="SRdata.welfare_amount" ng-change="SRupdateSaleRate()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label">Round Off</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control text-right" ng-value="SRdata.roundoff_amount" readonly="" tabindex="-1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-5 control-label">Bill Amount</label>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control text-right" ng-value="SRdata.bill_amount" readonly="" tabindex="-1" style="font-size: 20px;">
+                        </div>
+                    </div>
+                    <!--                <div class="form-group" ng-show="data.payment_type == 'CA'">
+                                        <label class="col-lg-5 control-label">Amount Received</label>
+                                        <div class="col-lg-3">
+                                            <input type="text" class="form-control text-right" ng-model="data.amount_received" number-mask="" ng-keyup="updateBalance()" ng-keydown="updateBalance()">
+                                        </div>
+                                        <label class="col-lg-2 control-label">Balance</label>
+                                        <div class="col-lg-2">
+                                            <input type="text" class="form-control text-right" ng-value="data.balance" readonly="" tabindex="-1">
+                                        </div>
+                                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <footer class="panel-footer text-right bg-light lter">
+        <div class="col-sm-6" style="color:#a94442" ng-if="Errormessage != ''">{{Errormessage}}</div>
+        <button class="btn m-b-xs  btn-success save-btn">Save</button>
+        &nbsp;
+        <button type="button" class="btn m-b-xs btn-dark" ng-click="$state.go('pharmacy.saleReturn')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>
+
+

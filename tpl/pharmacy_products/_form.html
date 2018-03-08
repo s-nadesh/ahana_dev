@@ -1,0 +1,314 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold">Product Details</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Product Name * </label>
+                            <div class="col-sm-3">
+                                <input type="text" name="product_name" ng-model="data.product_name" class="form-control" placeholder="Product Name">
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="text" name="product_unit_count" ng-model="data.product_unit_count" class="form-control" placeholder="Unit">
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="form-control" ng-model="data.product_unit" ng-options="productUnit.product_unit as productUnit.product_unit for productUnit in productUnits| orderBy: label">
+                                    <option value="">Select</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-0">
+                                <script type="text/ng-template" id="ProductunitModalContent.html">
+                                    <div ng-include="'tpl/modal_form/modal.productunit.html'"></div>
+                                </script>
+                                <button type="button" class="btn btn-primary" ng-click="open('md', 'ProductunitModalInstanceCtrl', 'ProductunitModalContent.html', '')">
+                                    <i class="fa fa-plus text ng-scope"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Product Type * </label>
+                            <div class="col-sm-6">
+                                <select class="selectpicker" data-live-search="true" ng-model="data.product_description_id" ng-options="productDescription.description_id as productDescription.description_name for productDescription in productDescriptions| orderBy: 'description_name'">
+                                    <option value="">Select Product Type</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-0">
+                                <script type="text/ng-template" id="DescriptionModalContent.html">
+                                    <div ng-include="'tpl/modal_form/modal.description.html'"></div>
+                                </script>
+                                <button type="button" class="btn btn-primary" ng-click="open('md', 'DescriptionModalInstanceCtrl', 'DescriptionModalContent.html', '')">
+                                    <i class="fa fa-plus text ng-scope"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Brand Name * </label>
+                            <div class="col-sm-6">
+                                <select class="selectpicker" data-live-search="true" ng-model="data.brand_id" ng-options="brand.brand_id as brand.brand_name for brand in brands| orderBy: 'brand_name'">
+                                    <option value="">Select Brand Name</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-0">
+                                <script type="text/ng-template" id="BrandModalContent.html">
+                                    <div ng-include="'tpl/modal_form/modal.brand.html'"></div>
+                                </script>
+                                <button type="button" class="btn btn-primary" ng-click="open('lg', 'BrandModalInstanceCtrl', 'BrandModalContent.html', '')">
+                                    <i class="fa fa-plus text ng-scope"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Brand Division * </label>
+                            <div class="col-sm-6">
+                                <select class="selectpicker" data-live-search="true" ng-model="data.division_id" ng-options="division.division_id as division.division_name for division in divisions| orderBy: 'division_name'">
+                                    <option value="">Select Brand Division</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-0">
+                                <script type="text/ng-template" id="DivisionModalContent.html">
+                                    <div ng-include="'tpl/modal_form/modal.division.html'"></div>
+                                </script>
+                                <button type="button" class="btn btn-primary" ng-click="open('lg', 'DivisionModalInstanceCtrl', 'DivisionModalContent.html', '')">
+                                    <i class="fa fa-plus text ng-scope"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Generic Name * </label>
+                            <div class="col-sm-6">
+                                <select class="selectpicker" data-live-search="true" ng-model="data.generic_id" ng-options="generic.generic_id as generic.generic_name for generic in generics| orderBy: 'generic_name'" ng-change="getDrugByGeneric()">
+                                    <option value="">Select Generic Name</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-0">
+                                <script type="text/ng-template" id="GenericModalContent.html">
+                                    <div ng-include="'tpl/modal_form/modal.generic.html'"></div>
+                                </script>
+                                <button type="button" class="btn btn-primary" ng-click="open('lg', 'GenericModalInstanceCtrl', 'GenericModalContent.html', '')">
+                                    <i class="fa fa-plus text ng-scope"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+                        <div ng-show="data.drug_name != '' && data.drug_name != '-' && data.drug_class_id">
+                            <div class="form-group" >
+                                <label class="col-sm-5 control-label">Drug Class </label>
+                                <div class="col-sm-7">
+                                    <input type="text" ng-value="data.drug_name" maxlength="50" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                        </div>
+                        <div ng-show="showDrugDropdown">
+                            <div class="form-group">
+                                <label class="col-sm-5 control-label">Drug Class </label>
+                                <div class="col-sm-7">
+                                    <select class="selectpicker" data-live-search="true" ng-model="data.drug_class_id" ng-options="drugClass.drug_class_id as drugClass.drug_name for drugClass in drugClasses| orderBy: 'drug_name'">
+                                        <option value="">Select Drug Class</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Purchase Price </label>
+                            <div class="col-sm-7">
+                                <input type="text" ng-model="data.product_price" maxlength="50" class="form-control" number-mask="" >
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+                    </div>
+                    <div class="col-sm-6">
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Product Location </label>
+                            <div class="col-sm-7">
+                                <input type="text" ng-model="data.product_location" maxlength="50" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>   
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Re-Order Level (Min) / (Max) * </label>
+                            <div class="col-sm-3">
+                                <input type="text" name="product_reorder_min" ng-model="data.product_reorder_min" maxlength="50" class="form-control" number-mask="" >
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" name="product_reorder_max" ng-model="data.product_reorder_max" maxlength="50" class="form-control" number-mask="" >
+                            </div>
+                        </div>
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">HSN Number </label>
+                            <div class="col-sm-6">
+                                <select class="selectpicker" data-live-search="true" ng-model="data.hsn_id" ng-options="hsn.hsn_id as hsn.hsn_no for hsn in hsncode| orderBy: 'hsn_no'" >
+                                    <option value="">Select HSN</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-0">
+                                <script type="text/ng-template" id="HsnModalContent.html">
+                                    <div ng-include="'tpl/modal_form/modal.hsn.html'"></div>
+                                </script>
+                                <button type="button" class="btn btn-primary" ng-click="open('lg', 'HsnModalInstanceCtrl', 'HsnModalContent.html', '')">
+                                    <i class="fa fa-plus text ng-scope"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="line line-dashed b-b line-lg "></div>   
+                        <div class="form-group">
+                            <label class="col-lg-5 control-label">Supplier Name1 </label>
+                            <div class="col-lg-6">
+                                <select class="selectpicker" data-live-search="true" ng-model="data.supplier_id_1" ng-options="supplier.supplier_id as supplier.supplier_name for supplier in suppliers| orderBy: 'supplier_name'">
+                                    <option value="">Select Supplier1</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-0">
+                                <script type="text/ng-template" id="SupplierModalContent.html">
+                                    <div ng-include="'tpl/modal_form/modal.supplier.html'"></div>
+                                </script>
+                                <button type="button" class="btn btn-primary" ng-click="open('lg', 'SupplierModalInstanceCtrl', 'SupplierModalContent.html', '')">
+                                    <i class="fa fa-plus text ng-scope"></i>
+                                </button>
+                            </div>
+                        </div>                         
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <div class="form-group">
+                            <label class="col-lg-5 control-label">Supplier Name2 </label>
+                            <div class="col-lg-6">
+                                <select class="selectpicker" data-live-search="true" ng-model="data.supplier_id_2" ng-options="supplier.supplier_id as supplier.supplier_name for supplier in suppliers| orderBy: 'supplier_name'">
+                                    <option value="">Select Supplier2</option>
+                                </select>
+                            </div>
+                        </div>                         
+                        <div class="line line-dashed b-b line-lg "></div>
+
+                        <div class="form-group">
+                            <label class="col-lg-5 control-label">Supplier Name3 </label>
+                            <div class="col-lg-6">
+                                <select class="selectpicker" data-live-search="true" ng-model="data.supplier_id_3" ng-options="supplier.supplier_id as supplier.supplier_name for supplier in suppliers| orderBy: 'supplier_name'">
+                                    <option value="">Select Supplier3</option>
+                                </select>
+                            </div>
+                        </div>                         
+                        <div class="line line-dashed b-b line-lg "></div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold">
+                Vat Details:
+                <script type="text/ng-template" id="VatModalContent.html">
+                    <div ng-include="'tpl/modal_form/modal.vat.html'"></div>
+                </script>
+                <button tooltip="Add Vat Details" type="button" class="btn btn-sm btn-primary" ng-click="open('md', 'VatModalInstanceCtrl', 'VatModalContent.html', 'both')">
+                    <i class="fa fa-plus text ng-scope"></i>
+                </button>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">Purchase Vat * </label>
+                    <div class="col-sm-6">
+                        <select class="selectpicker" data-live-search="true" ng-model="data.purchase_vat_id" ng-options="purchase_vat.vat_id as purchase_vat.vat for purchase_vat in vats| orderBy: vat" ng-change="setVat('sale')">
+                            <option value="">Select Purchase Vat</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+
+                <!--                <div class="form-group">
+                                    <label class="col-sm-5 control-label">Sale Vat * </label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" ng-model="data.sales_vat_id" ng-options="sale_vat.vat_id as sale_vat.vat for sale_vat in vats| orderBy: vat" ng-change="setVat('purchase')">
+                                            <option value="">Select Sale Vat</option>
+                                        </select>
+                                    </div>
+                                </div>-->
+
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">GST * </label>
+                    <div class="col-sm-6">
+                        <select class="selectpicker" data-live-search="true" ng-model="data.sales_gst_id" ng-options="sale_gst.gst_id as sale_gst.gst for sale_gst in gstlist| orderBy: gst" ng-change="setGst(data.sales_gst_id)">
+                            <option value="">Select GST</option>
+                        </select>
+                        <span ng-if="cgst"> <b>CGST :</b> {{cgst}} % <b> &nbsp;SGST :</b> {{cgst}} %</span>
+                    </div>
+                </div>
+
+                <!--                <div class="form-group">
+                                    <label class="col-sm-5 control-label">CGST </label>
+                                    <div class="col-sm-6">
+                                        2.5 %
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                
+                                <div class="form-group">
+                                    <label class="col-sm-5 control-label">SGST </label>
+                                    <div class="col-sm-6">
+                                        2.5 %
+                                    </div>
+                                </div>-->
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold">
+                Packing Details:
+                <script type="text/ng-template" id="PackageModalContent.html">
+                    <div ng-include="'tpl/modal_form/modal.package.html'"></div>
+                </script>
+                <button tooltip="Add Packing Details" type="button" class="btn btn-sm btn-primary" ng-click="open('md', 'PackageModalInstanceCtrl', 'PackageModalContent.html', 'purchase')">
+                    <i class="fa fa-plus text ng-scope"></i>
+                </button>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">Purchase Unit </label>
+                    <div class="col-sm-6">
+                        <select class="selectpicker" data-live-search="true" ng-model="data.purchase_package_id" ng-options="purchase_unit.package_id as purchase_unit.package_name for purchase_unit in packingUnits| orderBy: package_name" ng-change="setPackageUnit()">
+                            <option value="">Select Purchase Unit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-sm-5 control-label">Sale Unit </label>
+                    <div class="col-sm-6">
+                        <select class="selectpicker" data-live-search="true" ng-model="data.sales_package_id" ng-options="sale_unit.package_id as sale_unit.package_name for sale_unit in packingUnits| orderBy: package_name | packingunitFilter:packing_unit">
+                            <option value="">Select Sale Unit</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="panel-footer text-right bg-light lter">
+    <button class="btn m-b-xs  btn-success save-btn" id="save" ng-click="saveForm(data.formtype)">Save</button>
+    &nbsp;
+    <button class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.products')"><i class="fa fa-times"></i> Cancel</button>
+    &nbsp;
+</footer>

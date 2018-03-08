@@ -1,0 +1,78 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Generic Names</h1>
+</div>
+
+<div class="wrapper-md" ng-controller="GenericNameController as generic" ng-init="loadGenericNamesList()">
+
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b> Generic Names Management </b>
+                </div>
+                <div class="panel-body b-b b-light">  
+                    <!--                    <button class="btn btn-sm btn-grey" ng-click="loadGenericNamesList()"> 
+                                            &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+                                        </button>-->
+<!--                    <input id="filter" type="text" class="form-control input-sm w-sm inline m-r" placeholder="Search"/>                   -->
+                    <button check-access-button ng-click="$state.go('configuration.genericNameCreate')" class="btn btn-sm btn-info pull-right">
+                        <i class="fa fa-plus"></i> &nbsp; Add new Generic Name
+                    </button>
+                </div>
+                <div>
+                    <table id="generic_index" datatable="" dt-options="generic.dtOptions" dt-columns="generic.dtColumns" class="row-border hover"></table>
+<!--                    <table class="table m-b-none" ui-jq="footable" data-filter="#filter" data-page-size="10" data-limit-navigation="10">
+                        <thead>
+                            <tr>
+                                <th>Generic Name</th>
+                                <th data-sort-ignore="true">Status</th>
+                                <th data-sort-ignore="true">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-hide="isLoading">
+                            <tr ng-repeat="row in displayedCollection| orderBy: generic_name">
+                                <td>
+                                    {{row.generic_name}}
+                                </td>
+                                <td>
+                                    <div ng-if="row.tenant_id != null">
+                                        <label class="i-checks ">
+                                            <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="row.status" ng-change='updateStatus("PhaGeneric", row.generic_id)'>
+                                            <i></i>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div ng-if="row.tenant_id != null">
+                                        <a class=" label bg-dark" title="Edit" check-access  ui-sref="configuration.genericNameUpdate({id: row.generic_id})">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>&nbsp;&nbsp;&nbsp;
+                                        <a class="hide" title="Delete" ng-click="removeRow(row)">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="3" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-right">
+                                    <ul class="pagination"></ul>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

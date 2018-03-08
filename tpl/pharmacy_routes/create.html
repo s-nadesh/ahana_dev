@@ -1,0 +1,22 @@
+<div ng-controller="RoutesController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Create Route</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>                  
+        <div class="row">
+            <div class="col-sm-6" ng-init="data = {};
+                                        data.formtype = 'add';
+                                            initForm();
+                                            data.status = '1'">
+                <form name="routeForm" class="form-horizontal form-validation" novalidate="">
+                    <div ng-include="'tpl/pharmacy_routes/_form.html'">
+                        {% include 'tpl/pharmacy_routes/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

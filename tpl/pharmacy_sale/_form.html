@@ -1,0 +1,574 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="pull-right">
+            <span class="">GST No :33AAQFA999IEIZI &nbsp;&nbsp;</span>
+            <a check-access ui-sref="pharmacy.sales" class="btn btn-primary"> View List</a><br /><br />
+        </div>
+
+        <!--        <a check-access ui-sref="pharmacy.sales" class="btn btn-primary pull-right"> View List</a>
+                <span class="pull-right">GST No :12345678 &nbsp;&nbsp;</span><br /><br />-->
+    </div>
+    <img ng-hide="true" id="sale_logo" src="{{app.org_logo}}"/>
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading font-bold">Sale Details</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">
+
+                                        <div ng-hide="true" ng-if="data.patient.patient_int_code"> <io-barcode id="{{ data.patient.patient_int_code ||'-'}}" code="{{ data.patient.patient_int_code ||'-'}}" type="CODE128B" options="barcodeOptions"></io-barcode></div>
+                                        <div ng-hide="true" ng-if="!data.patient.patient_int_code"> <io-barcode id="{{ patient_int_code || '-'}}" code="{{ patient_int_code || '-'}}" type="CODE128B" options="barcodeOptions"></io-barcode></div>
+                                        Patient Name
+                                        <span ng-show="show_patient_loader">&nbsp;&nbsp;
+                                            <i class="fa fa-spin fa-refresh"></i>
+                                        </span>
+                                    </label>
+                                    <div class="col-lg-8" ng-show="(formtype == 'add')">
+                                        <input autocomplete="off"
+                                               placeholder="Patient Name"
+                                               type="text"
+                                               class="form-control"
+                                               ng-model="data.patient_name"
+                                               typeahead="patient as patient.name_with_int_code for patient in getPatients($viewValue) | filter:{name_with_int_code:$viewValue} | limitTo: 10"
+                                               typeahead-on-select="formatPatient($item, $model, $label)"
+                                               typeahead-wait-ms="400"
+                                               ng-change="changePatient()"
+                                               />
+                                    </div>
+                                    <div class="col-lg-8" ng-show="(formtype == 'update')">
+                                        <label>{{data.patient_name}}</label>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">
+                                        Consultant 
+                                        <span ng-show="show_consultant_loader">
+                                            &nbsp;&nbsp;
+                                            <i class="fa fa-spin fa-refresh"></i>
+                                        </span>
+                                    </label>
+                                    <div class="col-lg-8">
+                                        <input autocomplete="off"
+                                               placeholder="Doctor Name"
+                                               type="text"
+                                               class="form-control"
+                                               ng-model="data.consultant_name"
+                                               typeahead="doctor.user_id as doctor.fullname for doctor in getDoctors($viewValue) | filter:{name:$viewValue} | limitTo: 10"
+                                               typeahead-on-select="formatDoctor($item, $model, $label)"
+                                               typeahead-wait-ms="400"
+                                               />
+                                        <!--                                        <select class="form-control selectpicker" data-live-search="true" ng-model="data.consultant_id" ng-options="doctor.user_id as doctor.fullname for doctor in doctors| orderBy: 'name'" data-ng-change="changeGetConsultant()">
+                                                                                    <option value="">Select Consultant</option>
+                                                                                </select>-->
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">
+                                        Encounter # 
+                                        <span ng-show="show_encounter_loader">
+                                            &nbsp;&nbsp;
+                                            <i class="fa fa-spin fa-refresh"></i>
+                                        </span>
+                                    </label>
+                                    <div class="col-lg-8">
+                                        <select class="form-control selectpicker" data-live-search="true"
+                                                ng-model="data.encounter_id"
+                                                ng-options="encounter.encounter_id as encounter.encounter_full_details for encounter in encounters| orderBy: 'encounter_id'"
+                                                ng-change="getPrescription()"
+                                                >
+                                            <option value="">Select Encounter</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Sale Date *</label>
+                                    <div class="col-lg-8">
+                                        <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.sale_date" is-open="$parent.opened1" datepicker-options="dateOptions" close-text="Close"  min-date="minDate" ng-click="open($event, 'opened1')" ng-focus="open($event, 'opened1')" prevent-enter="true"/>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">Payment Type *</label>
+                                    <div class="col-lg-8 col-sm-9" ng-show="(formtype == 'add')">
+                                        <div class="input-group w-md">
+                                            <label class="i-checks" ng-repeat="paymentType in paymentTypes">
+                                                <input type="radio" checked="" value="{{paymentType.value}}" name="paymentType" ng-model="data.payment_type"  ng-change="changeGetPayType()">
+                                                <i></i>
+                                                {{paymentType.label}}&nbsp; &nbsp;
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-sm-9" ng-show="(formtype == 'update')">
+                                        <div class="input-group w-md">
+                                            <label>
+                                                <span ng-if="data.payment_type == 'CA'">
+                                                    Cash
+                                                </span>
+                                                <span ng-if="data.payment_type == 'CR'">
+                                                    Credit
+                                                </span>
+                                                <span ng-if="data.payment_type == 'COD'">
+                                                    Cash On Delivery
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label">
+                                        Patient Group 
+                                        <span ng-show="show_group_loader">&nbsp;&nbsp;
+                                            <i class="fa fa-spin fa-refresh"></i>
+                                        </span>
+                                    </label>
+                                    <div class="col-lg-8 col-sm-9">
+                                        <select class="form-control" name="Patientgroup" ng-model="data.patient_group_id" ng-options="patientgroup.patient_group_id as patientgroup.group_name for patientgroup in patientgroups| orderBy: 'group_name'" data-ng-change="updatePatientGroupname()">
+                                            <option value="">Select Group</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <b>Sale Items</b>&nbsp;<span ng-bind-html="productloader"></span>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div style="{{css.style}}">
+
+
+                            <table class="table table-bordered table-hover table-condensed bg-white-only">
+                                <thead class="sales-table-heading">
+                                    <tr>
+                                        <th  rowspan="2"><span>Product Name</span></th>
+                                        <th  rowspan="2"><span>Batch No</span></th>
+                                        <th  rowspan="2"><span>Exp Date</span></th>
+                                        <th  rowspan="2"><span>Qty</span></th>
+                                        <th  rowspan="2"><span>Unit</span></th>
+                                        <th  rowspan="2"><span>MRP</span></th>
+                                        <th  rowspan="2"><span>Hsn No</span></th>
+                                        <th  rowspan="2"><span>Dis %</span></th>
+                                        <th  rowspan="2"><span>Dis Amt</span></th>
+
+                                        <th  rowspan="2">Taxable value</th>
+                                        <th  colspan="2" align="center">CGST</th>
+                                        <th  colspan="2" align="center">SGST</th>
+                                        <th  rowspan="2"><span>Total</span></th>
+                                        <th  rowspan="2"><span>Action</span></th>
+                                    </tr>
+
+                                    <tr>
+                                        <th> Rate %</th>
+                                        <th> Amount</th>
+                                        <th> Rate %</th>
+                                        <th> Amount</th>
+                                    </tr>
+                                </thead>
+                                <tr class="r-v-top" ng-repeat="(key, saleitem) in saleItems">
+                                    <td>
+                                        <div id="i_full_name_{{key}}">
+                                            <span
+                                                editable-text="saleitem.full_name"
+                                                e-class="fullname"
+                                                e-name="full_name"
+                                                e-form="tableform"
+                                                onbeforesave="checkInput($data, key, $index)"
+                                                e-typeahead="product as product.full_name for product in products | filter:{full_name:$viewValue} | limitTo:8"
+                                                e-typeahead-min-length=0
+                                                e-typeahead-editable="false"
+                                                e-typeahead-on-select="updateProductRow($item, $model, $label, key)"
+                                                e-autocomplete="off"
+                                                data-e-id="full_name"
+                                                e-ng-change="clearProductRow($data, key)"
+                                                >
+                                                {{ saleitem.full_name || 'empty' }}
+                                            </span>
+                                        </div>
+                                        <span id="t_full_name_{{key}}" class="hide">
+                                            {{ saleitem.full_name || 'empty' }}
+                                        </span>
+                                        <span ng-if="saleitem.product_location">
+                                            <b>Location:</b> {{saleitem.product_location}}
+                                        </span>
+                                        <div class="text-danger" style="" ng-show="saleitem.out_of_stock_msg"> 
+                                            {{saleitem.out_of_stock_msg}}
+                                        </div>
+                                        <div class="custom-warning" style="" ng-show="saleitem.min_reorder_msg"> 
+                                            {{saleitem.min_reorder_msg}}
+                                        </div>
+                                        <div id="i_alternate_medicine_{{key}}" class="hide">
+                                            <span
+                                                editable-select="saleitem.alternate_product"
+                                                e-name="alternate_product"
+                                                e-form="tableform"
+                                                e-ng-options="product as product.full_name for product in saleitem.alternateproducts | filter:$viewValue"
+                                                e-ng-change="updateAlternateProductRow($data, key, $index)"
+                                                >
+                                                {{ showAlternateProduct(saleitem) || 'empty'}}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="i_batch_details_{{key}}">
+                                            <span
+                                                editable-select="saleitem.batch_details"
+                                                data-e-id="batch_details"
+                                                e-name="batch_details"
+                                                e-form="tableform"
+                                                onbeforesave="checkInput($data, key, $index)"
+                                                e-ng-options="batch.batch_details as batch.batch_details for batch in saleitem.product_batches | filter:$viewValue | limitTo:8"
+                                                e-ng-change="updateBatchRow($data, key, $index)">
+                                                {{ showBatch($data, key)}}
+                                            </span>
+                                        </div>
+                                        <span id="t_batch_details_{{key}}" class="hide">
+                                            {{ saleitem.batch_details || 'empty' }}
+                                        </span>
+                                        <div class="custom-warning" style="" ng-show="saleitem.exp_warning"> 
+                                            {{saleitem.exp_warning}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{ showExpiryDate(saleitem)}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span
+                                            editable-text="saleitem.quantity"
+                                            e-number-mask=""
+                                            e-name="quantity"
+                                            e-form="tableform"
+                                            onbeforesave="checkInput($data, key, $index); checkAmount($data, key, $index); checkQuantity($data, key)"
+                                            e-ng-keydown="updateColumn($data, key, 'quantity')"
+                                            e-ng-keyup="updateColumn($data, key, 'quantity')"
+                                            e-autocomplete="off"
+                                            e-limit-to="7"
+                                            data-e-id="quantity"
+                                            ng-click="addRowWhenFocus(key)"
+                                            e-select-on-click="">
+                                            {{saleitem.quantity|| 0}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{ saleitem.package_name || 'empty' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{saleitem.mrp|| 0}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div id="i_hsn_no_{{key}}">
+                                            <span
+                                                editable-select="saleitem.hsn_no"
+                                                data-e-id="hsn_no"
+                                                onbeforesave="checkHsn($data, key, $index)"
+                                                e-form="tableform"
+                                                e-name="hsn_no"
+                                                e-ng-options="s.hsn_no as s.hsn_no for s in hsncodes">
+                                                {{ saleitem.hsn_no}}
+                                            </span>
+                                        </div>
+                                        <span id="t_hsn_no_{{key}}" class="hide">
+                                            {{ saleitem.temp_hsn_no}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span
+                                            editable-text="saleitem.discount_percentage"
+                                            e-name="discount_percentage"
+                                            e-index ="{{saleitem.key}}"
+                                            e-number-mask=""
+                                            e-form="tableform"
+                                            onbeforesave="checkInput($data, key, $index); checkTotalpercentage($data, key, $index);"
+                                            e-ng-keydown="updateColumn($data, key, 'discount_percentage',tableform)"
+                                            e-ng-keyup="updateColumn($data, key, 'discount_percentage',tableform)"
+                                            e-autocomplete="off"
+                                            e-maxlength="5"
+                                            >
+                                            {{saleitem.discount_percentage|| 0}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span
+                                            editable-text="saleitem.discount_amount"
+                                            e-name="discount_amount"
+                                            e-index ="{{saleitem.key}}"
+                                            e-number-mask=""
+                                            e-form="tableform"
+                                            e-ng-keydown="updateColumn($data, key, 'discount_amount',tableform)"
+                                            e-ng-keyup="updateColumn($data, key, 'discount_amount',tableform)"
+                                            e-autocomplete="off"
+                                            e-maxlength="5">
+                                            {{saleitem.discount_amount|| 0}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{saleitem.taxable_value}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{saleitem.cgst_percent}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{saleitem.cgst_amount}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{saleitem.sgst_percent}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{saleitem.sgst_amount}}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{saleitem.total_amount}}
+                                    </td>
+                                    <td>
+                                        <a ng-if="formtype == 'add'" ng-click="removeSaleItem($index)" title="Delete">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                        <a ng-if="formtype == 'update'" ng-click="updateremoveSaleItem($index, saleitem.sale_item_id)" title="Delete">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <div class="btn-form">
+                            <br>
+                            <button type="button" ng-click="tableform.$show();
+                                addRow(true)" class="btn btn-default pull-left btn-primary">Add Product</button>
+                            <button id="edit_products" type="button" ng-show="!tableform.$visible;" ng-click="tableform.$show();" class="btn btn-default pull-left btn-info">Edit Products</button>
+                            <span class="btn" style="color: #a94442">{{sale_item_error}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div ng-if="formtype == 'add'" class="panel panel-default">
+            <div class="panel-heading">
+                <b>Payment Details</b>
+            </div>
+            <div class="panel-body">
+                <label class="i-checks" ng-repeat="paymentMode in paymentModes">
+                    <input type="radio" checked="" value="{{paymentMode.value}}" ng-model="data.payment_mode">
+                    <i></i>
+                    {{paymentMode.label}}&nbsp; &nbsp;
+                </label>
+
+                <div ng-show="data.payment_mode == 'CD'">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Card Type *</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" ng-model="data.card_type" ng-options="cardType.value as cardType.label for cardType in cardTypes| orderBy: label">
+                                <option value="">Select Card Type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Card Number *<br><em class="text-muted">(Last 4 Digits)</em></label>
+                        <div class="col-sm-9">
+                            <input type="text" ui-mask="9999" ng-model="data.card_number" placeholder="XXXX" class="form-control m-b">
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+                </div>
+
+                <!-- Cheque -->
+                <div ng-show="data.payment_mode == 'CH'">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Bank Name *</label>
+                        <div class="col-sm-9">
+                            <input type="text" ng-model="data.bank_name" maxlength="100" class="form-control" placeholder="Bank Name">
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Date *</label>
+                        <div class="col-sm-9">
+                            <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" data-ng-model="data.bank_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <datetimepicker data-ng-model="data.bank_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown3' }" data-on-set-time="onTimeSet(newDate, oldDate)"/>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Cheque No *</label>
+                        <div class="col-sm-9">
+                            <input type="text" ng-model="data.cheque_no" maxlength="100" class="form-control" placeholder="Cheque No">
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+
+                </div>
+
+                <div ng-show="data.payment_mode == 'ON'">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Bank Name *</label>
+                        <div class="col-sm-9">
+                            <input type="text" ng-model="data.bank_name" maxlength="100" class="form-control" placeholder="Bank Name">
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Date *</label>
+                        <div class="col-sm-9">
+                            <a class="dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target="#" href="javascript:void(0)">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" data-ng-model="data.bank_date" data-date-time-input="YYYY-MM-DD hh:mm A" />
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <datetimepicker data-ng-model="data.bank_date" data-datetimepicker-config="{ dropdownSelector: '#dropdown3' }" data-on-set-time="onTimeSet(newDate, oldDate)"/>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Ref No *</label>
+                        <div class="col-sm-9">
+                            <input type="text" ng-model="data.ref_no" maxlength="100" class="form-control" placeholder="Ref No">
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <!--                <div class="form-group">
+                                    <label class="col-lg-5 control-label">Total Item Vat Amount</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control text-right" ng-value="data.total_item_vat_amount" readonly="" tabindex="-1">
+                                    </div>
+                                </div>-->
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">Total Item Sale Amount</label>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-value="data.total_item_sale_amount" readonly="" tabindex="-1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Disc %</label>
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control text-right" ng-model="data.total_item_discount_percent" ng-change="updateSaleRate('percentage')" maxlength="2" number-mask="">
+                    </div>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-model="data.total_item_discount_amount" ng-change="updateSaleRate('amount')" tabindex="-1">
+                        <span style="color:#a94442" ng-if="percentageErrormessage">{{percentageErrormessage}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">Total Amount</label>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-value="data.total_item_amount" readonly="" tabindex="-1">
+                    </div>
+                </div>
+                <div class="form-group hide">
+                    <label class="col-lg-5 control-label">Welfare Amount</label>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-model="data.welfare_amount" ng-change="updateSaleRate()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">Round Off</label>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-value="data.roundoff_amount" readonly="" tabindex="-1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-5 control-label">Bill Amount</label>
+                    <div class="col-lg-7">
+                        <input type="text" class="form-control text-right" ng-value="data.bill_amount" readonly="" tabindex="-1" style="font-size: 20px;">
+                    </div>
+                </div>
+                <div class="form-group" ng-show="data.payment_type == 'CA'">
+                    <label class="col-lg-5 control-label">Amount Received</label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control text-right" ng-model="data.amount_received" number-mask="" ng-keyup="updateBalance()" ng-keydown="updateBalance()">
+                    </div>
+                    <label class="col-lg-2 control-label">Balance</label>
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control text-right" ng-value="data.balance" readonly="" tabindex="-1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <footer class="panel-footer text-right bg-light lter">
+        <div class="col-sm-6" style="color:#a94442" ng-if="duplicateErrormessage != ''">{{duplicateErrormessage}}</div>
+        <button class="btn m-b-xs  btn-primary save-print-bill" id="save_print" ng-click="getBtnId('print')">
+            <i class="fa fa-print"></i> Save and Print Bill
+        </button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-success save-btn" id="save" ng-click="getBtnId('save')">
+            Save
+        </button>
+        &nbsp;
+        <button class="btn m-b-xs btn-dark" ng-click="$state.go('pharmacy.sales')">
+            <i class="fa fa-times"></i> Cancel
+        </button>
+        &nbsp;  
+    </footer>
+</div>

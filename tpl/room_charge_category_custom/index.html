@@ -1,0 +1,80 @@
+<!--- Note: Common Index for Allied & Procedure Charges -->
+
+<div ng-controller="CustomRoomChargeCategoriesController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n font-thin h3">{{category.charge_cat_name}}</h1>
+    </div>
+    <div class="wrapper-md" ng-init="loadCustomRoomChargeCategoriesList()">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <button class="btn btn-sm btn-grey" ng-click="loadCustomRoomChargeCategoriesList()"> 
+                    &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+                </button>
+                <button ng-show="category.charge_cat_code == 'ALC'" ng-click="$state.go('configuration.alliedChargeCreate', {cat_id: category.charge_cat_id})" class="btn btn-sm btn-info pull-right">
+                    <i class="fa fa-plus"></i> &nbsp; Add new {{category.charge_cat_name}}
+                </button>
+                <button ng-show="category.charge_cat_code == 'PRC'" ng-click="$state.go('configuration.procedureChargeCreate', {cat_id: category.charge_cat_id})" class="btn btn-sm btn-info pull-right">
+                    <i class="fa fa-plus"></i> &nbsp; Add new {{category.charge_cat_name}}
+                </button>
+            </div>
+            <table st-table="displayedCollection"  st-safe-src="rowCollection" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th st-sort="charge_subcat_name">{{category.charge_cat_name}}</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <input st-search="'charge_subcat_name'" placeholder="search for name" class="input-sm form-control" type="search"/>
+                        </th>
+                        <th colspan="2">&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody ng-hide="isLoading">
+                    <tr ng-repeat="row in displayedCollection | orderBy: charge_subcat_name">
+                        <td>
+                            {{row.charge_subcat_name}}
+                        </td>
+                        <td>
+                            <div ng-if="row.tenant_id != null">
+                                <label class="i-checks "> 
+                                    <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="row.status" ng-change='updateStatus("CoRoomChargeSubcategory", row.charge_subcat_id)'> 
+                                    <i></i>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <div ng-if="row.tenant_id != null">
+                                <a ng-show="category.charge_cat_code == 'ALC'"  title="Edit" ui-sref="configuration.alliedChargeUpdate({id: row.charge_subcat_id, cat_id: category.charge_cat_id})">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a ng-show="category.charge_cat_code == 'PRC'"  title="Edit" ui-sref="configuration.procedureChargeUpdate({id: row.charge_subcat_id, cat_id: category.charge_cat_id})">
+                                    <i class="fa fa-pencil"></i>
+                                </a>&nbsp;&nbsp;&nbsp;
+                                <a class="hide" title="Delete" ng-click="removeRow(row)">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody ng-show="isLoading">
+                    <tr>
+                        <td colspan="4" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

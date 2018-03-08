@@ -1,0 +1,157 @@
+<div ng-controller="stockController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Stock Adjust</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6" ng-init="data.search_by = 'pha_product.product_name';
+                            data.search_type = 'C';
+                            initForm();">
+                <form name="searchForm" class="form-horizontal form-validation">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">Search</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label"> <b> Search By Product</b></label>
+                                    <div class="col-lg-9">
+                                        <select class="form-control" ng-model="data.search_by" ng-options="searchBy.value as searchBy.label for searchBy in searchByLists| orderBy: label">
+                                        </select>
+                                    </div>
+                                </div> 
+                                <div class="line line-dashed b-b line-lg "></div>  
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label"> <b> Search With </b></label>
+                                    <div class="col-lg-9 col-sm-9">
+                                        <div class="radio">
+                                            <label class="i-checks" ng-repeat="searchType in searchTypes">
+                                                <input type="radio" checked="" value="{{searchType.value}}" name="b" ng-model="data.search_type">
+                                                <i></i>
+                                                {{searchType.label}}&nbsp; &nbsp;
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>    
+                                <div class="line line-dashed b-b line-lg "> </div>  
+                                <div class="form-group">
+                                    <label class="col-lg-3 control-label"> <b> Search Text </b></label>
+                                    <div class="col-lg-9">
+                                        <input type="text" placeholder="Search Text" class="form-control" ng-model="data.search_text" focus-me="true">
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="panel-footer"> 
+                            <div class="text-right">
+                                <button class="btn m-b-xs  btn-success search-btn" ng-click="loadStockList()">Search</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="data.search_text = '';
+                                            showTable = false;"><i class="fa fa-times"></i> Cancel</button>
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div ng-show="showTable" class="row" style="">
+            <div class="wrapper-md">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <b>Products List</b>
+                    </div>
+                    <div class="dataTables_length">
+                        <label>
+                            Show 
+                            <select id="ddlPageSize" class=""  
+                                    ng-model="pageSizeSelected"  
+                                    ng-change="changePageSize()">  
+                                <option value="10">10</option>  
+                                <option value="25">25</option>  
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> entries 
+                        </label>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table " st-safe-src="rowCollection" st-table="displayedCollection">
+                            <thead>
+                                <tr>
+                                    <th class="{{sortClass}}" ng-click="sortChanged(sortClass);" >Product Name</th>
+                                    <th>Code</th>
+                                    <th>P.Unit</th>
+                                    <th>P.Rate</th>
+                                    <!--<th>GRNO</th>-->
+                                    <th>Batch No.</th>
+                                    <th>Expiry Date</th>
+                                    <th>S.Unit</th>
+                                    <th>MRP</th>
+                                    <th>Available</th>
+                                    <th>Stock Adjust</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>    
+                            <tbody ng-hide="isLoading">
+                                <tr ng-repeat="(key, row) in displayedCollection| orderBy: description">
+                                    <td>{{row.product.full_name}}</td>
+                                    <td><span class="label bg-primary">{{row.product.product_code}}</span></td>
+                                    <td>{{row.product.purchasePackageName}}</td>
+                                    <td>{{row.purchase_rate}}</td>
+<!--                                    <td>{{row.product.product_price}}</td>-->
+                                    <!--<td>{{row.product.product_code}}</td>-->
+                                    <td>{{row.batch_no}}</td>
+                                    <td><span class="label bg-danger">{{row.expiry_date| moment:'MMM YYYY' || 'empty' }}</span></td>
+                                    <td>{{row.product.salesPackageName}}</td>
+                                    <td>{{row.mrp}}</td>
+                                    <td><span class="label bg-info">{{row.available_qty}}</span></td>
+                                    <td>
+                                        <span editable-text="row.add_stock" e-name="add_stock" e-form="rowform" onbeforesave="checkInput($data)" e-number-mask="" e-limit-to="7" e-required>
+                                            {{ row.add_stock || '-' }}
+                                        </span>
+                                    </td>
+                                    <td style="white-space: nowrap">
+                                        <!-- form -->
+                                        <form editable-form name="rowform" onbeforesave="adjustStock($data.add_stock, row.batch_id, key)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == row">
+                                            <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                                                Save
+                                            </button>
+                                            <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                                                Cancel
+                                            </button>
+                                        </form>
+                                        <div class="buttons" ng-show="!rowform.$visible">
+                                            <button class="btn btn-dark" ng-click="rowform.$show()"><i class="fa fa-pencil"></i> Edit</button>
+                                            <!--<button class="btn btn-danger" ng-click="removeUser($index)">del</button>-->
+                                        </div>  
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody ng-hide="isLoading" class="" style="">
+                                <!-- ngRepeat: (key, row) in displayedCollection| orderBy: description --><!-- end ngRepeat: (key, row) in displayedCollection| orderBy: description --><!-- end ngRepeat: (key, row) in displayedCollection| orderBy: description --><!-- end ngRepeat: (key, row) in displayedCollection| orderBy: description --><!-- end ngRepeat: (key, row) in displayedCollection| orderBy: description --><!-- end ngRepeat: (key, row) in displayedCollection| orderBy: description --><!-- end ngRepeat: (key, row) in displayedCollection| orderBy: description --><!-- end ngRepeat: (key, row) in displayedCollection| orderBy: description -->
+                            </tbody>
+                            <tbody ng-show="isLoading" class="ng-hide" style="">
+                            </tbody>
+                            <tfoot>
+                                <tr>  
+                                    <td align="center" colspan="11">  
+                                        <div class="pull-right">  
+                                            <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex" max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>  
+                                            <!--                                            <a class="btn btn-primary">Page: {{pageIndex}} / {{numPages}}</a>  -->
+                                        </div>  
+                                    </td>  
+                                </tr> 
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="panel-footer"></div>
+                </div>
+            </div>
+        </div>
+    </div>   
+</div>

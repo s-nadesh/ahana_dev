@@ -1,0 +1,50 @@
+<div ng-controller="RoomController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Update Maintenance (Bed No. {{data.bed_name}})</h1>
+    </div>
+
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="loadForm()" novalidate="">
+                <form name="roomForm" class="form-horizontal form-validation">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Update Maintenance</label>
+                                <div class="col-sm-9">
+                                    <label class="i-checks "> 
+                                        <input type="checkbox" ng-true-value="'2'" ng-false-value="'0'" ng-model="data.occupied_status" ng-change="updateNotes(data.occupied_status)" ng-checked="data.occupied_status == '2'"> 
+                                        <i></i> 
+                                    </label> &nbsp; &nbsp;
+                                </div>
+                            </div>
+                            <div ng-show="data.occupied_status == '2'">
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Notes *</label>
+                                    <div class="col-sm-9">
+                                        <textarea ng-model="data.notes" class="form-control" placeholder="Notes"></textarea>
+                                        <!--<input type="text" ng-model="data.notes" maxlength="50" class="form-control" placeholder="Bed No.">-->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <footer class="panel-footer text-right bg-light lter">
+                            <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm('update')">Save</button>
+                            &nbsp;
+                            <button class="btn m-b-xs  btn-dark" ng-click="$state.go('configuration.room')">
+                                <i class="fa fa-times"></i> Cancel
+                            </button>
+                            &nbsp;
+                        </footer>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

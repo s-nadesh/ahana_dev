@@ -1,0 +1,201 @@
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Invoice No. *</label>
+                    <div class="col-lg-9">
+                        <input type="text" placeholder="Invoice No." class="form-control" ng-model="data.invoice_no">
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">Invoice Date *</label>
+                    <div class="col-lg-9">
+                        <input type="text" placeholder="Invoice Date" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="data.invoice_date" is-open="$parent.opened1" datepicker-options="dateOptions" close-text="Close"  min-date="minDate" ng-click="open($event, 'opened1')" ng-focus="open($event, 'opened1')" prevent-enter="true"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Purchase Date </label>
+                    <div class="col-lg-8">
+                        {{data.purchase_date}}
+                    </div>
+                </div>
+                <div class="line line-dashed b-b line-lg "></div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Supplier Name </label>
+                    <div class="col-lg-8">
+                        {{data.supplier_name}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <b>Purchase Return Items</b>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-12">
+
+                        <table class="table table-bordered table-hover table-condensed bg-white-only" id="item_table">
+                            <tr style="font-weight: bold">
+                                <td><span>Product Name</span></td>
+                                <td><span>Batch No</span></td>
+                                <td><span>Qty</span></td>
+                                <td><span>P.Unit</span></td>
+                                <td><span>Return Quantity</span></td>
+                                <td><span>MRP</span></td>
+                                <td><span>P.Price</span></td>
+                                <td><span>Amt</span></td>
+                                <td><span>Disc %</span></td>
+                                <td><span>Disc Amt</span></td>
+                                <td><span>P.Vat</span></td>
+                                <td><span>Vat Amt</span></td>
+                                <td><span>Total Amt</span></td>
+                            </tr>
+                            <tr ng-repeat="(key, purchasereturnitem) in purchasereturnitems">
+                                <td>
+                                    {{ purchasereturnitem.full_name || 'empty' }}
+                                </td>
+                                <td>
+                                    {{ purchasereturnitem.batch_details || 'empty' }}
+                                </td>
+                                <td>
+<!--                                    {{purchasereturnitem.purchase_quantity || 0}}-->
+                                    {{purchasereturnitem.total_returned_quantity > 0 ? purchasereturnitem.purchase_quantity - purchasereturnitem.total_returned_quantity + ' (' + purchasereturnitem.purchase_quantity + ')' : purchasereturnitem.purchase_quantity}}
+                                </td>
+                                <td>
+                                    {{ purchasereturnitem.package_name || '-' }}
+                                </td>
+                                <td>
+                                    <span 
+                                        editable-text="purchasereturnitem.quantity" 
+                                        e-number-mask="" 
+                                        e-form="tableform" 
+                                        onbeforesave="checkReturnQuantity($data, key);" 
+                                        e-ng-keydown="updateColumn($data, key, 'quantity')"  
+                                        e-ng-keyup="updateColumn($data, key, 'quantity')" 
+                                        e-autocomplete="off" 
+                                        e-limit-to="7">
+                                        {{purchasereturnitem.quantity|| 0}}
+                                    </span>
+                                </td>
+                                <td>
+                                    {{purchasereturnitem.mrp|| 0}}
+                                </td>
+                                <td>
+                                    {{purchasereturnitem.purchase_ret_rate|| 0}}
+                                </td>
+                                <td>
+                                    {{purchasereturnitem.purchase_ret_amount}}
+                                </td>
+                                <td>
+                                    {{purchasereturnitem.discount_percent|| 0}}
+                                </td>
+                                <td>
+                                    {{purchasereturnitem.discount_amount}}
+                                </td>
+                                <td>
+                                    {{purchasereturnitem.vat_percent}}
+                                </td>
+                                <td>
+                                    {{purchasereturnitem.vat_amount}}
+                                </td>
+                                <td>
+                                    {{purchasereturnitem.total_amount}}
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="btn-form">
+                            <br>
+                            <button type="button" ng-show="!tableform.$visible;" ng-click="tableform.$show();" class="btn btn-default pull-left btn-info">Edit Products</button>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>    
+    </div>
+
+    <div class="col-sm-7"></div>
+    <div class="col-sm-5">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Total Disc. Amount</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control text-right" ng-value="data.total_item_discount_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Total Vat Amount</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control  text-right" ng-value="data.total_item_vat_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Total Amount</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control  text-right" ng-value="data.total_item_purchase_ret_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">Disc %</label>
+                    <div class="col-lg-2">
+                        <input type="text" class="form-control  text-right" ng-model="data.discount_percent" ng-change="updatePurchaseReturnRate()" limit-to="2" maxlength="5" number-mask="">
+                    </div>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control text-right" ng-value="data.discount_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Before Disc. Total</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control text-right" ng-value="data.before_disc_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">After Disc. Total</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control text-right" ng-value="data.after_disc_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Round Off</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control text-right" ng-value="data.roundoff_amount" readonly="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-4 control-label">Net Amount</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control text-right" ng-value="data.net_amount" readonly="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <footer class="panel-footer text-right bg-light lter">
+        <button class="btn m-b-xs  btn-success save-btn">Save</button>
+        &nbsp;
+        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('pharmacy.purchaseReturn')"><i class="fa fa-times"></i> Cancel</button>
+        &nbsp;
+    </footer>
+</div>
+
+

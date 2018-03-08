@@ -1,0 +1,22 @@
+<div class="panel-body">
+    <table class="export-table print-table table table-striped" width='100%'>
+        <thead>
+            <tr>
+                <th id="work-base-grid_c0">Product Code</th>
+                <th id="work-base-grid_c0">Product Name</th>
+                <th id="work-base-grid_c1">Price per Unit</th>
+                <th id="work-base-grid_c1">Net Stock</th>
+                <th id="work-base-grid_c1">Stock Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="(key, record) in records">
+                <td>{{record.product_code}}</td>
+                <td>{{record.product_name}}</td>
+                <td>{{record.mrp}}</td>
+                <td>{{record.available_qty}}</td>
+                <td>{{record.stock_value}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

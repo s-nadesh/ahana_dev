@@ -1,0 +1,120 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Batch Details</h1>
+</div>
+<!--<div class="wrapper-md" ng-controller="stockController as stock">-->
+<div class="wrapper-md" ng-controller="stockController" ng-init="loadBatchList()">
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <b> Batch Details </b>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <input id="filter1" type="text" placeholder="Search" class="form-control input-sm w-sm inline m-r" ng-model="form_filter1"/>
+<!--                            <div class=" col-sm-3">
+                                <select id="filter" class="form-control selectpicker" data-live-search="true" ng-model="form_filter" ng-options="bat.batch_no as bat.batch_no for bat in batch| orderBy: batch_name">
+                                    <option value="">Select Batch</option>
+                                </select>
+                            </div>-->
+                            <button class="btn btn-sm btn-grey" ng-click="loadBatchList(sale_payment_type)">
+                                &nbsp; &nbsp; <i class="fa fa-search"></i> &nbsp; &nbsp;
+                            </button>
+                            <button class="btn btn-sm btn-dark" title="clear filter" ng-click="form_filter = '';form_filter1 = '';loadBatchList()">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <!--                    <table id="Batch_details" datatable="" dt-options="stock.dtOptions" dt-columns="stock.dtColumns" class="row-border hover">
+                                        </table>-->
+                    <table class="table m-b-none" data-filter="#filter" data-page-size="10">
+                        <thead>
+                            <tr>
+                                <th data-toggle="true">Description</th>
+                                <th data-toggle="true">Product Name</th>
+                                <th data-toggle="true">Batch No.</th>
+                                <th data-toggle="true">Expiry Date</th>
+                                <th data-toggle="true">Available Qty</th>
+                                <th data-toggle="true">MRP</th>
+                                <th data-toggle="true">Purchase Unit</th>
+                                <th data-toggle="true">Sales VAT</th>
+                                <th data-sort-ignore="true">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody ng-if="isLoading == true">
+                            <tr>
+                                <td colspan="8" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                            </tr>
+                        </tbody>                        
+                        <tbody ng-if="isLoading == false">
+                            <tr ng-repeat="(key, row) in rowCollection| orderBy: description">
+                                <td>{{row.product.description_name}}</td>
+                                <td>{{row.product.full_name}}</td>
+                                <td>
+                                    <span editable-text="row.batch_no" e-name="batch_no" e-form="rowform" onbeforesave="checkInput($data)" e-required>
+                                        {{ row.batch_no || '-' }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span editable-text="row.expiry_date" e-name="expiry_date" e-form="rowform" e-class="form-control" e-datepicker-popup="MMM yyyy" e-is-open="$parent.opened2" e-ng-click="$parent.opened2=true" e-ng-focus="$parent.opened2=true" e-datepicker-options="{minMode: 'month'}" e-close-text="Close" e-datepicker-mode="'month'" e-autocomplete="off" e-prevent-enter="true">
+                                        {{ row.expiry_date | moment:'MMM YYYY' || 'empty' }}
+                                    </span>
+                                </td>
+                                <td>{{row.available_qty}}</td>
+                                <td>
+                                    <span editable-text="row.mrp" e-name="mrp" e-form="rowform" e-class="form-control" onbeforesave="checkInput($data)" e-number-mask e-limit-to="7" e-required>
+                                        {{ row.mrp || 'empty' }}
+                                    </span>
+                                </td>
+<!--                                <td>{{row.product.salesPackageName}}</td>-->
+<td>{{row.package_name}}</td>
+                                <td>{{row.product.saleVatPercent}}</td>
+                                <td style="white-space: nowrap">
+                                    <!--                                                         form -->
+                                    <form editable-form name="rowform" onbeforesave="updateBatch($data, row.batch_id, key)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == row">
+                                        <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                                            Save
+                                        </button>
+                                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+                                            Cancel
+                                        </button>
+                                    </form>
+                                    <div class="buttons" ng-show="!rowform.$visible">
+                                        <button class="btn btn-dark" ng-click="rowform.$show()">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                        <!--                                                            <button class="btn btn-danger" ng-click="removeUser($index)">del</button>-->
+                                    </div>  
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="hide-if-no-paging">
+                            <!--                            <tr>
+                                                            <td colspan="8" class="text-right">
+                                                                <ul class="pagination"></ul>
+                                                            </td>
+                                                        </tr>-->
+                            <tr>  
+                                <td align="center" colspan="8">  
+                                    <div class="pull-right">  
+                                        <pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true" ng-model="pageIndex" max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>  
+                                    </div>  
+                                </td>  
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

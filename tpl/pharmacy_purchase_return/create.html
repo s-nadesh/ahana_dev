@@ -1,0 +1,46 @@
+<div ng-controller="PurchaseReturnController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">New Purchase Return</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="initForm('add');">
+                <form editable-form name="tableform" class="form-horizontal form-validation" onaftersave="saveForm('add'); tableform.$show();" novalidate="" oncancel="cancel()" shown="true">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-lg-2 control-label">Purchase Invoice No.</label>
+                                        <div class="col-lg-4">
+                                            <input autocomplete="off"
+                                               placeholder="Invoice No."
+                                               type="text"
+                                               class="form-control"
+                                               ng-model="select_purchase_id"
+                                               typeahead="purchase as purchase.invoice_no_with_supplier for purchase in getPurchaseinvoices($viewValue) | orderBy: invoice_no"
+                                               typeahead-on-select="getPurchaseReturnItems($item, $model, $label)"
+                                               typeahead-wait-ms="400"
+                                               />
+                                            
+<!--                                            <select class="form-control selectpicker" data-live-search="true" ng-model="data.purchase_id" ng-options="purchase.purchase_id as purchase.invoice_no for purchase in purchaseinvoice | orderBy: invoice_no"  data-ng-change="getPurchaseReturnItems()">
+                                                <option value="">Select Purchase Invoice No.</option>
+                                            </select>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-include="'tpl/pharmacy_purchase_return/_form.html'" ng-show="data.purchase_id">
+                        {% include 'tpl/pharmacy_purchase_return/_form.html' %}
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

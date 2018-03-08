@@ -1,0 +1,27 @@
+<div ng-controller="SaleController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Update Sale</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="initForm('update')" novalidate="">
+                <form 
+                    editable-form 
+                    name="tableform" 
+                    class="form-horizontal form-validation" 
+                    onbeforesave="checkTotalpercent()"
+                    onaftersave="saveForm('update'); tableform.$show();" 
+                    novalidate="" 
+                    oncancel="cancel()" 
+                    shown="true">
+                    <div ng-include="'tpl/pharmacy_sale/_form.html'">
+                        {% include 'tpl/pharmacy_sale/_form.html' %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
