@@ -1,0 +1,13 @@
+RewriteEngine on
+SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule . index.php
+
+<IfModule mod_headers.c>
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Headers "Content-Type,Authorization,x-domain-path"
+    Header always set Access-Control-Allow-Methods "POST, GET,PUT,DELETE, OPTIONS"
+</IfModule>
