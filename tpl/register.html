@@ -1,0 +1,287 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n h3">Patient Register</h1>
+</div>
+<div class="wrapper-md">
+  <div ng-controller="FormDemoCtrl">
+    <div class="row">
+      
+      
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <form name="formValidate" class="form-horizontal form-validation">
+          <div class="panel panel-default">
+            
+            <div class="panel-body">                    
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Patient ID  </label>
+                <div class="col-sm-9">
+               <p>  <b> TMP2015030410  </b></p>
+                  
+                  
+                </div>
+              </div>
+              
+              <div class="line line-dashed b-b line-lg "></div>
+              
+              
+              
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Name * </label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control" placeholder="First Name" >
+                </div>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" placeholder="Last Name" >
+                </div>
+              </div>
+              
+              
+              
+              
+              
+              
+              
+              <div class="line line-dashed b-b line-lg "></div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Gender</label>
+                <div class="col-sm-9">
+                 <label class="i-checks ">
+                <input type="radio" checked="" value="option2" name="a">
+                <i></i>
+                Male
+              </label> &nbsp; &nbsp;
+              <label class="i-checks">
+                <input type="radio" value="option2" name="a">
+                <i></i>
+                Female
+              </label>
+              &nbsp; &nbsp;
+              
+              <label class="i-checks">
+                <input type="radio" value="option2" name="a">
+                <i></i>
+               Others
+              </label>
+              
+              
+                </div>
+              </div>
+              <div class="line line-dashed b-b line-lg "></div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Age * </label>
+               <div class="col-sm-5">
+                  <input type="text" class="form-control" placeholder="###" >
+                </div>
+                <div class="col-sm-4">
+                 Years
+                </div>
+              </div>
+              <div class="line line-dashed b-b line-lg "></div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Mobile No * </label>
+               <div class="col-sm-9">
+                  <input type="text" class="form-control" placeholder="##########" >
+                </div>
+                
+              </div>
+              <div class="line line-dashed b-b line-lg "></div>
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Place</label>
+                <div class="col-sm-9">
+                 <select ="" ng-model="f.b" class="form-control  ng-pristine ng-invalid ng-invalid- ng-touched">
+                      <option value="">City / Town / Village</option>
+                  </select>
+                </div>
+              </div>
+              
+               <div class="line line-dashed b-b line-lg "></div>
+              
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Billing</label>
+                <div class="col-sm-9">
+                 <label class="i-checks ">
+                <input type="radio" checked="" value="option2" name="a">
+                <i></i>
+                Normal
+              </label> &nbsp; &nbsp;
+              <label class="i-checks">
+                <input type="radio" value="option2" name="a">
+                <i></i>
+                Free
+              </label>
+              &nbsp;</div>
+              </div>
+              
+              
+                <div class="line line-dashed b-b line-lg "></div>
+              
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Category</label>
+                <div class="col-sm-9">
+                 <label class="i-checks ">
+                <input type="radio" checked="" value="option2" name="a">
+                <i></i>
+                Standard 
+              </label> &nbsp; &nbsp;
+              <label class="i-checks">
+                <input type="radio" value="option2" name="a">
+                <i></i>
+               Priority
+              </label> &nbsp; &nbsp;  <label class="i-checks">
+                <input type="radio" value="option2" name="a">
+                <i></i>
+               VIP
+              </label> &nbsp; &nbsp; </div>
+              </div>
+              
+               <div class="line line-dashed b-b line-lg "></div>
+              
+              <div class="form-group">
+                <label class="col-sm-3 control-label">Patient Type </label>
+                <div class="col-sm-9">
+                 <label class="i-checks ">
+                <input type="radio"  value="option2" name="a">
+                <i></i>
+              New 
+              </label> &nbsp; &nbsp;
+              <label class="i-checks">
+                <input type="radio" value="option2" name="a">
+                <i></i>
+               Review
+              </label>
+              &nbsp;</div>
+              </div>
+            </div>
+            <footer class="panel-footer text-right bg-light lter">
+              <button class="btn m-b-xs  btn-success ">Register</button> &nbsp;
+              <button class="btn m-b-xs  btn-default"> Register & Book an appoinment</button>  &nbsp;
+               <button class="btn m-b-xs  btn-dark"> <i class="fa fa-times"></i> Cancel</button>  &nbsp;
+            </footer>
+          </div>
+        </form>
+      </div>
+      <div class="col-sm-6">
+        <form name="forma" class="form-horizontal form-validation">
+          <div class="panel panel-default">
+            
+            <div class="panel-body"> 
+            
+            
+            <p> <h4>  <i class="fa fa-exclamation-triangle"></i> One or more particulars matching to existing patient records!  </h4></p>     
+                       
+     <div class="search-patientcont">
+     
+     
+     <div class="row"> 
+     <div class="col-xs-12 col-sm-2 col-md-2"> <img src="img/man-icon.png"  alt="" /></div>
+     
+     <div class="col-xs-12 col-sm-5 col-md-5"> 
+     
+     <div class="row"> 
+     <a href="#">Mr. PatIent name</a> (35y) <br/>
+AH12345 
+
+<p class="m-t"> No, 123, Lorem St. <br/> 
+Dolorsite main, <br/> 
+Madurai 123456 <br/> 
+Tamilnadu</p>
+
+<p>  <span> <b>Contact No.s</b> <br/> 
+ +91 1234567890 (Primary)<br/> 
+
++91 1234567890 (Secondary) </span></p>
+
+
+
+
+
+
+</div>
+
+</div>
+     
+      <div class="col-xs-12 col-sm-5 col-md-5"> 
+    Last visited on <span> <b> 23-jan-2015 </b></span> <br/> 
+Consultation with <span> <b> Dr.Vikram </b> </span>
+
+<p class="m-t-xxl "> <button class="btn m-b-xs w-xs btn-info">BOOK</button></p>
+
+</div>
+     
+     </div>
+     
+     
+     
+     
+     </div>
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     <div class="search-patientcont">
+     
+     
+     <div class="row"> 
+     <div class="col-xs-12 col-sm-2 col-md-2"> <img src="img/man-icon2.png"  alt="" /></div>
+     
+     <div class="col-xs-12 col-sm-5 col-md-5"> 
+     
+     <div class="row"> 
+     <a href="#">Mr. PatIent name</a> (35y) <br/>
+AH12345 
+
+<p class="m-t"> No, 123, Lorem St. <br/> 
+Dolorsite main, <br/> 
+Madurai 123456 <br/> 
+Tamilnadu</p>
+
+<p>  <span> <b>Contact No.s</b> <br/> 
+ +91 1234567890 (Primary)<br/> 
+
++91 1234567890 (Secondary) </span></p>
+
+
+
+
+
+
+</div>
+
+</div>
+     
+      <div class="col-xs-12 col-sm-5 col-md-5"> 
+    Last visited on <span> <b> 23-jan-2015 </b></span> <br/> 
+Consultation with <span> <b> Dr.Vikram </b> </span>
+
+<p class="m-t-xxl "> <button class="btn m-b-xs w-xs btn-info">BOOK</button></p>
+
+</div>
+     
+     </div>
+     
+     
+     
+     
+     </div>
+     
+     
+            </div>
+            
+          </div>
+        </form>
+      </div>
+    </div>
+    
+  </div>
+</div>

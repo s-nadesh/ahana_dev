@@ -1,0 +1,83 @@
+<div class="modal-header">
+    <h3 class="modal-title">Patient Details</h3>
+</div>
+<div class="modal-body wrapper-lg">
+  <div class="row">
+    <div class="col-sm-6 b-r">
+    <!--  <h3 class="m-t-none m-b font-thin">Sign in</h3>
+      <p>Sign in to meet your friends.</p>-->
+      <form role="form">
+      
+      
+      
+      <div class="form-group">
+          <label>Patient Name</label>
+          <input type="" class="form-control" placeholder="" value=" Patient Name ">
+        </div>
+        
+        <div class="form-group">
+          <label> Patient Photo </label>
+          
+          
+          
+
+            <input ui-jq="filestyle" type="file" data-icon="false" data-classButton="btn btn-default" data-classInput="form-control inline v-middle input-s">
+
+       
+        </div>
+        <div class="form-group">
+          <label>Patient ID</label>
+          <input type="" class="form-control" placeholder="" value=" AH1234 ">
+        </div>
+        
+        <div class="form-group">
+          <label>Case sheet</label>
+          <input type="" class="form-control" placeholder="" value=" CS123456 ">
+        </div>
+        
+        
+        
+        
+        
+        
+        
+      </form>
+    </div>
+    <div class="col-sm-6">
+    
+    <div class="form-group">
+          <label>Admission Date</label>
+          <div class="" ng-controller="DatepickerDemoCtrl">
+            <div class="input-group w-md">
+              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      
+      <div class="form-group">
+          <label>Room#</label>
+          <input type="" class="form-control" placeholder="" value=" 1234 ">
+        </div>
+        
+        <div class="form-group">
+          <label>Consultant</label>
+          <input type="" class="form-control" placeholder="" value=" Dr. Vikhram">
+        </div>
+        
+        <div class="form-group">
+          <label>Remarks</label>
+          <input type="" class="form-control" placeholder="" value="Comments if any">
+        </div>
+      
+    </div>
+  </div>
+  
+  
+</div>
+<div class="modal-footer">                  
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="ok()">Save</button>
+</div>

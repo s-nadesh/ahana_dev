@@ -1,0 +1,235 @@
+<div class="bg-light lter b-b wrapper-md ng-scope">
+    <h1 class="m-n font-thin h3">Create Organization</h1>
+</div>
+<div class="wrapper-md ng-scope" ng-controller="OrganizationController as org">
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+    <form name="form" class="bs-example form-horizontal ng-pristine ng-valid form-validation" novalidate="">
+        <div>
+            <div class="row">
+                <div class="col-sm-5">
+                    <div class="panel panel-default">
+                        <div class="panel-heading font-bold">Organization Details</div>
+                        <div class="panel-body">
+
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Name *</label>
+                                <div class="col-lg-10">
+                                    <input type="text" placeholder="Name" class="form-control" ng-model="data.Tenant.tenant_name" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Address *</label>
+                                <div class="col-lg-10">
+                                    <textarea type="text" placeholder="Address" class="form-control" ng-model="data.Tenant.tenant_address" required></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Country *</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control" name="Country" ng-model="data.Tenant.tenant_country_id" ng-options="country.value as country.label for country in countries | orderBy: label" data-ng-change="updateState()" required>
+                                        <option value="">Select Country</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">State *</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control" name="State" ng-model="data.Tenant.tenant_state_id" ng-options="state.value as state.label for state in availableStates | orderBy: label" data-ng-change="updateCity()" required>
+                                        <option value="">Select State</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">City *</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control" name="City" ng-model="data.Tenant.tenant_city_id" ng-options="city.value as city.label for city in availableCities | orderBy: label" required>
+                                        <option value="">Select City</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Contact1</label>
+                                <div class="col-lg-10">
+                                    <input type="text" placeholder="Contact1" class="form-control" ng-model="data.Tenant.tenant_contact1">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Contact2</label>
+                                <div class="col-lg-10">
+                                    <input type="text" placeholder="Contact2" class="form-control" ng-model="data.Tenant.tenant_contact2">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Fax</label>
+                                <div class="col-lg-10">
+                                    <input type="text" placeholder="Fax" class="form-control" ng-model="data.Tenant.tenant_fax">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Mobile</label>
+                                <div class="col-lg-10">
+                                    <input type="text" placeholder="Mobile" class="form-control" ng-model="data.Tenant.tenant_mobile">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Email</label>
+                                <div class="col-lg-10">
+                                    <input type="text" placeholder="abc@abc.com" class="form-control" ng-model="data.Tenant.tenant_email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">Website</label>
+                                <div class="col-lg-10">
+                                    <input type="text" placeholder="http://abc.com" class="form-control" ng-model="data.Tenant.tenant_url">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading font-bold">Organization Role</div>
+                                <div class="panel-body">
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Role *</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" placeholder="Role" class="form-control" ng-model="data.Role.description" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading font-bold">User Login</div>
+                                <div class="panel-body">
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Username *</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" placeholder="Username" class="form-control" ng-model="data.Login.username" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Password *</label>
+                                        <div class="col-lg-8">
+                                            <input type="password" placeholder="Password" class="form-control" ng-model="data.Login.password" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading font-bold">Module Rights</div>
+                                <div class="panel-body">
+
+                                    <div 
+                                        ivh-treeview="modules"
+                                         ivh-treeview-default-selected-state="false"
+                                    ivh-treeview-expand-to-depth="2"
+                                        ></div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="panel panel-default">
+                                <div class="panel-heading font-bold">Administrator User</div>
+                                <div class="panel-body">
+
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Prefix *</label>
+                                        <div class="col-lg-9">
+                                            <select class="form-control" name="Title" ng-model="data.User.title_code" ng-options="title_code.value as title_code.label for title_code in title_codes" required>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Name *</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" placeholder="Name" class="form-control" ng-model="data.User.name" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Designation *</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" placeholder="Designation" class="form-control" ng-model="data.User.designation" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Email *</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" placeholder="Email" class="form-control" ng-model="data.User.email" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Mobile *</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" placeholder="Mobile" class="form-control" ng-model="data.User.mobile" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Contact1</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" placeholder="Contact1" class="form-control" ng-model="data.User.contact1">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Contact2</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" placeholder="Contact2" class="form-control" ng-model="data.User.contact2">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Address</label>
+                                        <div class="col-lg-9">
+                                            <textarea placeholder="Address" class="form-control" ng-model="data.User.address"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Country</label>
+                                        <div class="col-lg-9">
+                                            <select class="form-control" name="Country" ng-model="data.User.country_id" ng-options="country.value as country.label for country in countries | orderBy: label" data-ng-change="updateState2()">
+                                                <option value="">Select Country</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">State</label>
+                                        <div class="col-lg-9">
+                                            <select class="form-control" name="State" ng-model="data.User.state_id" ng-options="state.value as state.label for state in availableStates2 | orderBy: label" data-ng-change="updateCity2()">
+                                                <option value="">Select State</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">City</label>
+                                        <div class="col-lg-9">
+                                            <select class="form-control" name="City" ng-model="data.User.city_id" ng-options="city.value as city.label for city in availableCities2 | orderBy: label">
+                                                <option value="">Select City</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-lg-3 control-label">Zip</label>
+                                        <div class="col-lg-9">
+                                            <input type="text" placeholder="Zip" class="form-control" ng-model="data.User.zip">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <button class="btn btn-primary" type="submit" ng-click="saveForm('add')">Save</button>
+                    <button class="btn btn-black" type="button" ui-sref="app.org_list" onclick="javascript:void(0)">Back</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,45 @@
+<div>
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Create State</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12" ng-init="data.status = '1'">
+                <form name="descForm" class="form-horizontal form-validation" novalidate="">
+                    <div class="modal-body wrapper-lg">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Country Name * </label>
+                                    <div class="col-sm-8">
+                                        <!--<select ui-jq="chosen" class="form-control" ng-model="data.country_id" ng-options="country.value as country.label for country in countries | orderBy: label">-->
+                                        <select class="form-control" ng-model="data.country_id" ng-options="country.value as country.label for country in countries | orderBy: label">
+                                            <option value="">Select Country</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">State Name * </label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-model="data.state_name" maxlength="50" name="stateName" class="form-control" placeholder="State Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <footer class="panel-footer text-right bg-light lter">
+                                <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()">Save</button>
+                                &nbsp;
+                                <button class="btn m-b-xs  btn-dark" ng-click="cancel()"><i class="fa fa-times"></i> Cancel</button>
+                                &nbsp;
+                            </footer>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

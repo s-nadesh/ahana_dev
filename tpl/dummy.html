@@ -1,0 +1,290 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n h3">Out-Patient</h1>
+</div>
+
+
+<div class="wrapper-md">
+<div class="panel panel-default">
+    <!--<div class="panel-heading">
+      Responsive Table
+    </div>-->
+    <div class="row wrapper">
+      <div class="col-sm-5 m-b-xs">
+      
+      <button class="btn btn-sm btn-default"> &nbsp; &nbsp; <i class="fa fa-repeat"></i>  &nbsp; &nbsp; </button>    
+      
+      <div class="btn-group" dropdown is-open="status.isopen">
+            <button type="button" class=" btn btn-sm btn-default" dropdown-toggle ng-disabled="disabled">
+             More &nbsp;&nbsp;<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href>Action</a></li>
+              <li><a href>Another action</a></li>
+              <li><a href>Something else here</a></li>
+              <li class="divider"></li>
+              <li><a href>Separated link</a></li>
+            </ul>
+          </div>
+                    
+      </div>
+      <div class="col-sm-4">
+      </div>
+      <div class="col-sm-2 pull-right">
+      
+        <div class="input-group">
+          
+          <div class="btn-group" dropdown>
+            <button type="button" class=" btn btn-sm btn-default" dropdown-toggle >
+              &nbsp;&nbsp; Select &nbsp;&nbsp;<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu1">
+              <li><a href>Action</a></li>
+              <li><a href>Another action</a></li>
+              <li><a href>Something else here</a></li>
+              <li class="divider"></li>
+              <li><a href>Separated link</a></li>
+            </ul>
+          </div>
+          
+         <div class="btn-group" dropdown>
+            <button type="button" class=" btn btn-sm btn-default" dropdown-toggle >
+            &nbsp;&nbsp;  <i class="fa fa-cog"></i>   &nbsp;&nbsp;<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu1">
+              <li><a href>Action</a></li>
+              <li><a href>Another action</a></li>
+              <li><a href>Something else here</a></li>
+              <li class="divider"></li>
+              <li><a href>Separated link</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive in-patient-table">
+     <script type="text/ng-template" id="myModalContent.html">
+            <div ng-include="'tpl/inpatient.edit.html'"></div>
+          </script>
+          
+      <table  class="table table-striped b-t b-light">
+        <thead>
+          <tr>
+            <th width="21"  style="width:20px;">
+              <label class="i-checks m-b-none">
+                <input type="checkbox"><i></i>
+              </label>
+            </th>
+            <th>Patient</th>
+            <th>Category</th>
+            <th>Contact#</th>
+            <th>appointment<br />
+            time</th>
+            <th>Arrival<br />
+            Time</th>
+            <th>status</th>
+            <th>consultant</th>
+            <th>remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td><img class="pull-left" src="img/man-icon.png"  alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td align="center" valign="middle"><img src="img/cate-1.png"  alt="" /></td>
+            <td><a editable-text="user.name">9988776655</a></td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            10:30 am <br/>  <span class="text-muted"> 04-Mar-2015</span></td>
+            <td>10:40 am <br/> <span class="text-muted"> 10 mins late! </span> </td>
+            <td>
+            <a editable-select="user.status" e-ng-options="s.value as s.text for s in statuses">
+                {{ showStatus(user) }}
+            </a>
+            <br /><span class="text-muted">Prepare final bill!</span></td>
+            <td>Dr. Vikhram</td>
+            <td class="action">
+            <div class="actions-message"> Comments if any  </div>
+            
+            <div class="actions-icons-cont" style="display:none;">  
+            <a href="#">  <i tooltip="Cancel" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-times-circle"></i>  </a>
+      <span ng-controller="ModalDemoCtrl"><a href="#" ng-click="open()">  <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i>   </a></span>
+             
+             <a href="#">  <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i>   </a>
+             
+             <span class="dropdown hidden-sm" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
+              <img src="img/actions-icon.png"  alt="" />
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu ">
+              <li><a href="#"> Action 1</a></li>
+              <li><a href="#">  Action 2 </a></li>
+              <li><a href="#"> Action 3</a></li>
+              <li><a href="#">  Action 5</a></li>
+            </ul>
+            <!-- / dropdown -->
+          </span>
+               </div>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td><img class="pull-left" src="img/man-icon2.png"  alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td align="center" valign="middle"><img src="img/cate-2.png"  alt="" /></td>
+            <td><a editable-text="user.name">9988776655</a></td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            10:30 am <br/>  <span class="text-muted"> 04-Mar-2015</span></td>
+            <td>8:40 am <br/> 
+              <span class="text-muted"> 15 mins late! </span> </td>
+            <td><a editable-select="user2.status" e-ng-options="s.value as s.text for s in statuses"> {{ showStatus(user2) }} </a><br /><span class="text-muted">In-progress!</span></td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td><img class="pull-left" src="img/man-icon.png"  alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td align="center" valign="middle">&nbsp;</td>
+            <td><a editable-text="user.name">9988776655</a></td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            10:30 am <br/>  <span class="text-muted"> 04-Mar-2015</span></td>
+            <td>12:40 am <br/> 
+            <span class="text-danger-dk"> 1 hr 3 mins late! </span> </td>
+            <td><a editable-select="user3.status" e-ng-options="s.value as s.text for s in statuses"> {{ showStatus(user3) }} </a><br /><span class="text-danger-dk">Waiting!</span></td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td><img class="pull-left" src="img/man-icon2.png"  alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td align="center" valign="middle"><img src="img/cate-3.png"  alt="" /></td>
+            <td><a editable-text="user.name">9988776655</a></td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            10:30 am <br/>  <span class="text-muted"> 04-Mar-2015</span></td>
+            <td>10:40 am <br/> <span class="text-success-dk"> On time! </span> </td>
+            <td><a editable-select="user3.status" e-ng-options="s.value as s.text for s in statuses"> {{ showStatus(user3) }} </a><br />
+              <span class="text-danger-dk">Waiting!</span></td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td><img class="pull-left" src="img/man-icon.png"  alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td align="center" valign="middle">&nbsp;</td>
+            <td><a editable-text="user.name">9988776655</a></td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            10:30 am <br/>  <span class="text-muted"> 04-Mar-2015</span></td>
+            <td>10:40 am <br/> <span class="text-muted"> 10 mins late! </span> </td>
+            <td><div class="text-info-dk">Scheduled</div></td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td><img class="pull-left" src="img/man-icon2.png"  alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td align="center" valign="middle"><img src="img/cate-1.png"  alt="" /></td>
+            <td><a editable-text="user.name">9988776655</a></td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            10:30 am <br/>  <span class="text-muted"> 04-Mar-2015</span></td>
+            <td>5:40 am <br/> <span class="text-muted"> 10 mins late! </span> </td>
+            <td><div class="text-info-dk">Scheduled</div></td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td><img class="pull-left" src="img/man-icon.png"  alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td align="center" valign="middle">&nbsp;</td>
+            <td><a editable-text="user.name">9988776655</a></td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            10:30 am <br/>  <span class="text-muted"> 04-Mar-2015</span></td>
+            <td>10:40 am <br/>
+            <span class="text-danger-dk"> 5 hr 3 mins late! </span></td>
+            <td><a editable-select="user.status" e-ng-options="s.value as s.text for s in statuses"> {{ showStatus(user) }} </a><br /><span class="text-muted">Prepare final bill!</span></td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td><img class="pull-left" src="img/man-icon2.png"  alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td align="center" valign="middle">&nbsp;</td>
+            <td><a editable-text="user.name">9988776655</a></td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            10:30 am <br/>  <span class="text-muted"> 04-Mar-2015</span></td>
+            <td>10:40 am <br/> <span class="text-muted"> 10 mins late! </span> </td>
+            <td><a editable-select="user.status" e-ng-options="s.value as s.text for s in statuses"> {{ showStatus(user) }} </a><br /><span class="text-muted">Prepare final bill!</span></td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td><img class="pull-left" src="img/man-icon.png"  alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td align="center" valign="middle"><img src="img/cate-4.png"  alt="" /></td>
+            <td><a editable-text="user.name">9988776655</a></td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            10:30 am <br/>  <span class="text-muted"> 04-Mar-2015</span></td>
+            <td>10:40 am <br/> <span class="text-muted"> 10 mins late! </span> </td>
+            <td><a editable-select="user.status" e-ng-options="s.value as s.text for s in statuses"> {{ showStatus(user) }} </a><br /><span class="text-muted">Prepare final bill!</span></td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td><img class="pull-left" src="img/man-icon2.png"  alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td align="center" valign="middle"><img src="img/cate-5.png"  alt="" /></td>
+            <td><a editable-text="user.name">9988776655</a></td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            10:30 am <br/>  <span class="text-muted"> 04-Mar-2015</span></td>
+            <td>10:40 am <br/> <span class="text-muted"> 10 mins late! </span> </td>
+            <td><a editable-select="user.status" e-ng-options="s.value as s.text for s in statuses"> {{ showStatus(user) }} </a><br /><span class="text-muted">Prepare final bill!</span></td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+        
+      
+    <footer class="panel-footer">
+      <div class="row">
+        <div class="col-sm-4 hidden-xs">
+          
+               
+        </div>
+        <div class="col-sm-4 text-center">
+          <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
+        </div>
+        <div class="col-sm-4 text-right text-center-xs">                
+          <ul class="pagination pagination-sm m-t-none m-b-none">
+            <li><a href><i class="fa fa-chevron-left"></i></a></li>
+            <li><a href>1</a></li>
+            <li><a href>2</a></li>
+            <li><a href>3</a></li>
+            <li><a href>4</a></li>
+            <li><a href>5</a></li>
+            <li><a href><i class="fa fa-chevron-right"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+</div>

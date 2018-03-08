@@ -1,0 +1,9 @@
+<toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+
+<div class="wrapper table-responsive alert ng-isolate-scope alert-success alert-dismissable" ng-show="successMessage">
+    <div>
+        <i class="fa fa-info-circle"></i> {{successMessage}}
+    </div>
+</div>
+<div class="alert ng-isolate-scope alert-danger alert-dismissable" ng-show="errorData" ng-bind-html="errorData">
+</div>

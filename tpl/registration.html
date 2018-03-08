@@ -1,0 +1,294 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">PATIENT REGISTRATION</h1>
+</div>
+<div class="wrapper-md" ng-controller="RegistrationController">
+  <form class="form-horizontal" name="registrationForm">
+    <div ng-show="registrationMessage != ''">
+      {{registrationMessage}}
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="panel panel-default">
+          <div class="panel-body">
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Registration Date</label>
+                <div class="col-lg-9">
+                  <div class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="data.date" is-open="opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">First Name</label>
+                <div class="col-lg-9">
+                  <div class="col-lg-3 padding-0">
+                    <select class="form-control col-sm-3" ng-model="data.salutation">
+                      <option value="">Select</option>
+                      <option value="Mr.">Mr.</option>
+                      <option value="Mrs.">Mrs.</option>
+                      <option value="Miss.">Miss.</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-9 padding-0">
+                    <input type="text" class="form-control col-sm-12" ng-model="data.firstName" placeholder="First Name">
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Last Name </label>
+                <div class="col-lg-9">
+                  <input type="text" class="form-control" ng-model="data.lastName" placeholder="Last Name">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Middle Name </label>
+                <div class="col-lg-9">
+                  <input type="text" class="form-control" ng-model="data.middleName" placeholder="Middle Name">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Care Taker</label>
+                <div class="col-lg-9">
+                  <select class="form-control" ng-model="data.careTaker">
+                    <option value="">Select</option>
+                    <option value="Parents">Parents</option>
+                    <option value="Guardian">Guardian</option>
+                    <option value="Others">Others</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Care Taker Name </label>
+                <div class="col-lg-9">
+                  <input type="text" class="form-control" ng-model="data.careTakerName" placeholder="Care Taker Name">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Date of Birth</label>
+                <div class="col-lg-9">
+                  <div class="input-group">
+                    <input type="text" class="form-control" datepicker-popup="{{formatDOB}}" ng-model="data.dateOfBith" is-open="openedDateOfBirth" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default" ng-click="openDateOfBirth($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Gender</label>
+                <div class="col-lg-9">
+                  <select class="form-control" ng-model="data.gender">
+                    <option value="">Select</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="T">Transgender</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Marital Status</label>
+                <div class="col-lg-9">
+                  <select class="form-control" ng-model="data.maritalStatus">
+                    <option value="">Select</option>
+                    <option value="S">Single</option>
+                    <option value="M">Married</option>
+                    <option value="D">Divorced</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Occupation</label>
+                <div class="col-lg-9">
+                  <input type="text" class="form-control" placeholder="Occcupation" ng-model="data.occupation">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Blood Group</label>
+                <div class="col-lg-9">
+                  <select class="form-control" ng-model="data.bloodGroup">
+                    <option value="">Select</option>
+                    <option value="o">'O'+ve</option>
+                    <option value="b">'B'+ve</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Category</label>
+                <div class="col-lg-9">
+                  <select class="form-control" ng-model="data.category">
+                    <option value="Standard">Standard-Default</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Email ID</label>
+                <div class="col-lg-9">
+                  <input type="email" class="form-control" placeholder="Email" ng-model="data.email">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Referral Doctor</label>
+                <div class="col-lg-9">
+                  <input type="text" class="form-control" placeholder="Referral Doctor" ng-model="data.referralDoctor">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Registration Mode</label>
+                <div class="col-lg-9">
+                  <label class="i-checks">
+                    <input type="radio" name="registrationMode" value="none" ng-model="data.registrationMode"><i></i>None
+                  </label>
+                  <label class="i-checks">
+                    <input type="radio" name="registrationMode" value="op" ng-model="data.registrationMode"><i></i>O.P
+                  </label>
+                  <label class="i-checks">
+                    <input type="radio" name="registrationMode" value="ip" ng-model="data.registrationMode"><i></i>I.P
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-lg-3 control-label">Patient Type</label>
+                <div class="col-lg-9">
+                  <select class="form-control" ng-model="data.patientType">
+                    <option value="">Select</option>
+                    <option value="type">Type</option>
+                  </select>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Current Address</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" placeholder="Address" ng-model="data.address">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Country</label>
+              <div class="col-lg-9">
+                <select class="form-control" ng-model="data.country">
+                  <option value="">Select Country</option>
+                  <option value="india">India</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">State</label>
+              <div class="col-lg-9">
+                <select class="form-control" ng-model="data.state">
+                  <option value="">Select State</option>
+                  <option value="TN">Tamilnadu</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">City</label>
+              <div class="col-lg-9">
+                <select class="form-control" ng-model="data.city">
+                  <option value="">Select City</option>
+                  <option value="Madurai">Madurai</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Zip</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" placeholder="Zip" ng-model="data.zip">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Same as above</label>
+              <div class="col-lg-9">
+                <label class="i-checks">
+                  <input type="checkbox" name="sameAsCurrentAddress" value="none" ng-model="data.sameAsCurrentAddress" ng-change="copyCurrentAddress()" ng-click="copyCurrentAddress()"><i></i>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Permanent Address</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" placeholder="Address" ng-model="data.permanentAddress">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Country</label>
+              <div class="col-lg-9">
+                <select class="form-control" ng-model="data.permanentCountry">
+                  <option value="">Select Country</option>
+                  <option value="india">India</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">State</label>
+              <div class="col-lg-9">
+                <select class="form-control" ng-model="data.permanentState">
+                  <option value="">Select State</option>
+                  <option value="TN">Tamilnadu</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">City</label>
+              <div class="col-lg-9">
+                <select class="form-control" ng-model="data.permanentCity">
+                  <option value="">Select City</option>
+                  <option value="Madurai">Madurai</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Zip</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" placeholder="Zip" ng-model="data.permanentZip">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Primary Contact #</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" placeholder="Primary Contact #" ng-model="data.primaryContactNo">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Secondary Contact #</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" placeholder="Secondary Contact #" ng-model="data.secondaryContactNo">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Mobile</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" placeholder="Mobile" ng-model="data.mobile">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Referral Hospital</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" placeholder="Referral Hospital" ng-model="data.referralHospital">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Patient Reference #</label>
+              <div class="col-lg-9">
+                <input type="text" class="form-control" placeholder="Patient Reference #" ng-model="data.patientReferenceNo">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12 padding-0 margin-bottom-20">
+      <div class="text-right">
+        <button type="submit" class="btn btn-sm btn-info" ng-click="saveRegistration()">SAVE</button>&nbsp;&nbsp;
+        <button type="reset" class="btn btn-sm btn-warning">CANCEL</button>
+      </div>
+    </div>
+  </form>
+</div>

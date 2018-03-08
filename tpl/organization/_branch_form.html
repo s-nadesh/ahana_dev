@@ -1,0 +1,136 @@
+<div class="col-sm-12">
+
+    <div class="row">
+
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Branch Name *</label>
+                        <div class="col-lg-8">
+                            <input type="text" placeholder="Name" class="form-control" ng-model="data.Tenant.tenant_name" focus-me="true" id="tenant_name" >
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Branch Address *</label>
+                        <div class="col-lg-8">
+                            <textarea type="text" placeholder="Address" class="form-control" ng-model="data.Tenant.tenant_address" ></textarea>
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Country *</label>
+                        <div class="col-lg-7">
+                            <select class="form-control" name="Country" ng-model="data.Tenant.tenant_country_id" ng-options="country.value as country.label for country in countries | orderBy: label" data-ng-change="updateState();
+                                    data.Tenant.tenant_state_id = '';
+                                    data.Tenant.tenant_city_id = '';" >
+                                <option value="">Select Country</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-0">
+                            <script type="text/ng-template" id="CountryModalContent.html">
+                                <div ng-include="'tpl/modal_form/modal.country.html'"></div>
+                            </script>
+                            <button type="button" class="btn btn-primary" ng-click="open('lg', 'CountryModalInstanceCtrl', 'CountryModalContent.html', 'branch')">
+                                <i class="fa fa-plus text ng-scope"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">State *</label>
+                        <div class="col-lg-7">
+                            <select class="form-control" name="State" ng-model="data.Tenant.tenant_state_id" ng-options="state.value as state.label for state in availableStates | orderBy: label" data-ng-change="updateCity();
+                                    data.Tenant.tenant_city_id = '';" >
+                                <option value="">Select State</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-0">
+                            <script type="text/ng-template" id="StateModalContent.html">
+                                <div ng-include="'tpl/modal_form/modal.state.html'"></div>
+                            </script>
+                            <button type="button" class="btn btn-primary" ng-click="open('lg', 'StateModalInstanceCtrl', 'StateModalContent.html', 'branch')">
+                                <i class="fa fa-plus text ng-scope"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">City *</label>
+                        <div class="col-lg-7">
+                            <select class="form-control" name="City" ng-model="data.Tenant.tenant_city_id" ng-options="city.value as city.label for city in availableCities | orderBy: label" >
+                                <option value="">Select City</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-0">
+                            <script type="text/ng-template" id="CityModalContent.html">
+                                <div ng-include="'tpl/modal_form/modal.city.html'"></div>
+                            </script>
+                            <button type="button" class="btn btn-primary" ng-click="open('lg', 'CityModalInstanceCtrl', 'CityModalContent.html', 'branch')">
+                                <i class="fa fa-plus text ng-scope"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Contact1 *</label>
+                        <div class="col-lg-8">
+                            <input type="text" placeholder="Contact1" class="form-control" ng-model="data.Tenant.tenant_contact1" only-digits="">
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Contact2</label>
+                        <div class="col-lg-8">
+                            <input type="text" placeholder="Contact2" class="form-control" ng-model="data.Tenant.tenant_contact2" only-digits="">
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Fax</label>
+                        <div class="col-lg-8">
+                            <input type="text" placeholder="Fax" class="form-control" ng-model="data.Tenant.tenant_fax" only-digits="">
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Mobile</label>
+                        <div class="col-lg-8">
+                            <input type="text" placeholder="Mobile" class="form-control" ng-model="data.Tenant.tenant_mobile" only-digits="">
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Email *</label>
+                        <div class="col-lg-8">
+                            <input type="text" placeholder="abc@abc.com" class="form-control" ng-model="data.Tenant.tenant_email">
+                        </div>
+                    </div>
+                    <div class="line line-dashed b-b line-lg "></div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">Website</label>
+                        <div class="col-lg-8">
+                            <input type="text" placeholder="http://abc.com" class="form-control" ng-model="data.Tenant.tenant_url">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <footer class="panel-footer text-right bg-light lter">
+            <button class="btn m-b-xs  btn-success save-btn" ng-click="saveBranch(data.form_type)">Save</button>
+            &nbsp;
+            <button class="btn m-b-xs  btn-dark" ng-click="$state.go('app.org_list')"><i class="fa fa-times"></i> Cancel</button>
+            &nbsp;
+        </footer>
+    </div>
+</div>

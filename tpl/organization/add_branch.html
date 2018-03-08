@@ -1,0 +1,17 @@
+<div ng-controller="OrganizationController">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Create Branch ({{organization.org.org_name}})</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <form name="userForm" class="form-horizontal form-validation" novalidate="" ng-init="data.form_type = 'add'; initForm();">
+                <div ng-include="'tpl/organization/_branch_form.html'">
+                    {% include 'tpl/organization/_branch_form.html' %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

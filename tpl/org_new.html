@@ -1,0 +1,41 @@
+<div class="bg-light lter b-b wrapper-md ng-scope">
+    <h1 class="m-n font-thin h3">Create Organization</h1>
+</div>
+<div class="wrapper-md ng-scope" ng-controller="OrganizationController">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="panel panel-default">
+                <div class="panel-heading font-bold">Organization Details</div>
+                <div class="panel-body">
+                    <form name="form" action="#" class="bs-example form-horizontal ng-pristine ng-valid" novalidate>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Name</label>
+                            <div class="col-lg-10">
+                                <input type="text" placeholder="Name" class="form-control" ng-model="tenant.tenant_name" required>
+                                <span style="color:red" ng-show="form.tenant.tenant_name.$dirty && form.tenant.tenant_name.$invalid">
+                                    <span ng-show="form.tenant.tenant_name.$error.required">Name is required.</span>
+                                </span>
+                                <!--<span class="help-block m-b-none">Example block-level help text here.</span>-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">Address</label>
+                            <div class="col-lg-10">
+                                <input type="text" placeholder="Name" class="form-control" ng-model="tenant.tenant_address" required>
+                                <!--<span class="help-block m-b-none">Example block-level help text here.</span>-->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-lg-10">
+                                <button class="btn btn-sm btn-info" type="submit" ng-click="submitForm()" ng-disabled='form.$invalid'>Sign in</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

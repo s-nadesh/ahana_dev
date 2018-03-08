@@ -1,0 +1,325 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Organizations</h1>
+</div>
+    
+<div class="wrapper-md" ng-controller="OrganizationController" ng-init="loadOrganizationsList()">
+    
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <button class="btn btn-sm btn-grey" ng-click="loadOrganizationsList()"> 
+                &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+            </button>
+            <button ng-click="$state.go('app.org_new')" class="btn btn-sm btn-info pull-right"><i class="fa fa-plus"></i> &nbsp; Create Organization</button>
+        </div>
+        
+        
+        <!--<div class="panel-heading">pipe/ajax plugin</div>-->
+        <!--<table st-table="rowCollectionPip"  st-pipe="callServer" class="table table-striped">-->
+        <table st-table="displayedCollection"  st-safe-src="rowCollection" class="table table-striped">
+            <thead>
+                <tr>
+                    <th st-sort="tenant_name">Organization Name</th>
+                    <th st-sort="lastName">Address</th>
+                    <th st-sort="birthDate">City</th>
+                    <th st-sort="balance">State</th>
+                    <th>Country</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <th>
+                        <input st-search="'tenant_name'" placeholder="search for organizationname" class="input-sm form-control" type="search"/>
+                    </th>
+                    <th colspan="5">
+                        <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+                    </th>
+                </tr>
+            </thead>
+            <tbody ng-hide="isLoading">
+                <tr ng-repeat="row in displayedCollection | orderBy: tenant_name">
+                    <td>{{row.tenant_name}}</td>
+                    <td>{{row.tenant_address}}</td>
+                    <td>{{row.tenant_city_name}}</td>
+                    <td>{{row.tenant_state_name}}</td>
+                    <td>{{row.tenant_country_name}}</td>
+                    <td>
+                        {{row.tenant_email}}
+                    </td>
+                    <td>
+                        <label class="i-checks "> 
+                            <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="row.status" ng-change='updateStatus("CoTenant", row.tenant_id)'> 
+                            <i></i>
+                        </label>
+                    </td>
+                    <td><a title="Edit" ui-sref="app.org_edit({id: '{{row.tenant_id}}'})"><i class="fa fa-pencil"></i></a></td>
+                </tr>
+            </tbody>
+            <tbody ng-show="isLoading">
+                <tr>
+                    <td colspan="8" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="8" class="text-center">
+                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+        
+        <!--        <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th st-sort="RoleID">first name</th>
+                            <th st-sort="Name">last name</th>
+
+                        </tr>
+                        <tr>
+                            <th>
+                                <input st-search="'RoleID'" placeholder="search for firstname" class="input-sm form-control" type="search" />
+                            </th>
+                            <th colspan="4">
+                                <input st-search placeholder="global search" class="input-sm form-control" type="search" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="row in displayedCollection">
+                            <td>{{row.RoleID| uppercase}}</td>
+                            <td>{{row.Name}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>-->
+    </div>
+    <!--  <div class="panel panel-default">
+        <div class="panel-heading">
+          stSafeSrc attribute
+        </div>
+        <div class="panel-body">
+          <button type="button" ng-click="addRandomItem(row)" class="btn btn-sm btn-success">
+            <i class="glyphicon glyphicon-plus">
+            </i> Add random item
+          </button>
+        </div>
+        <table st-table="displayedCollection" st-safe-src="rowCollection" class="table table-striped">
+          <thead>
+          <tr>
+            <th st-sort="firstName">first name</th>
+            <th st-sort="lastName">last name</th>
+            <th st-sort="birthDate">birth date</th>
+            <th st-sort="balance">balance</th>
+            <th width="50"></th>
+          </tr>
+          <tr>
+            <th colspan="5"><input st-search="" class="form-control" placeholder="global search ..." type="text"/></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="row in displayedCollection">
+            <td>{{row.firstName}}</td>
+            <td>{{row.lastName}}</td>
+            <td>{{row.birthDate}}</td>
+            <td>{{row.balance}}</td>
+            <td>
+              <button type="button" ng-click="removeItem(row)" class="btn btn-xs btn-default">
+                <i class="fa fa-times"></i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">Format data & cell templating</div>
+        <table st-table="rowCollectionBasic" class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th>first name</th>
+            <th>last name</th>
+            <th>birth date</th>
+            <th>balance</th>
+            <th>email</th>
+            <th width="50"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="row in rowCollectionBasic">
+            <td>{{row.firstName | uppercase}}</td>
+            <td>{{row.lastName}}</td>
+            <td>{{row.birthDate | date}}</td>
+            <td>{{row.balance | currency}}</td>
+            <td>
+              <button class="btn btn-xs" data-placement="top" data-content="{{row.email}}" bs-popover type="button">
+                <i class="fa fa-eye"></i>
+              </button>
+              <a ng-href="mailto:{{row.email}}">email</a></td>
+            <td>
+              <button type="button" ng-click="removeRow(row)" class="btn btn-xs btn-default">
+                <i class="fa fa-times">
+                </i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">Search/filter data</div>
+        <div class="panel-body">
+          <form>
+            <label for="predicate">selected predicate:</label>
+            <select class="form-control" id="predicate" ng-model="selectedPredicate" ng-options="predicate for predicate in predicates"></select>
+          </form>
+        </div>
+        <table st-table="rowCollectionBasic" class="table table-striped">
+          <thead>
+          <tr>
+            <th st-sort="firstName">first name</th>
+            <th st-sort="lastName">last name</th>
+            <th st-sort="birthDate">birth date</th>
+            <th st-sort="balance">balance</th>
+            <th>email</th>
+          </tr>
+          <tr>
+            <th>
+              <input st-search="'firstName'" placeholder="search for firstname" class="input-sm form-control" type="search"/>
+            </th>
+            <th colspan="3">
+              <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+            </th>
+            <th>
+              <input st-search="selectedPredicate" placeholder="bound predicate" class="input-sm form-control" type="search"/>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="row in rowCollectionBasic">
+            <td>{{row.firstName | uppercase}}</td>
+            <td>{{row.lastName}}</td>
+            <td>{{row.birthDate | date}}</td>
+            <td>{{row.balance | currency}}</td>
+            <td><a ng-href="mailto:{{row.email}}">email</a></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">Client side Pagination</div>
+        <div class="panel-body">
+          <form>
+            <label>items by page</label>
+            <input class="input-sm form-control" name="items" id="items" type="number" ng-model="itemsByPage" >
+          </form>
+        </div>
+        <table st-table="rowCollectionPage" class="table table-striped">
+          <thead>
+            <tr>
+              <th st-sort="firstName">first name</th>
+              <th st-sort="lastName">last name</th>
+              <th st-sort="birthDate">birth date</th>
+              <th st-sort="balance">balance</th>
+              <th>email</th>
+            </tr>
+            <tr>
+              <th>
+                <input st-search="'firstName'" placeholder="search for firstname" class="input-sm form-control" type="search"/>
+              </th>
+              <th colspan="4">
+                <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in rowCollectionPage">
+              <td>{{row.firstName | uppercase}}</td>
+              <td>{{row.lastName}}</td>
+              <td>{{row.birthDate | date}}</td>
+              <td>{{row.balance | currency}}</td>
+              <td><a ng-href="mailto:{{row.email}}">email</a></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5" class="text-center">
+                <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7" class="no-margin"></div>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>-->
+
+
+</div>
+
+
+<!--<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n h3">Organization Details</h1>
+</div>
+
+<div class="wrapper-md" ng-controller="OrganizationController" ng-init="loadRoomList()">
+  <div class="panel panel-default">
+    <div class="row wrapper">
+      <div class="col-sm-8 m-b-xs">
+        <button class="btn btn-sm btn-grey" ng-click="loadRoomList()"> &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; </button>
+        &nbsp; &nbsp;
+        <span ng-show="roomSelected > 0">
+          <button class="btn btn-sm btn-grey" ng-click="editMultipleRooms()"><i class="fa fa-pencil"></i> &nbsp; Edit</button> &nbsp; &nbsp;
+          <button class="btn btn-sm btn-grey" ng-click="deleteMultipleRooms()"><i class="fa fa-trash"></i> &nbsp; Delete</button>
+        </span>
+      </div>
+      <div class="col-sm-2">
+      </div>
+      <div class="col-sm-2 pull-right">
+        <button class=" btn btn-sm btn-info pull-right" ng-click="$state.go('app.createRoom')"><i class="fa fa-plus"></i> &nbsp; New Room</button>
+      </div>
+    </div>
+    <div class="wrapper table-responsive" ng-show="errorData">
+      <div ng-repeat="error in errorData.errors" class="text-danger">
+        <i class="fa fa-warning"></i> {{error.longMessage}}
+      </div>
+    </div>
+    <div class="wrapper table-responsive" ng-show="!errorData">
+      <table ng-table="tableParams" class="table table-striped b-t b-light">
+        <tr ng-repeat="room in $data track by room.oid">
+          <td class="text-left" header="'ng-table/headers/checkbox.html'">
+            <label class="i-checks "> <input type="checkbox" ng-model="checkboxes.items[room.oid]" /> <i></i> </label>
+          </td>
+          <td data-title="'Ward Name'" class="text-left" sortable="'wardName'">
+            {{room.wardName}}
+          </td>
+          <td data-title="'BED Name'" class="text-left" sortable="'bedName'">
+            {{room.bedName}}
+          </td>
+          <td data-title="'Occupancy Status'" class="text-left" sortable="'occupancyStatus'">
+            {{room.occupancyStatus}}
+          </td>
+          <td data-title="'Maintenance Status'" class="text-left" sortable="'maintenanceName'">
+            {{room.maintenanceName}}
+          </td>
+          <td data-title="'Status'" class="text-left" sortable="'status'">
+            <label class="i-checks "> <input type="checkbox" disabled ng-true-value="'ACT'" ng-false-value="'INACT'" name="status" ng-model="room.status"> <i></i> </label>
+          </td>
+          <td class="text-right">
+            <a ui-sref="app.editRoom({oid:room.oid})"> <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i> </a>&nbsp;&nbsp;&nbsp; <a ng-click="deleteRoom(room.oid, room.name)"> <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i> </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>-->

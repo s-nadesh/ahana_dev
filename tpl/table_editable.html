@@ -1,0 +1,484 @@
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n h3">In-Patient</h1>
+</div>
+
+
+<div class="wrapper-md">
+<div class="panel panel-default">
+    <!--<div class="panel-heading">
+      Responsive Table
+    </div>-->
+    <div class="row wrapper">
+      <div class="col-sm-5 m-b-xs">
+      
+      <button class="btn btn-sm btn-default"> &nbsp; &nbsp; <i class="fa fa-repeat"></i>  &nbsp; &nbsp; </button>    
+      
+      <div class="btn-group" dropdown is-open="status.isopen">
+            <button type="button" class=" btn btn-sm btn-default" dropdown-toggle ng-disabled="disabled">
+             More &nbsp;&nbsp;<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href>Action</a></li>
+              <li><a href>Another action</a></li>
+              <li><a href>Something else here</a></li>
+              <li class="divider"></li>
+              <li><a href>Separated link</a></li>
+            </ul>
+          </div>
+                    
+      </div>
+      <div class="col-sm-4">
+      </div>
+      <div class="col-sm-2 pull-right">
+      
+        <div class="input-group">
+          
+          <div class="btn-group" dropdown>
+            <button type="button" class=" btn btn-sm btn-default" dropdown-toggle >
+              &nbsp;&nbsp; Select &nbsp;&nbsp;<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu1">
+              <li><a href>Action</a></li>
+              <li><a href>Another action</a></li>
+              <li><a href>Something else here</a></li>
+              <li class="divider"></li>
+              <li><a href>Separated link</a></li>
+            </ul>
+          </div>
+          
+         <div class="btn-group" dropdown>
+            <button type="button" class=" btn btn-sm btn-default" dropdown-toggle >
+            &nbsp;&nbsp;  <i class="fa fa-cog"></i>   &nbsp;&nbsp;<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu1">
+              <li><a href>Action</a></li>
+              <li><a href>Another action</a></li>
+              <li><a href>Something else here</a></li>
+              <li class="divider"></li>
+              <li><a href>Separated link</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive in-patient-table">
+     <script type="text/ng-template" id="myModalContent.html">
+            <div ng-include="'tpl/inpatient.edit.html'"></div>
+          </script>
+          
+      <table  class="table table-striped b-t b-light">
+        <thead>
+          <tr>
+            <th width="21"  style="width:20px;">
+              <label class="i-checks m-b-none">
+                <input type="checkbox"><i></i>
+              </label>
+            </th>
+            <th style="width:40px;">&nbsp;</th>
+            <th>Patient</th>
+            <th>case sheet#</th>
+            <th>Admission<br>
+Date</th>
+            <th>rOOM#</th>
+            <th>consultant</th>
+            <th>remarks</th>
+            <th style="width:150px;"> Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td align="center" valign="middle"><img src="img/symbol1.png"  alt="" /></td>
+            <td><img src="img/man-icon.png" width="49" height="49" alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td>CS123456</td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            15-Feb-2015 <br/>  <span> 10 Days ago </span></td>
+            <td>1234 <br/> <span> Delux </span> </td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+            <td> <div class="actions-icons-cont">  
+           
+         
+            
+            <a href="#">  <i tooltip="Cancel" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-times-circle"></i>  </a>
+      <span ng-controller="ModalDemoCtrl"><a href="#" ng-click="open()">  <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i>   </a></span>
+             
+             <a href="#">  <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i>   </a>
+             
+             <span class="dropdown hidden-sm" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
+              <img src="img/actions-icon.png"  alt="" />
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu ">
+              <li><a href="#"> Action 1</a></li>
+              <li><a href="#">  Action 2 </a></li>
+              <li><a href="#"> Action 3</a></li>
+              <li><a href="#">  Action 5</a></li>
+            </ul>
+            <!-- / dropdown -->
+          </span>
+
+               </div>  </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td align="center" valign="middle">&nbsp;</td>
+            <td><img src="img/man-icon2.png" width="49" height="49" alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td>CS123456</td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            15-Feb-2015 <br/>  <span> 10 Days ago </span></td>
+            <td>1234 <br/> <span> Delux </span> </td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+            <td> <div class="actions-icons-cont">  
+           
+          
+            
+            <a href="#">  <i tooltip="Cancel" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-times-circle"></i>  </a>
+             <span ng-controller="ModalDemoCtrl"><a href="#" ng-click="open()">  <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i>   </a></span>
+             <a href="#">  <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i>   </a>
+             
+             <span class="dropdown hidden-sm" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
+              <img src="img/actions-icon.png"  alt="" />
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu ">
+              <li><a href="#"> Action 1</a></li>
+              <li><a href="#">  Action 2 </a></li>
+              <li><a href="#"> Action 3</a></li>
+              <li><a href="#">  Action 5</a></li>
+            </ul>
+            <!-- / dropdown -->
+          </span>
+
+               </div>  </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td align="center" valign="middle"><img src="img/symbol2.png"  alt="" /></td>
+            <td><img src="img/man-icon.png" width="49" height="49" alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td>CS123456</td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            15-Feb-2015 <br/>  <span> 10 Days ago </span></td>
+            <td>1234 <br/> <span> Delux </span> </td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+            <td> <div class="actions-icons-cont">  
+           
+          
+            
+            <a href="#">  <i tooltip="Cancel" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-times-circle"></i>  </a>
+              <span ng-controller="ModalDemoCtrl"><a href="#" ng-click="open()">  <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i>   </a></span>
+             <a href="#">  <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i>   </a>
+             
+             <span class="dropdown hidden-sm" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
+              <img src="img/actions-icon.png"  alt="" />
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu ">
+              <li><a href="#"> Action 1</a></li>
+              <li><a href="#">  Action 2 </a></li>
+              <li><a href="#"> Action 3</a></li>
+              <li><a href="#">  Action 5</a></li>
+            </ul>
+            <!-- / dropdown -->
+          </span>
+
+               </div>  </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td align="center" valign="middle">&nbsp;</td>
+            <td><img src="img/man-icon2.png" width="49" height="49" alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td>CS123456</td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            15-Feb-2015 <br/>  <span> 10 Days ago </span></td>
+            <td>1234 <br/> <span> Delux </span> </td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+            <td> <div class="actions-icons-cont">  
+           
+          
+            
+            <a href="#">  <i tooltip="Cancel" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-times-circle"></i>  </a>
+              <span ng-controller="ModalDemoCtrl"><a href="#" ng-click="open()">  <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i>   </a></span>
+             <a href="#">  <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i>   </a>
+             
+             <span class="dropdown hidden-sm" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
+              <img src="img/actions-icon.png"  alt="" />
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu ">
+              <li><a href="#"> Action 1</a></li>
+              <li><a href="#">  Action 2 </a></li>
+              <li><a href="#"> Action 3</a></li>
+              <li><a href="#">  Action 5</a></li>
+            </ul>
+            <!-- / dropdown -->
+          </span>
+
+               </div>  </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td align="center" valign="middle"><img src="img/symbol1.png"  alt="" /></td>
+            <td><img src="img/man-icon.png" width="49" height="49" alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td>CS123456</td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            15-Feb-2015 <br/>  <span> 10 Days ago </span></td>
+            <td>1234 <br/> <span> Delux </span> </td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+            <td> <div class="actions-icons-cont">  
+           
+          
+            
+            <a href="#">  <i tooltip="Cancel" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-times-circle"></i>  </a>
+              <span ng-controller="ModalDemoCtrl"><a href="#" ng-click="open()">  <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i>   </a></span>
+             <a href="#">  <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i>   </a>
+             
+             <span class="dropdown hidden-sm" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
+              <img src="img/actions-icon.png"  alt="" />
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu ">
+              <li><a href="#"> Action 1</a></li>
+              <li><a href="#">  Action 2 </a></li>
+              <li><a href="#"> Action 3</a></li>
+              <li><a href="#">  Action 5</a></li>
+            </ul>
+            <!-- / dropdown -->
+          </span>
+
+               </div>  </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td align="center" valign="middle">&nbsp;</td>
+            <td><img src="img/man-icon2.png" width="49" height="49" alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td>CS123456</td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            15-Feb-2015 <br/>  <span> 10 Days ago </span></td>
+            <td>1234 <br/> <span> Delux </span> </td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+            <td> <div class="actions-icons-cont">  
+           
+          
+            
+            <a href="#">  <i tooltip="Cancel" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-times-circle"></i>  </a>
+              <span ng-controller="ModalDemoCtrl"><a href="#" ng-click="open()">  <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i>   </a></span>
+             <a href="#">  <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i>   </a>
+             
+             <span class="dropdown hidden-sm" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
+              <img src="img/actions-icon.png"  alt="" />
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu ">
+              <li><a href="#"> Action 1</a></li>
+              <li><a href="#">  Action 2 </a></li>
+              <li><a href="#"> Action 3</a></li>
+              <li><a href="#">  Action 5</a></li>
+            </ul>
+            <!-- / dropdown -->
+          </span>
+
+               </div>  </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td align="center" valign="middle"><img src="img/symbol2.png"  alt="" /></td>
+            <td><img src="img/man-icon.png" width="49" height="49" alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td>CS123456</td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            15-Feb-2015 <br/>  <span> 10 Days ago </span></td>
+            <td>1234 <br/> <span> Delux </span> </td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+            <td> <div class="actions-icons-cont">  
+           
+          
+            
+            <a href="#">  <i tooltip="Cancel" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-times-circle"></i>  </a>
+              <span ng-controller="ModalDemoCtrl"><a href="#" ng-click="open()">  <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i>   </a></span>
+             <a href="#">  <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i>   </a>
+             
+             <span class="dropdown hidden-sm" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
+              <img src="img/actions-icon.png"  alt="" />
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu ">
+              <li><a href="#"> Action 1</a></li>
+              <li><a href="#">  Action 2 </a></li>
+              <li><a href="#"> Action 3</a></li>
+              <li><a href="#">  Action 5</a></li>
+            </ul>
+            <!-- / dropdown -->
+          </span>
+
+               </div>  </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td align="center" valign="middle">&nbsp;</td>
+            <td><img src="img/man-icon2.png" width="49" height="49" alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td>CS123456</td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            15-Feb-2015 <br/>  <span> 10 Days ago </span></td>
+            <td>1234 <br/> <span> Delux </span> </td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+            <td> <div class="actions-icons-cont">  
+           
+          
+            
+            <a href="#">  <i tooltip="Cancel" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-times-circle"></i>  </a>
+              <span ng-controller="ModalDemoCtrl"><a href="#" ng-click="open()">  <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i>   </a></span>
+             <a href="#">  <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i>   </a>
+             
+             <span class="dropdown hidden-sm" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
+              <img src="img/actions-icon.png"  alt="" />
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu ">
+              <li><a href="#"> Action 1</a></li>
+              <li><a href="#">  Action 2 </a></li>
+              <li><a href="#"> Action 3</a></li>
+              <li><a href="#">  Action 5</a></li>
+            </ul>
+            <!-- / dropdown -->
+          </span>
+
+               </div>  </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td align="center" valign="middle"><img src="img/symbol1.png"  alt="" /></td>
+            <td><img src="img/man-icon.png" width="49" height="49" alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td>CS123456</td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            15-Feb-2015 <br/>  <span> 10 Days ago </span></td>
+            <td>1234 <br/> <span> Delux </span> </td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+            <td> <div class="actions-icons-cont">  
+           
+          
+            
+            <a href="#">  <i tooltip="Cancel" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-times-circle"></i>  </a>
+              <span ng-controller="ModalDemoCtrl"><a href="#" ng-click="open()">  <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i>   </a></span>
+             <a href="#">  <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i>   </a>
+             
+             <span class="dropdown hidden-sm" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
+              <img src="img/actions-icon.png"  alt="" />
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu ">
+              <li><a href="#"> Action 1</a></li>
+              <li><a href="#">  Action 2 </a></li>
+              <li><a href="#"> Action 3</a></li>
+              <li><a href="#">  Action 5</a></li>
+            </ul>
+            <!-- / dropdown -->
+          </span>
+
+               </div>  </td>
+          </tr>
+          <tr>
+            <td align="center" valign="middle"><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
+            <td align="center" valign="middle">&nbsp;</td>
+            <td><img src="img/man-icon2.png" width="49" height="49" alt="" />  <a href="#">Mr. PatIent name </a>(35y) <br/> 
+            AH12345</td>
+            <td>CS123456</td>
+            <td>
+              <a href class="active" ui-toggle-class><i class="fa fa-times text-danger text"></i></a>
+            15-Feb-2015 <br/>  <span> 10 Days ago </span></td>
+            <td>1234 <br/> <span> Delux </span> </td>
+            <td>Dr. Vikhram</td>
+            <td>Comments if any</td>
+            <td> <div class="actions-icons-cont">  
+           
+          
+            
+            <a href="#">  <i tooltip="Cancel" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-times-circle"></i>  </a>
+              <span ng-controller="ModalDemoCtrl"><a href="#" ng-click="open()">  <i tooltip="Modify" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-pencil"></i>   </a></span>
+             <a href="#">  <i tooltip="Delete" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" class="fa fa-trash"></i>   </a>
+             
+             <span class="dropdown hidden-sm" dropdown>
+            <a href class="dropdown-toggle" dropdown-toggle>
+              <img src="img/actions-icon.png"  alt="" />
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu ">
+              <li><a href="#"> Action 1</a></li>
+              <li><a href="#">  Action 2 </a></li>
+              <li><a href="#"> Action 3</a></li>
+              <li><a href="#">  Action 5</a></li>
+            </ul>
+            <!-- / dropdown -->
+          </span>
+
+               </div>  </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+        
+      
+    <footer class="panel-footer">
+      <div class="row">
+        <div class="col-sm-4 hidden-xs">
+          <select class="input-sm form-control w-sm inline v-middle">
+            <option value="0">Bulk action</option>
+            <option value="1">Delete selected</option>
+            <option value="2">Bulk edit</option>
+            <option value="3">Export</option>
+          </select>
+          <button class="btn btn-sm btn-default">Apply</button>                  
+        </div>
+        <div class="col-sm-4 text-center">
+          <small class="text-muted inline m-t-sm m-b-sm">showing 20-30 of 50 items</small>
+        </div>
+        <div class="col-sm-4 text-right text-center-xs">                
+          <ul class="pagination pagination-sm m-t-none m-b-none">
+            <li><a href><i class="fa fa-chevron-left"></i></a></li>
+            <li><a href>1</a></li>
+            <li><a href>2</a></li>
+            <li><a href>3</a></li>
+            <li><a href>4</a></li>
+            <li><a href>5</a></li>
+            <li><a href><i class="fa fa-chevron-right"></i></a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+</div>
