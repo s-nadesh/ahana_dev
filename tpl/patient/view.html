@@ -1,0 +1,558 @@
+<div ng-controller="PatientController" ng-init="mode = 'view'; loadView()">
+    <div ng-show="mode == 'view'">
+        <div class="bg-light lter b-b wrapper-md"> <!-- ng-init="loadView()" -->
+            <h1 class="m-n h3">View Details</h1>
+        </div>
+        <div class="wrapper-md">
+            <div ng-include="'tpl/blocks/alert.html'">
+                {% include 'tpl/blocks/alert.html' %}
+            </div>
+            <div class="row">
+                <div class="col-sm-6" ng-show="view_data.childrens_global_ids != ''">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <span ng-if="view_data.migration_created_by != ''">
+                                <b> Merged By :  </b> {{view_data.migration_created_by}}
+                            </span>
+                            <span>
+                                <b> Secondary Patient ID's :  </b> {{view_data.childrens_global_ids}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 pull-right">
+                    <div class="btn-group btn-group-justified">
+                        <a class="btn btn-default" ng-click="printLabel()">
+                            <i class="fa fa-print"></i>  Print Label
+                        </a>
+                        <a class="btn btn-info" ng-click="changeMode('update')">
+                            <i class="fa fa-pencil"></i>  Update Patient
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <form name="formValidate" class="form-horizontal form-validation">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Registration Date:</label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.patient_reg_date}}  </p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Name:</label>
+                                    <div class="col-sm-9">
+                                        <p> {{view_data.fullname}} </p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Last Name:   </label>
+                                    <div class="col-sm-9">
+                                        <p> {{view_data.patient_lastname}} </p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"> Sex: </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{app.patientDetail.patientSex}}  </p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"> Age: </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.patient_age_ym}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"> DOB: </label>
+                                    <div class="col-sm-9">
+                                        <p>{{view_data.patient_dob}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Mobile No.:     </label>
+                                    <div class="col-sm-9">
+                                        <p>{{view_data.patient_mobile}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <!--                                <div class="form-group">
+                                                                    <label class="col-sm-3 control-label">Billing:     </label>
+                                                                    <div class="col-sm-9">
+                                                                        <p>{{view_data.bill_type}}</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="line line-dashed b-b line-lg "></div>-->
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Blood Group:</label>
+                                    <div class="col-sm-9">
+                                        <p> {{view_data.blood_group}} </p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Category:     </label>
+                                    <div class="col-sm-9">
+                                        <p>{{view_data.patient_category_fullname}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Secondary Contact:</label>
+                                    <div class="col-sm-9">
+                                        <p>{{view_data.patient_secondary_contact}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Care Taker:</label>
+                                    <div class="col-sm-9">
+                                        <p>{{view_data.care_taker}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Care Taker Name:</label>
+                                    <div class="col-sm-9">
+                                        <p>{{view_data.patient_care_taker_name}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Marital Status:</label>
+                                    <div class="col-sm-9">
+                                        <p> {{view_data.marital_status}} </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <form name="formValidate" class="form-horizontal form-validation">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Occupation:</label>
+                                    <div class="col-sm-9">
+                                        <p>{{view_data.patient_occupation}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Email:</label>
+                                    <div class="col-sm-9">
+                                        <p>{{view_data.patient_email}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Referral Hospital:</label>
+                                    <div class="col-sm-9">
+                                        <p>{{view_data.patient_ref_hospital}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Referral Doctor:</label>
+                                    <div class="col-sm-9">
+                                        <p>{{view_data.patient_ref_doctor}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Current Address:  </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.address.addr_current_address}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">City:  </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.address.city_name}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">State: </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.address.state_name}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Country: </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.address.country_name}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Zip: </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.address.addr_zip}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Permanent Address:  </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.address.addr_perm_address}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">City:  </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.address.perm_city_name}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">State: </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.address.perm_state_name}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Country: </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.address.perm_country_name}}</p>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Zip: </label>
+                                    <div class="col-sm-9">
+                                        <p>  {{view_data.address.addr_perm_zip}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-sm-12">
+                    <h3 class="text-center" ng-if="view_data.casesheetno">
+                        *** Old Casesheet No : {{view_data.casesheetno}} ***
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="mode == 'update'">
+        <div class="bg-light lter b-b wrapper-md">
+            <h1 class="m-n h3">Update Patient</h1>
+        </div>
+        <div class="wrapper-md">
+            <div ng-include="'tpl/blocks/alert.html'">
+                {% include 'tpl/blocks/alert.html' %}
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <form name="formValidate" class="form-horizontal form-validation">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Name * </label>
+                                    <div class="col-sm-9">
+                                        <div class="form-inline">
+                                            <div class="form-group">
+                                                <select class="form-control" ng-model="patdata.PatPatient.patient_title_code" ng-options="titleCode.value as titleCode.label for titleCode in titleCodes| orderBy: label">
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" name="patient_firstname" ng-model="patdata.PatPatient.patient_firstname" class="form-control" placeholder="First Name" ng-minlength="3" focus-me="true">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="text" ng-model="patdata.PatPatient.patient_lastname" class="form-control" placeholder="Last Name" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label"> Gender * </label>
+                                    <div class="col-sm-9">
+                                        <label class="i-checks" ng-repeat="gender in genders">
+                                            <input type="radio" checked="" value="{{gender.value}}" name="a" ng-model="patdata.PatPatient.patient_gender">
+                                            <i></i>
+                                            {{gender.label}}&nbsp; &nbsp;
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">DOB </label>
+                                    <div class="col-sm-3">
+                                        <div class="input-group">
+<!--                                            <input type="text" name="dob" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="patdata.PatPatient.patient_dob" is-open="opened" datepicker-options="dateOptions" close-text="Close" max-date="maxDate" date-disabled="disabled(date, mode)" ng-change="setAgeEmpty();
+                                                            getAge();" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            </span>-->
+                                            <input type="text" name="dob" class="form-control" ng-blur="setAgeEmpty();getAge();" ng-model="patdata.PatPatient.patient_dob" my-date/>
+                                        </div>
+                                    </div>
+<!--                                    <div class="col-sm-4">
+                                        <input type="text" ng-model="patdata.PatPatient.patient_age" class="form-control" placeholder="Age" only-digits="" onkeydown="" ng-change="setDateEmpty();
+                                                        getDOB();">
+                                    </div>-->
+                                    <div class="col-sm-2">
+                                        <input type="text" ng-model="patdata.PatPatient.patient_age_year" class="form-control" placeholder="Age" only-digits="" onkeydown="" ng-change="setDateEmpty();getDOB();">
+                                    </div>
+                                    <label style="float: left; padding-top: 5px;">(Yrs)</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" ng-model="patdata.PatPatient.patient_age_month" class="form-control" placeholder="Months" only-digits="" onkeydown="" ng-change="setDateEmpty();getDOB();">
+                                    </div>
+                                    <label style="float: left; padding-top: 5px;">(Months)</label>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Mobile No *</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" maxlength='10' ng-model="patdata.PatPatient.patient_mobile" class="form-control" placeholder="" >
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <!--                                <div class="form-group">
+                                                                    <label class="col-sm-3 control-label">Billing</label>
+                                                                    <div class="col-sm-9">
+                                                                        <label class="i-checks" ng-repeat="bill_type in bill_types">
+                                                                            <input type="radio" checked="" value="{{bill_type.value}}" name="b" ng-model="patdata.PatPatient.patient_bill_type">
+                                                                            <i></i>
+                                                                            {{bill_type.label}}&nbsp; &nbsp;
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="line line-dashed b-b line-lg "></div>-->
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Blood Group</label>
+                                    <div class="col-sm-9">
+                                        <select ng-model="patdata.PatPatient.patient_blood_group" class="form-control" ng-options="blood.value as blood.label for blood in bloods| orderBy: label">
+                                            <option value="">Select Blood Group</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Category *</label>
+                                    <div class="col-sm-9">
+                                        <select ng-model="patdata.PatPatient.patient_category_id" class="form-control" ng-options="category.patient_cat_id as category.patient_cat_name for category in categories| orderBy: patient_cat_name">
+                                            <option value="">Select Category</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Secondary Contact</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" ng-model="patdata.PatPatient.patient_secondary_contact"  name="patient_secondary_contact" class="form-control" placeholder="Secondary Contact" number-mask="">
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Care Taker</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" ng-model="patdata.PatPatient.patient_care_taker" ng-options="careTaker.value as careTaker.label for careTaker in careTakers| orderBy: label">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Care Taker Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" ng-model="patdata.PatPatient.patient_care_taker_name"  name="patient_care_taker_name" class="form-control" placeholder="Care taker name">
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Marital Status    </label>
+                                    <div class="col-sm-9">
+                                        <select ng-model="patdata.PatPatient.patient_marital_status" class="form-control" ng-options="maritalStatus.value as maritalStatus.label for maritalStatus in maritalStatuses| orderBy: label">
+                                            <option value="">Select Marital Status</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <form name="formValidate" class="form-horizontal form-validation">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Occupation</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-model="patdata.PatPatient.patient_occupation"  name="patient_occupation" class="form-control" placeholder="Occupation">
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Email</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-model="patdata.PatPatient.patient_email"  name="patient_email" class="form-control" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Referral Hospital</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-model="patdata.PatPatient.patient_ref_hospital"  name="patient_ref_hospital" class="form-control" placeholder="Referral Hospital">
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Referral Doctor</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-model="patdata.PatPatient.patient_ref_doctor"  name="patient_ref_doctor" class="form-control" placeholder="Referral Doctor">
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Current Address *</label>
+                                    <div class="col-sm-8">
+                                        <textarea ng-model="patdata.PatPatientAddress.addr_current_address" class="form-control" placeholder="" ></textarea>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Place *</label>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" ng-model="patdata.PatPatientAddress.addr_country_id" ng-options="country.value as country.label for country in countries| orderBy: label" ng-change="updateState2();
+                                                            patdata.PatPatientAddress.addr_state_id = '';
+                                                            patdata.PatPatientAddress.addr_city_id = '';">
+                                            <option value="">Select Country</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select class="form-control" name="State" ng-model="patdata.PatPatientAddress.addr_state_id" ng-options="state.value as state.label for state in availableStates2| orderBy: label" ng-change="updateCity2();
+                                                            patdata.PatPatientAddress.addr_city_id = '';">
+                                            <option value="">Select State</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select class="form-control" name="City" ng-model="patdata.PatPatientAddress.addr_city_id" ng-options="city.value as city.label for city in availableCities2| orderBy: label">
+                                            <option value="">Select City</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Zip *</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-model="patdata.PatPatientAddress.addr_zip" maxlength='6' class="form-control" placeholder="" >
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-4 col-sm-8">
+                                        <label class="i-checks m-b-none">
+                                            <input ng-model="patdata.is_permanent" type="checkbox" name="b[]" ng-click="CopyAddress()"><i></i>
+                                        </label>
+                                        <b>Same as current address</b>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Permanent Address  </label>
+                                    <div class="col-sm-8">
+                                        <textarea ng-model="patdata.PatPatientAddress.addr_perm_address" class="form-control" placeholder="" ></textarea>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Place  </label>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" ng-model="patdata.PatPatientAddress.addr_perm_country_id" ng-options="country.value as country.label for country in countries| orderBy: label" ng-change="updateState();
+                                                            patdata.PatPatientAddress.addr_perm_state_id = '';
+                                                            patdata.PatPatientAddress.addr_perm_city_id = '';">
+                                            <option value="">Select Country</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select class="form-control" name="State" ng-model="patdata.PatPatientAddress.addr_perm_state_id" ng-options="state.value as state.label for state in availableStates| orderBy: label" ng-change="updateCity();
+                                                            patdata.PatPatientAddress.addr_perm_city_id = '';">
+                                            <option value="">Select State</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <select class="form-control" name="City" ng-model="patdata.PatPatientAddress.addr_perm_city_id" ng-options="city.value as city.label for city in availableCities| orderBy: label">
+                                            <option value="">Select City</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg "></div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Zip </label>
+                                    <div class="col-sm-8">
+                                        <input type="text" ng-model="patdata.PatPatientAddress.addr_perm_zip" maxlength='6' class="form-control" placeholder="" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <footer class="panel-footer text-right bg-light lter">
+                <button class="btn m-b-xs  btn-success save-btn" ng-click="saveForm()">Save</button> &nbsp;
+                <!--                <button class="btn m-b-xs  btn-dark " ng-click="mode = 'view'">Cancel</button> &nbsp;-->
+                <button class="btn m-b-xs  btn-dark " ng-click="getPatientdetail()">Cancel</button> &nbsp;
+            </footer>
+        </div>
+    </div>
+</div>

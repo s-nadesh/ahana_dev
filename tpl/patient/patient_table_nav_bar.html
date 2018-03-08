@@ -1,0 +1,39 @@
+<!--                            <a ui-sref="patient.view({id: row.apptPatientData.patient_guid})">
+                                <img src="img/small-icon1.png"  alt="" tooltip="Details" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" />
+                            </a>-->
+
+<a check-access ui-sref="patient.procedure({id: row.apptPatientData.patient_guid})">
+    <img src="img/medi-icon1.png"  alt="" tooltip="Procedures" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" />
+</a>
+
+<a check-access ui-sref="patient.encounter({id: row.apptPatientData.patient_guid})">
+    <img src="img/medi-icon2.png"  alt="" tooltip="Encounters " tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" />
+</a>
+
+<a check-access ui-sref="patient.billing({id: row.apptPatientData.patient_guid})" ng-if="row.encounter_type == 'IP'">
+    <img src="img/medi-icon3.png"  alt="" tooltip=" Billing " tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" />
+</a>
+
+<a check-access ui-sref="patient.allbilling({id: row.apptPatientData.patient_guid})" ng-if="row.encounter_type == 'OP'">
+    <img src="img/medi-icon3.png"  alt="" tooltip=" Billing " tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" />
+</a>
+
+<a check-access ui-sref="patient.prescription({id: row.apptPatientData.patient_guid})">
+    <img src="img/medi-icon4.png"  alt="" tooltip="Prescriptions " tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" />
+</a>
+
+<a check-access ui-sref="patient.consultant({id: row.apptPatientData.patient_guid})">
+    <img src="img/medi-icon5.png"  alt="" tooltip="Consultation " tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" />
+</a>
+
+<!--                            <a href="#">
+                                <img src="img/small-icon7.png"  alt="" tooltip="Documents " tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" />
+                            </a>
+
+                            <a ui-sref="patient.alert({id: row.apptPatientData.patient_guid})">
+                                <img src="img/small-icon8.png"  alt="" tooltip="Alerts  " tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" />
+                            </a>
+
+                            <a ui-sref="patient.billing({id: row.apptPatientData.patient_guid})">
+                                <img src="img/small-icon9.png"  alt="" tooltip="Billing" tooltip-trigger tooltip-animation="false" tooltip-placement="bottom" />
+                            </a>-->

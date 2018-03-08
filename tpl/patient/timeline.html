@@ -1,0 +1,73 @@
+<div ng-controller="PatientTimelineController" ng-init="loadTimeline()">
+    <!--    <div class="bg-light lter b-b wrapper-md">
+            <h1 class="m-n h3">Timeline</h1>
+        </div>-->
+    <div class="bg-light lter b-b wrapper-md" style="width:100%;float:left; padding:10px; padding-bottom:0px; margin-bottom:15px;">
+        <div class="col-sm-9 m-b-xs">  <h1 class="m-n h3">Timeline ({{data.tenant_name}})</h1> </div>
+        <div class="col-sm-3 m-b-xs pull-right right">
+            <b> Shared Organizations : </b> 
+            <select class="form-control" name="Branches" ng-model="data.tenant_id" ng-options="tenant.tenant_id as tenant.branch_name for tenant in tenants| orderBy: label" data-ng-change="switchBranch()">
+            </select>
+
+        </div>
+    </div>
+
+    <div class="wrapper-md">
+        <div class="container">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="legendColorBox">
+                            <div style="border:1px solid #ccc;padding:1px">
+                                <div style="width:4px;height:0;border:5px solid rgb(35,183,229);overflow:hidden"></div>
+                            </div>
+                        </td>
+                        <td class="legendLabel">Clinical Information</td>
+                        <td class="legendColorBox">
+                            <div style="border:1px solid #ccc;padding:1px">
+                                <div style="width:4px;height:0;border:5px solid rgb(39,194,76);overflow:hidden"></div>
+                            </div>
+                        </td>
+                        <td class="legendLabel">Administrative Info</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <div class="wrapper">
+                <ul class="timeline timeline-center">
+                    <li class="tl-header">
+                        <div class="btn btn-info manicon"> <h2> <i class="fa fa-male"></i> </h2></div>
+                    </li>
+                    <li class="{{row.item_class}} {{$index % 2 == 0 ? '' : 'tl-left'}}" ng-repeat="row in timeline track by $index">
+                        <div class="tl-wrap {{row.encounter_color}}">
+                            <!--                            {{row.encounter_id}}
+                                                        {{row.encounter_starts}}
+                                                        <span class="tl-date">04.2014</span>-->
+                            <div class="tl-content panel padder b-a w-md w-auto-xs">
+                                <span class="arrow {{$index % 2 == 0 ? 'left' : 'right'}} pull-up"></span>
+                                <div class="text-lt m-b-sm {{row.box_class}}">
+                                    <div class="timeline-heading"> 
+                                        <b ng-bind-html="row.header"></b>  <br/> <span ng-bind-html="row.header_sub"></span>
+                                    </div>  
+                                    <div class="timeline-timedetails">  
+                                        <i class="fa fa-clock-o"></i>  {{row.date_time| moment:'hh:mma'}}  &nbsp; &nbsp; {{row.date_time| moment:'DDMMM'}}<br/> <span> {{row.date_time| moment:'dddd'}} </span>
+                                        <br/> <span ng-bind-html="row.branch"></span>
+                                    </div> 
+                                </div>
+                                <div class="panel-body b-t b-light" >
+                                    <span style="word-wrap: break-word;" ng-bind-html="row.message"></span>
+                                    <span class="help-block text-right">
+                                        Created By: {{row.created_user}}<br />
+                                        Branch: {{row.tenant_name}}
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

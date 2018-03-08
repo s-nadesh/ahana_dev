@@ -1,0 +1,42 @@
+<div ng-controller="OrganizationController" ng-init="initSettings()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Settings</h1>
+    </div>
+
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form name="shareform" class="form-horizontal form-validation" id="shareform">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Default Patient Share Modules *</label>
+                                        <div class="col-sm-8">
+                                            <div ng-repeat="share_data in config_share_data">
+                                                <label class="i-checks">
+                                                    <!--ng-disabled="share_data.code == 'BASIC'"-->
+                                                    <input type="checkbox" ng-checked="share_data.value == '1'" id="{{share_data.code}}" name="share[{{share_data.code}}]" /> 
+                                                    <i></i> 
+                                                </label> 
+                                                <label for='{{share_data.code}}'>{{share_data.code}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <footer class="panel-footer text-right bg-light lter">
+                                    <button class="btn m-b-xs  btn-success save-btn" ng-click="updateShareSetting()">Save</button>
+                                </footer>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

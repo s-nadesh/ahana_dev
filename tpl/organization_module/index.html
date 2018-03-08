@@ -1,0 +1,59 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Organization Modules</h1>
+</div>
+
+<div class="wrapper-md" ng-controller="OrganizationModulesController" ng-init="loadOrganizationModulesList()">
+
+    <div ng-include="'tpl/blocks/alert.html'">
+        {% include 'tpl/blocks/alert.html' %}
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <button class="btn btn-sm btn-grey" ng-click="loadOrganizationModulesList()"> 
+                &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+            </button>
+        </div>
+
+        <table st-table="displayedCollection"  st-safe-src="rowCollection" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th st-sort="resource_name">Description</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <th>
+                        <input st-search="'resource_name'" placeholder="search for role name" class="input-sm form-control" type="search"/>
+                    </th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody ng-hide="isLoading">
+                <tr ng-repeat="row in displayedCollection| orderBy: resource_name">
+                    <td>
+                        {{row.resource_name}}
+                    </td>
+                    <td>
+                        <label class="i-checks"> 
+                            <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="row.status" ng-change='updateStatus("CoRolesResources", row.role_perm_id)'> 
+                            <i></i>
+                        </label>
+                    </td>
+                </tr>
+            </tbody>
+            <tbody ng-show="isLoading">
+                <tr>
+                    <td colspan="2" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" class="text-center">
+                        <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+</div>

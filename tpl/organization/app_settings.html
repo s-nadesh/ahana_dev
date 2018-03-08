@@ -1,0 +1,410 @@
+<div ng-controller="OrganizationController" ng-init="initSettings()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Application Settings</h1>
+    </div>
+
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="col-sm-12">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="panel panel-default col-sm-12">
+                        <div class="row wrapper">
+                            <div class="col-sm-5 m-b-xs">
+                                <button class="btn btn-sm btn-grey" ng-click="initSettings()"> 
+                                    &nbsp; &nbsp; <i class="fa fa-repeat"></i> &nbsp; &nbsp; 
+                                </button>      
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table  st-table="displayedCollection"  st-safe-src="rowCollection" class="table table-striped b-t b-light">
+                                <thead>
+                                    <tr>
+                                        <th>Key</th>
+                                        <th>Value</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody ng-hide="isLoading">
+                                    <tr ng-repeat="row in displayedCollection| orderBy: key">
+                                        <td>
+                                            {{row.key}}
+                                        </td>
+                                        <td ng-if="row.code == 'CSP'" class="v-middle">
+                                            <label class="i-checks "> 
+                                                <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="row.value" ng-change='updateSetting(row.value, row.config_id)'> 
+                                                <i></i>
+                                            </label>
+                                            <span>
+                                                {{ row.notes || 'empty' }}
+                                            </span>
+                                        </td>
+                                        <td ng-if="row.code == 'ET'" class="v-middle">
+                                            <span editable-text="row.value" e-name="value" e-form="rowform" onbeforesave="checkValue($data)" e-required>
+                                                {{ row.value || 'empty' }}
+                                            </span>
+                                            <span>
+                                                {{ row.notes || 'empty' }}
+                                            </span>
+                                        </td>
+                                        <td ng-show="row.code == 'ET'" style="white-space: nowrap">
+                                            <!-- form -->
+                                            <form editable-form name="rowform" onbeforesave="updateSetting($data, row.config_id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == row">
+                                                <button type="submit" ng-disabled="rowform.$waiting" class="btn m-b-xs btn-info save-btn">
+                                                    Save
+                                                </button>
+                                                <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn m-b-xs btn-default">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                            <div class="buttons" ng-show="!rowform.$visible">
+                                                <button class="btn m-b-xs  btn-primary " ng-click="rowform.$show()"> <i class="fa fa-pencil"></i> Edit</button> 
+                                            </div>  
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                                <tbody ng-show="isLoading">
+                                    <tr>
+                                        <td colspan="3" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                                    </tr>
+                                </tbody>
+
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3" class="text-center">
+                                            <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+
+                            </table>
+                        </div>
+                        <!--            </div>    -->
+                    </div>
+
+                    <!--                    <div class="panel panel-default col-sm-12">
+                                            <br />
+                                            <form name="Purchase" class="form-horizontal" novalidate="" enctype="multipart/form-data">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <b>Purchase Import</b>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="form-group">
+                                                            <input type="file" id="fileInput" file-model="myFile" ui-jq="filestyle" data-icon="false" data-classButton="btn btn-default" data-classInput="form-control inline v-middle input-s">
+                                                        </div>
+                                                        <div class="form-group" ng-show="import_process_text">
+                                                            <span class="text text-primary">{{ import_process_text}}<br /></span>
+                                                            <span class="text text-success" ng-show="progress_imported_rows">Success Row: {{ success_import_rows}}<br /></span>
+                                                            <span class="text text-danger" ng-show="progress_imported_rows">Failed Row: {{ failed_import_rows}}<br /></span>
+                                                            <span class="text text-primary" ng-show="progress_imported_rows">Total Row: {{ total_import_rows}}<br /></span>
+                                                        </div>
+                                                        <div class="form-group" ng-if="import_percent > 0">
+                                                            <div class="progress">
+                                                                <div class="progress-bar" role="progressbar" aria-valuenow="{{ import_percent}}" aria-valuemin="0" aria-valuemax="100" style="width:{{ import_percent}}%">
+                                                                    <span class="" style="color: black">{{ import_percent | number:2}}% Complete</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group" ng-if="import_error_log">
+                                                            <button class="btn btn-xs btn-danger pull-right" ng-click="showImportErrorLog()">Error Log</button>
+                                                        </div>
+                                                    </div>
+                                                    <footer class="panel-footer text-right bg-light lter">
+                                                        <button class="btn m-b-xs  btn-success save-btn" ng-click="importCsv()">Import</button>
+                                                    </footer>
+                                                </div>
+                                            </form>
+                                        </div>-->
+
+                    <!--                    <div class="panel panel-default col-sm-12">
+                                            <div class="panel-body">
+                                                <form name="Product" class="form-horizontal" novalidate="" enctype="multipart/form-data">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <b>Product Import</b>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="form-group">
+                                                                <input type="file" id="fileInputProduct" file-model="masterProducts" ui-jq="filestyle" data-icon="false" data-classButton="btn btn-default" data-classInput="form-control inline v-middle input-s">
+                                                            </div>
+                                                            <div class="form-group" ng-show="product_import_process_text">
+                                                                <span class="text text-primary">{{ product_import_process_text}}<br /></span>
+                                                                <span class="text text-success" ng-show="progress_product_imported_rows">Success Row: {{ success_product_import_rows}}<br /></span>
+                                                                <span class="text text-danger" ng-show="progress_product_imported_rows">Failed Row: {{ failed_product_import_rows}}<br /></span>
+                                                                <span class="text text-primary" ng-show="progress_product_imported_rows">Total Row: {{ total_product_import_rows}}<br /></span>
+                                                            </div>
+                                                            <div class="form-group" ng-if="import_product_percent > 0">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ import_product_percent}}" aria-valuemin="0" aria-valuemax="100" style="width:{{ import_product_percent}}%">
+                                                                        <span class="" style="color: black">
+                                                                            {{ import_product_percent | number:2}}% Complete
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                                                                    <div class="form-group" ng-if="product_import_error_log">
+                                                                                                        <button class="btn btn-xs btn-danger pull-right" ng-click="showProductImportErrorLog()">Error Log</button>
+                                                                                                    </div>
+                                                        </div>
+                                                        <footer class="panel-footer text-right bg-light lter">
+                                                            <button class="btn m-b-xs  btn-success save-btn" ng-click="importProducts()">Import</button>
+                                                        </footer>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>-->
+
+                    <!--                    <div class="panel panel-default col-sm-12">
+                                            <div class="panel-body">
+                                                <form name="stockBatchwise" class="form-horizontal" novalidate="" enctype="multipart/form-data">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <b>Stock Batchwise Import</b>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="form-group">
+                                                                <input type="file" id="fileInputBatchwise" file-model="stockBatchwise" ui-jq="filestyle" data-icon="false" data-classButton="btn btn-default" data-classInput="form-control inline v-middle input-s">
+                                                            </div>
+                                                            <div class="form-group" ng-show="stk_import_process_text">
+                                                                <span class="text text-primary">{{ stk_import_process_text}}<br /></span>
+                                                                <span class="text text-success" ng-show="progress_stk_imported_rows">Success Row: {{ success_stk_import_rows}}<br /></span>
+                                                                <span class="text text-danger" ng-show="progress_stk_imported_rows">Failed Row: {{ failed_stk_import_rows}}<br /></span>
+                                                                <span class="text text-primary" ng-show="progress_stk_imported_rows">Total Row: {{ total_stk_import_rows}}<br /></span>
+                                                            </div>
+                                                            <div class="form-group" ng-if="import_stk_percent > 0">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ import_stk_percent}}" aria-valuemin="0" aria-valuemax="100" style="width:{{ import_stk_percent}}%">
+                                                                        <span class="" style="color: black">
+                                                                            {{ import_stk_percent | number:2}}% Complete
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                                                                    <div class="form-group" ng-if="product_import_error_log">
+                                                                                                        <button class="btn btn-xs btn-danger pull-right" ng-click="showProductImportErrorLog()">Error Log</button>
+                                                                                                    </div>
+                                                        </div>
+                                                        <footer class="panel-footer text-right bg-light lter">
+                                                            <button class="btn m-b-xs  btn-success save-btn" ng-click="importStockBatchwise()">Import</button>
+                                                        </footer>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>-->
+
+                    <!-- START -->
+                    <!--                    <div class="panel panel-default col-sm-12">
+                                            <div class="panel-body">
+                                                <form name="phaMastersUpdate" class="form-horizontal" novalidate="" enctype="multipart/form-data">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <b>Pharmacy Masters Update (Products, Generic and Drugs)</b>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="form-group">
+                                                                <input type="file" id="fileInputPhaMastersUpdate" file-model="phaMastersUpdate" ui-jq="filestyle" data-icon="false" data-classButton="btn btn-default" data-classInput="form-control inline v-middle input-s">
+                                                            </div>
+                                                            <div class="form-group" ng-show="pha_master_import_process_text">
+                                                                <span class="text text-primary">{{ pha_master_import_process_text}}<br /></span>
+                                                                <span class="text text-success" ng-show="progress_pha_master_imported_rows">Success Row: {{ success_pha_master_import_rows}}<br /></span>
+                                                                <span class="text text-danger" ng-show="progress_pha_master_imported_rows">Failed Row: {{ failed_pha_master_import_rows}}<br /></span>
+                                                                <span class="text text-primary" ng-show="progress_pha_master_imported_rows">Total Row: {{ total_pha_master_import_rows}}<br /></span>
+                                                            </div>
+                                                            <div class="form-group" ng-if="import_pha_master_percent > 0">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ import_pha_master_percent}}" aria-valuemin="0" aria-valuemax="100" style="width:{{ import_pha_master_percent}}%">
+                                                                        <span class="" style="color: black">
+                                                                            {{ import_pha_master_percent | number:2}}% Complete
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <footer class="panel-footer text-right bg-light lter">
+                                                            <button class="btn m-b-xs  btn-success save-btn" ng-click="importPhaMasters()">
+                                                                Import
+                                                            </button>
+                                                        </footer>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>-->
+                    <!-- END -->
+
+                    <!--                    <div class="panel panel-default col-sm-12">
+                                            <div class="panel-body">
+                                                <form name="productGSTImport" class="form-horizontal" novalidate="" enctype="multipart/form-data">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <b>Product GST import</b>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="form-group">
+                                                                <input type="file" id="fileInputProductGSTImport" file-model="productGSTImport" ui-jq="filestyle" data-icon="false" data-classButton="btn btn-default" data-classInput="form-control inline v-middle input-s">
+                                                            </div>
+                                                            <div class="form-group" ng-show="product_gst_import_process_text">
+                                                                <span class="text text-primary">{{ product_gst_import_process_text}}<br /></span>
+                                                                <span class="text text-success" ng-show="progress_product_gst_imported_rows">Success Row: {{ success_product_gst_import_rows}}<br /></span>
+                                                                <span class="text text-danger" ng-show="progress_product_gst_imported_rows">Failed Row: {{ failed_product_gst_import_rows}}<br /></span>
+                                                                <span class="text text-primary" ng-show="progress_product_gst_imported_rows">Total Row: {{ total_product_gst_import_rows}}<br /></span>
+                                                            </div>
+                                                            <div class="form-group" ng-if="import_product_gst_percent > 0">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ import_product_gst_percent}}" aria-valuemin="0" aria-valuemax="100" style="width:{{ import_product_gst_percent}}%">
+                                                                        <span class="" style="color: black">
+                                                                            {{ import_product_gst_percent | number:2}}% Complete
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <footer class="panel-footer text-right bg-light lter">
+                                                            <button class="btn m-b-xs  btn-success save-btn" ng-click="importProductGST()">
+                                                                Import
+                                                            </button>
+                                                        </footer>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>-->
+
+                    <!--                    <div class="panel panel-default col-sm-12">
+                                            <div class="panel-body">
+                                                <form name="productPriceImport" class="form-horizontal" novalidate="" enctype="multipart/form-data">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <b>Product Price import</b>
+                                                        </div>
+                                                        <div class="panel-body">
+                                                            <div class="form-group">
+                                                                <input type="file" id="fileInputProductPriceImport" file-model="productPriceImport" ui-jq="filestyle" data-icon="false" data-classButton="btn btn-default" data-classInput="form-control inline v-middle input-s">
+                                                            </div>
+                                                            <div class="form-group" ng-show="product_price_import_process_text">
+                                                                <span class="text text-primary">{{ product_price_import_process_text}}<br /></span>
+                                                                <span class="text text-success" ng-show="progress_product_price_imported_rows">Success Row: {{ success_product_price_import_rows}}<br /></span>
+                                                                <span class="text text-danger" ng-show="progress_product_price_imported_rows">Failed Row: {{ failed_product_price_import_rows}}<br /></span>
+                                                                <span class="text text-primary" ng-show="progress_product_price_imported_rows">Total Row: {{ total_product_price_import_rows}}<br /></span>
+                                                            </div>
+                                                            <div class="form-group" ng-if="import_product_price_percent > 0">
+                                                                <div class="progress">
+                                                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ import_product_price_percent}}" aria-valuemin="0" aria-valuemax="100" style="width:{{ import_product_price_percent}}%">
+                                                                        <span class="" style="color: black">
+                                                                            {{ import_product_price_percent | number:2}}% Complete
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <footer class="panel-footer text-right bg-light lter">
+                                                            <button class="btn m-b-xs  btn-success save-btn" ng-click="importProductPrice()">
+                                                                Import
+                                                            </button>
+                                                        </footer>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>-->
+
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>Prescription Settings</b>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Prescription Footer</label>
+                                    <div class="col-sm-9">
+                                        <div ng-repeat="print_data in config_print_data| orderBy: key">
+                                            <div ng-if="((print_data.code == 'PID') || (print_data.code == 'PIB') || (print_data.code == 'PIA'))">
+                                                <label class="i-checks "> 
+                                                    <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="print_data.value" ng-change='updateSetting(print_data.value, print_data.config_id)'> 
+                                                    <i></i> 
+                                                </label>
+                                                <label for='{{print_data.key}}'>{{print_data.key}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="line line-dashed b-b line-lg"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Print</label>
+                                    <div class="col-sm-9">
+                                        <div ng-repeat="print_data in config_print_data| orderBy: key">
+                                            <div ng-if="((print_data.code != 'PID') && (print_data.code != 'PIB') && (print_data.code != 'PIA'))">
+                                                <label class="i-checks "> 
+                                                    <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="print_data.value" ng-change='updateSetting(print_data.value, print_data.config_id)'> 
+                                                    <i></i> 
+                                                </label>
+                                                <label for='{{print_data.key}}'>{{print_data.key}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-12">
+            <div class="col-sm-6" ng-init="initPharmacyBranch()">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <b>Pharmacy Branch</b> 
+                            <div class="pull-right"><a class="label bg-primary" ng-click="updateEmptypharmacy('0')">Reset</a></div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-sm-9">
+                                    <div ng-repeat="branch in pha_branch">
+                                        <label class="i-checks">
+                                            <input type="radio" checked="" value="{{branch.tenant_id}}" name="pharmacy_branch" ng-model="pharmacy_branch" ng-change="updateEmptypharmacy('{{branch.tenant_id}}')">
+                                            <i></i>
+                                            {{branch.tenant_name}}&nbsp; &nbsp;
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-6" ng-init="initSessionInterval()">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <b>User Interval</b> 
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Session Timeout Interval</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control search-dropdown" ng-model="session_timeout" ng-options="time.value as time.label for time in timeout" ng-change="updateTimeout()">
+                                            <option value="">MM</option>
+                                        </select> Minutes
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

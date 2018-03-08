@@ -1,0 +1,25 @@
+<!-- navbar -->
+<div data-ng-include=" 'tpl/blocks/header.html'" class="app-header navbar" ng-init="loadUserCredentials()"></div>
+<!-- / navbar -->
+
+<!-- Patient Detail Bar -->
+<div data-ng-include=" 'tpl/blocks/patient.topbar.html'" ng-show="app.settings.patientTopBar" ng-if="app.settings.patientTopBar == true"></div>
+<!-- / Patient Detail Bar -->
+
+<!-- menu -->
+<div data-ng-include=" 'tpl/blocks/aside.patient.html'" ng-show="app.settings.patientSideMenu" class="app-aside hidden-xs {{app.settings.asideColor}}"></div>
+<!-- / menu -->
+
+<!-- content -->
+<div class="{{app.settings.patientContentClass}}">
+    <div ui-butterbar></div>
+    <a href class="off-screen-toggle hide" ui-toggle-class="off-screen" data-target=".app-aside" ></a>
+    <div class="app-content-body fade-in-up" ui-view></div>
+</div>
+<!-- /content -->
+
+<!-- footer -->
+<div class="{{app.settings.patientFooterClass}} wrapper b-t bg-light">
+    <div data-ng-include=" 'tpl/blocks/footer.html'"></div>
+</div>
+<!-- / footer -->

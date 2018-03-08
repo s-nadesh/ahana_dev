@@ -1,0 +1,321 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n h3">Out-Patient</h1>
+</div>
+<div ng-controller="OutPatientsController" ng-init="startDaterangepicker(op_type)">
+    <div class="wrapper-md tab-btn">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="btn-group op-btn-group">
+                    <button class="btn btn-info current-op-patient" ng-click="loadOutPatientsList('current')">
+                        <i class="fa fa-user-md"></i>&nbsp;&nbsp;Today's Appointments
+                    </button>
+                    <a class="btn btn-info" ui-sref="patient.futureAppointment">
+                        <i class="fa fa-hospital-o"></i>&nbsp;&nbsp;Scheduled Appointments
+                    </a>
+                    <button class="btn btn-info previous-op-patient" ng-click="startDaterangepicker(); loadOutPatientsList('previous')">
+                        <i class="fa fa-user-md"></i>&nbsp;&nbsp;Past Appointments
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wrapper-md" ng-init="loadOutPatientsList(op_type)">
+        <div class="panel panel-default">
+            <div class="row wrapper pb-0">
+                <div class="col-sm-6 m-b-xs">
+                    <button class="btn btn-sm btn-grey" ng-click="loadOutPatientsList(op_type)"> &nbsp; &nbsp; <i class="fa fa-refresh"></i>  &nbsp; &nbsp; </button>
+                    <span ng-show="currentAppointmentSelected > 0">
+                        <button ng-click="rescheduleAppointments()" class="btn btn-sm btn-primary">
+                            <i class="fa fa-retweet"></i> Reschedule Appointments
+                        </button>
+                        <button ng-click="cancelAppointments()" class="btn btn-sm btn-dark">
+                            <i class="fa fa-times"></i> Cancel Appointment
+                        </button>
+                    </span>
+                </div>
+                <div class="col-sm-6">
+                    <div id="reportrange" ng-show="op_type == 'previous'" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                        <span></span> <b class="caret"></b>
+                    </div>
+                </div>
+                
+                <!-- hide by Nad -->
+                <!--            <div class="col-sm-3 pull-right text-right">
+                                <h4 class="badge bg-primary mt-10"> <b> Census: {{census}} </b></h4>
+                            </div>-->
+            </div>
+
+            <div class="table-responsive in-patient-table out-patient-table">
+                <!--<div style="{{css.style}}">-->
+                <!--<pre>{{rowCollection}}</pre>-->
+                <scrollable-table watch="displayedCollection">
+                    <table st-table="displayedCollection"  st-safe-src="rowCollection"  class="table table-striped b-t b-light">
+                        <thead>
+                            <tr>
+                                <th style="width:45px;">&nbsp;</th>
+                                <th>
+                                    <button class="btn btn-sm btn-default hms-plus" type="button" ng-click="ctrl.expandAll(allExpanded = !allExpanded)">
+                                        <i ng-if="!allExpanded" class="fa fa-plus text"></i>
+                                        <i ng-if="allExpanded" class="fa fa-minus text"></i>
+                                    </button>
+                                </th>
+                                <th class="outpatient-1">Patient</th>
+                                <th class="outpatient-2">Category</th>
+                                <th class="outpatient-3">Contact#</th>
+                                <th>Booking <br/> time</th>
+                                <th class="outpatient-5">Appointment<br/> time</th>
+                                <th class="outpatient-6">Arrival <br/> time</th>
+                                <th>status</th>
+                                <!--<th class="outpatient-8">consultant</th>-->
+                                <th> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-hide="isLoading">
+                            <tr ng-if="displayedCollection.length == 0">
+                                <td colspan="10" class="text-center">
+                                    No O/P records
+                                </td>
+                            </tr>
+                            <tr ng-repeat-start="(op_key, value) in displayedCollection">
+                                <td style="width:45px;">
+                                    <label class="i-checks">
+                                        <input ng-model="row.selected" ng-true-value="'1'" ng-false-value="'0'" ng-checked="value.selected == '1'"  type="checkbox" name="checkall" class="oplistcheckbox oplistcheckbox_{{op_key}}" ng-click="updateCheckbox(row, op_key)">
+                                        <i></i>
+                                    </label>&nbsp; &nbsp;
+                                </td>
+                                <td colspan="9">
+                                    <b>
+                                        <button ng-click="value.expanded = !value.expanded;
+                                                                        setRowExpanded(value.consultant_id, value.expanded)" expand class="btn btn-sm btn-default hms-plus">
+                                            <i ng-if="!value.expanded" class="fa fa-plus text"></i>
+                                            <i ng-if="value.expanded" class="fa fa-minus text"></i>
+                                        </button>&nbsp; &nbsp;
+                                        <span class="badge bg-primary">Consultant: {{value.consultant_name}}</span>&nbsp; &nbsp;
+                                        <span class="badge bg-black">Booked: {{value.booking_count}}</span>&nbsp; &nbsp;
+                                        <span class="badge bg-success">Arrived: {{value.arrived_count}}</span>&nbsp; &nbsp;
+                                        <span class="badge bg-info" ng-if="op_type != 'previous'">Seen: {{value.seen_count}}</span>&nbsp; &nbsp;
+                                        <i class="fa fa-spin fa-spinner" ng-if="value.rowLoading == true"></i>
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr ng-show="value.expanded" ng-repeat="(key, row) in value.act_enc" ng-if="row.apptSeenData == '-'" class="tr_oplistcheckbox tr_oplistcheckbox_{{op_key}}">
+                                <td>
+                                    <label class="i-checks">
+                                        <input ng-model="row.selected" ng-true-value="'1'" ng-false-value="'0'" ng-checked="row.selected == '1'" class="oplistcheckbox oplistcheckbox_{{op_key}}" id="oplist_{{op_key}}_{{key}}" type="checkbox" name="status" ng-click="moreOptions(op_key, key, row.consultant_id, row.apptBookingData.appt_id, row)">
+                                        <i></i>
+                                    </label>
+                                </td>
+                                <td align="center" valign="middle">
+                                    <!--<div style="margin-top: -10px; position: relative;">-->
+                                    <img ng-if="(row.apptArrivalData != '-' && row.apptArrivalData.waiting_elapsed && row.apptSeenData == '-')" class="pull-left" src="img/elapsed-waiting-time.png"  alt="" tooltip="Waiting Time ({{row.apptArrivalData.waiting_elapsed_time}})" tooltip-trigger tooltip-animation="false" tooltip-placement="right"/>
+                                    <img ng-if="row.apptPatientData.hasalert" class="pull-left" src="img/symbol1.png"  alt="" tooltip="Has Alert" tooltip-trigger tooltip-animation="false" tooltip-placement="right"  />
+                                    <img ng-if="row.apptPatientData.incomplete_profile" class="pull-left" src="img/question.png"  alt="" tooltip="Incomplete Profile" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+                                    <img ng-if="row.apptPatientData.new_user" class="pull-left" src="img/new.png"  alt="" tooltip="New" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+                                    <!--</div>-->
+                                </td>
+                                <td class="{{row.apptPatientData.patient_img_url ? 'patientImage' : ''}}">
+                                    <a ui-sref="patient.view({id: row.apptPatientData.patient_guid})">
+                                        <img class="pull-left patient-image" width="30" height="30" src="img/man-icon.png" ng-attr-lazy-img="{{ row.apptPatientData.patient_img_url ? row.apptPatientData.patient_img_url : ($even ? 'img/man-icon.png' : 'img/man-icon2.png') }}" />
+                                    </a>
+
+                                    <a ui-sref="patient.view({id: row.apptPatientData.patient_guid})" tooltip="{{row.apptPatientData.fullcurrentaddress}}">
+                                        {{row.apptPatientData.fullname}}
+                                    </a>
+                                    ({{row.apptPatientData.patient_age_ym}})
+                                    <br/>
+                                    {{row.apptPatientData.patient_global_int_code}}
+                                </td>
+                                <td valign="middle">
+                                    <div ng-if="row.apptPatientData.patient_category" style="background-color: {{row.apptPatientData.patient_category_color}}" class="category_badge" tooltip="{{row.apptPatientData.patient_category_fullname}}" tooltip-trigger tooltip-animation="false" tooltip-placement="top" style="background-color: {{row.apptPatientData.patient_category_color}}">
+                                        {{row.apptPatientData.patient_category| uppercase}}
+                                    </div>
+                                </td>
+                                <td>
+                                    <a editable-text="row.apptPatientData.patient_mobile" e-number-mask="" onbeforesave="updatePatient(row.apptPatientData.patient_id, {'patient_mobile': $data}, $data)">
+                                        {{row.apptPatientData.patient_mobile}}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{row.created_at| moment:'hh:mm A'}}<br/>
+                                    <span class="text-muted"> {{row.created_at| moment:'YYYY-MM-DD'}}</span>
+                                </td>
+                                <td>
+                                    {{row.apptBookingData.status_datetime| moment:'hh:mm A'}}<br/>
+                                    <span class="text-muted"> {{row.apptBookingData.status_date}}</span>
+                                </td>
+                                <td>
+                                    <div class="input-group" ng-if="row.apptArrivalData == '-'">
+                                        <div>
+                                            <span>
+                                                {{row.sts_time}} <br/>
+                                                <span class="text-muted"> {{row.sts_date}} </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div ng-if="row.apptArrivalData != '-'">
+                                        {{row.apptArrivalData.status_datetime| moment:'hh:mm A'}} <br/>
+                                        <span class="text-muted"> {{row.apptArrivalData.status_date}} </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- Booking to Arrival -->
+                                    <div ng-if="row.apptArrivalData == '-' && row.apptSeenData == '-'">
+                                        <form editable-form name="rowform" onbeforesave="changeAppointmentStatus({
+                                              'patient_id': row.patient_id,
+                                              'encounter_id': row.encounter_id,
+                                              'status_date': row.sts_date,
+                                              'status_time': row.sts_time,
+                                              'consultant_id': row.consultant_id,
+                                              'appt_status': 'A',
+                                              }, op_key, key)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == row">
+                                            <span editable-select="statuses[0].value" e-name="sts_status" e-form="rowform" e-ng-options="s.value as s.text for s in statuses">
+                                                {{row.sts_status|| 'empty' }}
+                                            </span>
+                                            <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary btn-sm">
+                                                <span class="glyphicon glyphicon-ok"></span>
+                                            </button>
+                                            <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel();
+                                                                            setTimings(op_key, key, 'unset')" class="btn btn-default btn-sm">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </form>
+                                        <div class="buttons" ng-show="!rowform.$visible">
+                                            <a ng-click="rowform.$show();
+                                                                            row.sts_status = 'A';
+                                                                            setTimings(op_key, key, 'set')" class="ng-scope ng-binding editable editable-click"> Booked </a><br />
+                                        </div>
+                                    </div>
+
+                                    <!-- Arrival to Seen -->
+                                    <div ng-if="row.apptArrivalData != '-' && row.apptSeenData == '-'">
+                                        <div ng-if="row.apptArrivalData.appt_status == 'A'">
+                                            <form editable-form name="rowform" onbeforesave="$state.go('patient.changeStatus', {id: row.apptPatientData.patient_guid, enc_id: row.encounter_id})" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == row">
+                                                <span editable-select="arr_statuses[0].value" e-name="sts_status" e-form="rowform" e-ng-options="s.value as s.text for s in arr_statuses" e-class="form-control">
+                                                    {{item.sts_status|| 'empty' }}
+                                                </span>
+                                                <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary btn-sm">
+                                                    <span class="glyphicon glyphicon-ok"></span>
+                                                </button>
+                                                <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel();" class="btn btn-default btn-sm">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </form>
+                                            <div class="buttons" ng-show="!rowform.$visible">
+                                                <a ng-click="rowform.$show();" class="ng-scope ng-binding editable editable-click"> Arrived </a><br />
+                                                <span class="text-danger-dk">Waiting!</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <!--<td>{{value.consultant_name}}</td>-->
+                                <td align="left">
+                                    <div ng-include="'tpl/patient/patient_table_nav_bar.html'">
+                                        {% include 'tpl/patient/patient_table_nav_bar.html' %}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr ng-show="value.expanded"  ng-if="value.seen_count > '0' && op_type != 'previous'">
+                                <td>&nbsp; </td>
+                                <td colspan="9">
+                                    <b>
+                                        <button ng-click="value.seenExpanded = !value.seenExpanded;
+                                                                    expandSeen(value.consultant_id, value.seenExpanded);" expand class="btn btn-sm btn-default hms-plus">
+                                            <i ng-if="!value.seenExpanded" class="fa fa-plus text"></i>
+                                            <i ng-if="value.seenExpanded" class="fa fa-minus text"></i>
+                                        </button>&nbsp; &nbsp;
+                                        <span class="badge bg-info">Seen: {{value.seen_count}}</span>&nbsp; &nbsp;
+                                        <i class="fa fa-spin fa-spinner" ng-if="value.rowSeenLoading == true"></i>
+                                    </b>
+                                </td>
+                            </tr>
+                            <tr ng-show="value.expanded && value.seenExpanded" ng-repeat="(key, row) in value.seen_records" ng-if="value.seen_count > '0' && row.apptSeenData != '-' && op_type != 'previous'" class="tr_oplistcheckbox tr_oplistcheckbox_{{op_key}}">
+                                <td>&nbsp;  </td>
+                                <td align="center" valign="middle">
+                                    <div style="margin-top: -10px; position: relative;">
+                                        <img ng-if="row.apptPatientData.hasalert" class="pull-left" src="img/symbol1.png"  alt="" tooltip="Has Alert" tooltip-trigger tooltip-animation="false" tooltip-placement="right"  />
+                                        <img ng-if="row.apptPatientData.incomplete_profile" class="pull-left" src="img/question.png"  alt="" tooltip="Incomplete Profile" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+                                        <img ng-if="row.apptPatientData.new_user" class="pull-left" src="img/new.png"  alt="" tooltip="New" tooltip-trigger tooltip-animation="false" tooltip-placement="right" />
+                                    </div>
+                                </td>
+                                <td class="{{row.apptPatientData.patient_img_url ? 'patientImage' : ''}}">
+                                    <a ui-sref="patient.view({id: row.apptPatientData.patient_guid})">
+                                        <img class="pull-left patient-image" width="30" height="30" src="img/man-icon.png" ng-attr-lazy-img="{{ row.apptPatientData.patient_img_url ? row.apptPatientData.patient_img_url : ($even ? 'img/man-icon.png' : 'img/man-icon2.png') }}" />
+                                    </a>
+                                    <a ui-sref="patient.view({id: row.apptPatientData.patient_guid})" tooltip="{{row.apptPatientData.fullcurrentaddress}}">
+                                        {{row.apptPatientData.fullname}}
+                                    </a>
+                                    ({{row.apptPatientData.patient_age_ym}})
+                                    <br/>
+                                    {{row.apptPatientData.patient_global_int_code}}
+                                </td>
+                                <td valign="middle">
+                                    <div ng-if="row.apptPatientData.patient_category" class="category_badge" tooltip="{{row.apptPatientData.patient_category_fullname}}" tooltip-trigger tooltip-animation="false" tooltip-placement="top" style="background-color: {{row.apptPatientData.patient_category_color}}">
+                                        {{row.apptPatientData.patient_category| uppercase}}
+                                    </div>
+                                </td>
+                                <td>
+                                    <a editable-text="row.apptPatientData.patient_mobile" e-number-mask="" onbeforesave="updatePatient(row.apptPatientData.patient_id, {'patient_mobile': $data}, $data)">
+                                        {{row.apptPatientData.patient_mobile}}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{row.created_at| moment:'hh:mm A'}}<br/>
+                                    <span class="text-muted"> {{row.created_at| moment:'YYYY-MM-DD'}}</span>
+                                </td>
+                                <td>
+                                    {{row.apptBookingData.status_datetime| moment:'hh:mm A'}}<br/>
+                                    <span class="text-muted"> {{row.apptBookingData.status_date}}</span>
+                                </td>
+                                <td>
+                                    <div ng-if="row.apptArrivalData != '-'">
+                                        {{row.apptArrivalData.status_datetime| moment:'hh:mm A'}} <br/>
+                                        <span class="text-muted"> {{row.apptArrivalData.status_date}} </span>
+                                    </div>
+                                </td>
+                                <td> Seen </td>
+                                <!--<td>{{value.consultant_name}}</td>-->
+                                <td align="left">
+                                    <div ng-include="'tpl/patient/patient_table_nav_bar.html'">
+                                        {% include 'tpl/patient/patient_table_nav_bar.html' %}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr ng-repeat-end><br></tr>
+                        </tbody>
+                        <tbody ng-show="isLoading">
+                            <tr>
+                                <td colspan="10" class="text-center"><i class="fa fa-spin fa-refresh"></i></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="10" class="text-center">
+                                    <div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </scrollable-table>
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+                    $(function () {
+                        if ($.isFunction($.fn.photoZoom)) {
+                            profilePhoto(".patientImage");
+                        } else {
+                            $.getScript("js/photoZoom.js", function (data, textStatus, jqxhr) {
+                                profilePhoto(".patientImage");
+                            });
+                        }
+                    });
+</script>
