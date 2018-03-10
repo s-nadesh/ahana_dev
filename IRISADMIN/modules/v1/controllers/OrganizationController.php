@@ -106,6 +106,7 @@ class OrganizationController extends ActiveController {
             $v_billing_recurring = file_get_contents(Url::base(true) . '/v_billing_recurring.sql');
             $v_documents = file_get_contents(Url::base(true) . '/v_documents.sql');
             $v_encounter = file_get_contents(Url::base(true) . '/v_encounter.sql');
+            $pharmacy_structure = file_get_contents(Url::base(true) . '/pharmacy_structure.sql');
 
             $connection = new Connection([
                 'dsn' => "mysql:host={$post['org_db_host']};dbname={$post['org_database']}",
@@ -150,6 +151,19 @@ class OrganizationController extends ActiveController {
 
             $connection->close();
             //End
+            //Pharmacy database section import start
+            $pharmacyConnection = new Connection([
+                'dsn' => "mysql:host={$post['org_db_host']};dbname={$post['org_db_pharmacy']}",
+                'username' => $post['org_db_username'],
+                'password' => isset($post['org_db_password']) ? $post['org_db_password'] : '',
+            ]);
+            $pharmacyConnection->open();
+
+            $pharmacyCommand = $pharmacyConnection->createCommand($pharmacy_structure);
+            $pharmacyCommand->execute();
+            
+            $pharmacyConnection->close();
+            //Pharmacy database section import end
         }
     }
 
@@ -159,7 +173,7 @@ class OrganizationController extends ActiveController {
             $model = new CoOrganization();
             $model->attributes = Yii::$app->request->post('Organization');
             $model->patient_UHID_prefix = Yii::$app->request->post('Organization')['patient_UHID_prefix'];
-            
+
             $model->is_decoded = true;
 
             $login_form_model = new CoLoginForm();
@@ -293,7 +307,6 @@ class OrganizationController extends ActiveController {
 //            $user_role = CoUsersRoles::find()->where(['user_id' => $query_php[0]['user_id']])->one();
 //            print_r($user_role);
 //            die;
-
             //$login = CoLogin::find()->where(['user_id' => $userProf->user_id])->one();
             //$login->password = '';
             //$return['Tenant'] = $this->excludeColumns($organization->attributes);
@@ -343,7 +356,7 @@ class OrganizationController extends ActiveController {
             if (isset($post['Organization'])) {
                 $model = new CoOrganization();
                 $model->attributes = Yii::$app->request->post('Organization');
-                if(isset(Yii::$app->request->post('Organization')['patient_UHID_prefix']) && Yii::$app->request->post('Organization')['patient_UHID_prefix']) {
+                if (isset(Yii::$app->request->post('Organization')['patient_UHID_prefix']) && Yii::$app->request->post('Organization')['patient_UHID_prefix']) {
                     $model->patient_UHID_prefix = Yii::$app->request->post('Organization')['patient_UHID_prefix'];
                 }
                 $model->scenario = 'Create';
