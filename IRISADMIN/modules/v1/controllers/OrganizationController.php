@@ -107,7 +107,9 @@ class OrganizationController extends ActiveController {
             $v_documents = file_get_contents(Url::base(true) . '/v_documents.sql');
             $v_encounter = file_get_contents(Url::base(true) . '/v_encounter.sql');
             $pharmacy_structure = file_get_contents(Url::base(true) . '/pharmacy_structure.sql');
-
+            $database = $post['org_database'];
+            $pharmacy_structure = str_replace("REFERENCES `pha_ahana`", "REFERENCES `$database`", $pharmacy_structure);
+            
             $connection = new Connection([
                 'dsn' => "mysql:host={$post['org_db_host']};dbname={$post['org_database']}",
                 'username' => $post['org_db_username'],
@@ -161,7 +163,7 @@ class OrganizationController extends ActiveController {
 
             $pharmacyCommand = $pharmacyConnection->createCommand($pharmacy_structure);
             $pharmacyCommand->execute();
-            
+
             $pharmacyConnection->close();
             //Pharmacy database section import end
         }
