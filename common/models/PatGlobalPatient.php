@@ -55,7 +55,8 @@ class PatGlobalPatient extends RActiveRecord {
      * @inheritdoc
      */
     public static function tableName() {
-        return 'pat_global_patient';
+        $dbname=Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
+        return $dbname.'.pat_global_patient';
     }
     
     public function init() {

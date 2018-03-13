@@ -91,7 +91,8 @@ class PatPatient extends RActiveRecord {
      * @inheritdoc
      */
     public static function tableName() {
-        return 'pat_patient';
+        $dbname=Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
+        return $dbname.'.pat_patient';
     }
 
     public function init() {

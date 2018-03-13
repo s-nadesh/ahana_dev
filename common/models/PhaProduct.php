@@ -47,7 +47,7 @@ use yii\db\ActiveQuery;
  * @property PhaProductBatch[] $phaProductBatches
  * @property PhaPurchaseItem[] $phaPurchaseItems
  */
-class PhaProduct extends RActiveRecord {
+class PhaProduct extends PActiveRecord {
 
     public $full_name;
     public $supplier_ids = false;

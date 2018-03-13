@@ -73,6 +73,7 @@ class PharmacyreportController extends ActiveController {
 
     //Sale Vat Report
     public function actionSalevatreport() {
+        $dbname=Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
         $post = Yii::$app->getRequest()->post();
         $tenant_id = Yii::$app->user->identity->logged_tenant_id;
         $sql = "SELECT
@@ -86,16 +87,17 @@ class PharmacyreportController extends ActiveController {
                 FROM `pha_sale` `a`
                     LEFT JOIN `pha_sale_item` `b`
                     ON `a`.`sale_id` = `b`.`sale_id`
-                    LEFT JOIN pat_patient c
+                    LEFT JOIN ".$dbname.".pat_patient c
                     ON c.patient_id = a.patient_id
-                    LEFT JOIN pat_global_patient d
+                    LEFT JOIN ".$dbname.".pat_global_patient d
                     ON c.patient_global_guid = d.patient_global_guid
                     WHERE ((`a`.`tenant_id` = '" . $tenant_id . "')
                     AND (a.sale_date BETWEEN '" . $post['from'] . "' AND '" . $post['to'] . "'))
                     AND (b.deleted_at = '0000-00-00 00:00:00')
                     AND (a.deleted_at = '0000-00-00 00:00:00')
                     GROUP BY `b`.`sale_id`,`b`.`cgst_percent` ";
-        $command = Yii::$app->client->createCommand($sql);
+        //$command = Yii::$app->client->createCommand($sql);
+        $command = Yii::$app->client_pharmacy->createCommand($sql);
         $reports = $command->queryAll();
         return ['report' => $reports];
     }
@@ -201,7 +203,8 @@ class PharmacyreportController extends ActiveController {
     public function actionStockreport() {
         $post = Yii::$app->getRequest()->post();
         if (!empty($post)) {
-            $conncection = Yii::$app->client;
+            //$conncection = Yii::$app->client;
+            $conncection = Yii::$app->client_pharmacy;
             $command = $conncection->createCommand("CALL pha_stock_report_by_date({$post['tenant_id']}, '{$post['from']}');");
             $stock_report = $command->queryAll();
             return ['stock_report' => $stock_report];

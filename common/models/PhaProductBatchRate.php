@@ -23,7 +23,7 @@ use yii\db\ActiveQuery;
  * @property PhaProductBatch $batch
  * @property CoTenant $tenant
  */
-class PhaProductBatchRate extends RActiveRecord {
+class PhaProductBatchRate extends PActiveRecord {
 
     /**
      * @inheritdoc

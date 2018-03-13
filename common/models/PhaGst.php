@@ -18,7 +18,7 @@ use Yii;
  * @property string $modified_at
  * @property string $deleted_at
  */
-class PhaGst extends RActiveRecord {
+class PhaGst extends PActiveRecord {
 
     /**
      * @inheritdoc

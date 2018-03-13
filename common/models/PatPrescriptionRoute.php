@@ -21,7 +21,7 @@ use yii\db\ActiveQuery;
  * @property PatPrescriptionItems[] $patPrescriptionItems
  * @property CoTenant $tenant
  */
-class PatPrescriptionRoute extends RActiveRecord {
+class PatPrescriptionRoute extends PActiveRecord {
 
     /**
      * @inheritdoc

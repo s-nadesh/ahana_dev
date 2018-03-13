@@ -46,7 +46,7 @@ use yii\helpers\ArrayHelper;
  * @property PhaSaleBilling[] $phaSaleBillings
  * @property PhaSaleItem[] $phaSaleItems
  */
-class PhaSale extends RActiveRecord {
+class PhaSale extends PActiveRecord {
 
     public $after_save = true;
     public $payment_mode;

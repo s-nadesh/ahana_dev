@@ -19,7 +19,7 @@ use Yii;
  * @property string $modified_at
  * @property string $deleted_at
  */
-class CoPatientGroup extends RActiveRecord {
+class CoPatientGroup extends PActiveRecord {
 
     /**
      * @inheritdoc

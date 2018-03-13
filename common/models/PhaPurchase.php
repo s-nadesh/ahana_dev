@@ -39,7 +39,7 @@ use yii\helpers\ArrayHelper;
  * @property CoTenant $tenant
  * @property PhaPurchaseItem[] $phaPurchaseItems
  */
-class PhaPurchase extends RActiveRecord {
+class PhaPurchase extends PActiveRecord {
 
     public $after_save = true;
 

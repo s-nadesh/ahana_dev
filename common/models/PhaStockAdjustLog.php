@@ -26,7 +26,7 @@ namespace common\models;
  * @property PhaProductBatch $batch
  * @property CoTenant $tenant
  */
-class PhaStockAdjustLog extends RActiveRecord {
+class PhaStockAdjustLog extends PActiveRecord {
 
     /**
      * @inheritdoc

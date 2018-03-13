@@ -29,7 +29,7 @@ use yii\db\ActiveQuery;
  * @property PhaBrandDivision $division
  * @property CoTenant $tenant
  */
-class PhaBrandRepresentative extends RActiveRecord {
+class PhaBrandRepresentative extends PActiveRecord {
 
     /**
      * @inheritdoc

@@ -21,7 +21,7 @@ use yii\db\ActiveQuery;
  *
  * @property CoTenant $tenant
  */
-class PhaPackageUnit extends RActiveRecord {
+class PhaPackageUnit extends PActiveRecord {
 
     /**
      * @inheritdoc

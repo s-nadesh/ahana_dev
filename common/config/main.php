@@ -2,7 +2,7 @@
 
 $client = [];
 if (defined('DOMAIN_PATH')) {
-    if (isset(Yii::$app->session['client']) && isset(Yii::$app->session['current_domain_path']) && Yii::$app->session['current_domain_path'] == DOMAIN_PATH && Yii::$app->session['is_read']) {
+    if (isset(Yii::$app->session['client']) && isset(Yii::$app->session['client_pharmacy']) && isset(Yii::$app->session['current_domain_path']) && Yii::$app->session['current_domain_path'] == DOMAIN_PATH && Yii::$app->session['is_read']) {
         $client['client'] = Yii::$app->session['client'];
         $client['client_pharmacy'] = Yii::$app->session['client_pharmacy'];
     } else {

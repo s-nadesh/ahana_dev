@@ -22,7 +22,7 @@ use yii\db\ActiveQuery;
  *
  * @property CoTenant $tenant
  */
-class PhaDrugClass extends RActiveRecord {
+class PhaDrugClass extends PActiveRecord {
 
     /**
      * @inheritdoc

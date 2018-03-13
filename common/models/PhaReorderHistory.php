@@ -25,7 +25,7 @@ use yii\db\ActiveQuery;
  * @property CoTenant $tenant
  * @property PhaReorderHistoryItem[] $phaReorderHistoryItems
  */
-class PhaReorderHistory extends RActiveRecord {
+class PhaReorderHistory extends PActiveRecord {
 
     /**
      * @inheritdoc

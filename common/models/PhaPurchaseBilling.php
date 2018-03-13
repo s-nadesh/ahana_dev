@@ -20,7 +20,7 @@ use yii\db\ActiveQuery;
  * @property string $modified_at
  * @property string $deleted_at
  */
-class PhaPurchaseBilling extends RActiveRecord {
+class PhaPurchaseBilling extends PActiveRecord {
 
     /**
      * @inheritdoc

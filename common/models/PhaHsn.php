@@ -20,7 +20,7 @@ use common\models\RActiveRecord;
  * @property string $modified_at
  * @property string $deleted_at
  */
-class PhaHsn extends RActiveRecord {
+class PhaHsn extends PActiveRecord {
 
     /**
      * @inheritdoc

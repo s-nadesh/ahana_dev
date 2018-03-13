@@ -38,7 +38,7 @@ use yii\helpers\ArrayHelper;
  * @property PhaSale $sale
  * @property PhaSaleReturnItem[] $phaSaleReturnItems
  */
-class PhaSaleReturn extends RActiveRecord {
+class PhaSaleReturn extends PActiveRecord {
 
     public $noitem = false;
 

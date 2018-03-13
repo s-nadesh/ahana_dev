@@ -40,7 +40,7 @@ use yii\db\ActiveQuery;
  * @property PhaPurchaseReturn $purchaseRet
  * @property CoTenant $tenant
  */
-class PhaPurchaseReturnItem extends RActiveRecord {
+class PhaPurchaseReturnItem extends PActiveRecord {
 
     public $expiry_date;
     public $batch_no;

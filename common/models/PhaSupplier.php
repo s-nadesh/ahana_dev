@@ -34,7 +34,7 @@ use yii\db\ActiveQuery;
  * @property CoMasterState $state
  * @property CoTenant $tenant
  */
-class PhaSupplier extends RActiveRecord {
+class PhaSupplier extends PActiveRecord {
 
     /**
      * @inheritdoc

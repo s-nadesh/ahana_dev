@@ -23,7 +23,7 @@ use yii\db\ActiveQuery;
  * @property PhaProductDescription $description
  * @property CoTenant $tenant
  */
-class PhaDescriptionsRoutes extends RActiveRecord {
+class PhaDescriptionsRoutes extends PActiveRecord {
     
     public $route_ids;
 

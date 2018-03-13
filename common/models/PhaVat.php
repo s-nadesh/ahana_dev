@@ -21,7 +21,7 @@ use Yii;
  *
  * @property CoTenant $tenant
  */
-class PhaVat extends RActiveRecord {
+class PhaVat extends PActiveRecord {
 
     /**
      * @inheritdoc

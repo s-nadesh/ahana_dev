@@ -35,7 +35,7 @@ use yii\db\ActiveQuery;
  * @property PhaProductBatch $batch
  * @property PhaProduct $product
  */
-class PhaSaleReturnItem extends RActiveRecord {
+class PhaSaleReturnItem extends PActiveRecord {
 
     public $expiry_date;
     public $batch_no;

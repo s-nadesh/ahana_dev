@@ -38,7 +38,7 @@ use yii\helpers\ArrayHelper;
  * @property PhaPurchase $purchase
  * @property PhaPurchaseReturnItem[] $phaPurchaseReturnItems
  */
-class PhaPurchaseReturn extends RActiveRecord {
+class PhaPurchaseReturn extends PActiveRecord {
 
     /**
      * @inheritdoc

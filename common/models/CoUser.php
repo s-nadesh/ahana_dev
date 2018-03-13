@@ -50,7 +50,8 @@ class CoUser extends RActiveRecord {
      * @inheritdoc
      */
     public static function tableName() {
-        return 'co_user';
+        $dbname=Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
+        return $dbname.'.co_user';
     }
 
     /**

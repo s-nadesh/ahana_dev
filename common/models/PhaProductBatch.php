@@ -29,7 +29,7 @@ use Yii;
  * @property CoTenant $tenant
  * @property PhaProductBatchRate[] $phaProductBatchRates
  */
-class PhaProductBatch extends RActiveRecord {
+class PhaProductBatch extends PActiveRecord {
 
     public $product_name;
     public $product_code;

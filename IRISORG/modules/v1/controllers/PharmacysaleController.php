@@ -73,8 +73,9 @@ class PharmacysaleController extends ActiveController {
         $sales = PhaSale::find()
                 ->tenant()
                 ->active()
-                ->leftJoin('pat_patient', 'pha_sale.patient_id=pat_patient.patient_id')
-                ->leftJoin('pat_global_patient', 'pat_global_patient.patient_global_guid=pat_patient.patient_global_guid')
+                ->joinWith(['patient.patGlobalPatient'])
+               // ->leftJoin($dbname.'.pat_patient', 'pha_sale.patient_id=pat_patient.patient_id')
+                //->leftJoin($dbname.'.pat_global_patient', 'pat_global_patient.patient_global_guid=pat_patient.patient_global_guid')
                 ->andFilterWhere([
                     'or',
                         ['like', 'bill_no', $text],

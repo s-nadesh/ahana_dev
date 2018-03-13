@@ -24,7 +24,7 @@ use yii\db\ActiveQuery;
  * @property PhaDrugClass $drug
  * @property CoTenant $tenant
  */
-class PhaDrugGeneric extends RActiveRecord {
+class PhaDrugGeneric extends PActiveRecord {
 
     /**
      * @inheritdoc

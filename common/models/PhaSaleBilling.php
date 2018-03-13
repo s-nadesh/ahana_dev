@@ -23,7 +23,7 @@ use yii\db\ActiveQuery;
  * @property PhaSale $sale
  * @property CoTenant $tenant
  */
-class PhaSaleBilling extends RActiveRecord {
+class PhaSaleBilling extends PActiveRecord {
 
     public $sale_ids;
     public $total_amount;

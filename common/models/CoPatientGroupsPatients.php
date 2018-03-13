@@ -22,7 +22,7 @@ namespace common\models;
  * @property CoPatientGroup $patientGroup
  * @property PatGlobalPatient $globalPatient
  */
-class CoPatientGroupsPatients extends RActiveRecord {
+class CoPatientGroupsPatients extends PActiveRecord {
 
     /**
      * @inheritdoc
