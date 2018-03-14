@@ -151,21 +151,24 @@ class PatientController extends ActiveController {
 //                        'pat_patient.deleted_at' => '0000-00-00 00:00:00',
 //                        'pat_global_patient.parent_id' => NULL
                     ])
-                    ->joinWith(['patGlobalPatient', 'patMergedGlobalPatient a'])
+                    ->joinWith(['glPatient b', 'glMergedPatient a'])
+//                    ->joinWith(['glPatient' => function($query) {
+//                            return $query->from(\common\models\GlPatient::tableName() . ' b');
+//                        }])
                     ->andFilterWhere([
                         'or',
-                            ['like', 'pat_global_patient.patient_firstname', $text],
-                            ['like', 'pat_global_patient.patient_lastname', $text],
-                            ['like', 'pat_global_patient.patient_mobile', $text],
-                            ['like', 'pat_global_patient.patient_global_int_code', $text],
-                            ['like', 'pat_global_patient.casesheetno', $text],
+                            ['like', 'b.patient_firstname', $text],
+                            ['like', 'b.patient_lastname', $text],
+                            ['like', 'b.patient_mobile', $text],
+                            ['like', 'b.patient_global_int_code', $text],
+                            ['like', 'b.casesheetno', $text],
                             ['like', 'a.patient_firstname', $text],
                             ['like', 'a.patient_lastname', $text],
                             ['like', 'a.patient_mobile', $text],
                             ['like', 'a.patient_global_int_code', $text],
                             ['like', 'a.casesheetno', $text],
                     ])
-                    ->orWhere("pat_global_patient.parent_id = ''")
+                    ->orWhere("b.parent_id = ''")
                     ->limit($limit)
                     ->all();
 
@@ -173,7 +176,7 @@ class PatientController extends ActiveController {
                 $patients[$key]['Patient'] = $patient;
 //                $patients[$key]['PatientAddress'] = $patient->patPatientAddress; // :NOUSE
                 $patients[$key]['PatientActiveEncounter'] = $patient->patActiveEncounter;
-                $patients[$key]['PatientMerged'] = $patient->patMergedGlobalPatient;
+                $patients[$key]['PatientMerged'] = $patient->glMergedPatient;
                 $patients[$key]['same_branch'] = true;
                 $patients[$key]['same_org'] = true;
             }
@@ -182,28 +185,28 @@ class PatientController extends ActiveController {
             if (empty($patients)) {
                 $lists = PatPatient::find()
                         ->andWhere("pat_patient.status = '1' AND pat_patient.tenant_id != {$tenant_id}")
-                        ->joinWith(['patGlobalPatient', 'patMergedGlobalPatient a'])
+                        ->joinWith(['glPatient b', 'glMergedPatient a'])
                         ->andFilterWhere([
                             'or',
-                                ['like', 'pat_global_patient.patient_firstname', $text],
-                                ['like', 'pat_global_patient.patient_lastname', $text],
-                                ['like', 'pat_global_patient.patient_mobile', $text],
-                                ['like', 'pat_global_patient.patient_global_int_code', $text],
-                                ['like', 'pat_global_patient.casesheetno', $text],
+                                ['like', 'b.patient_firstname', $text],
+                                ['like', 'b.patient_lastname', $text],
+                                ['like', 'b.patient_mobile', $text],
+                                ['like', 'b.patient_global_int_code', $text],
+                                ['like', 'b.casesheetno', $text],
                                 ['like', 'a.patient_firstname', $text],
                                 ['like', 'a.patient_lastname', $text],
                                 ['like', 'a.patient_mobile', $text],
                                 ['like', 'a.patient_global_int_code', $text],
                                 ['like', 'a.casesheetno', $text],
                         ])
-                        ->orWhere("pat_global_patient.parent_id = ''")
+                        ->orWhere("b.parent_id = ''")
                         ->limit($limit)
                         ->groupBy('a.patient_global_guid')
                         ->all();
 
                 foreach ($lists as $key => $patient) {
                     $patients[$key]['Patient'] = $patient;
-                    $patients[$key]['PatientMerged'] = $patient->patMergedGlobalPatient;
+                    $patients[$key]['PatientMerged'] = $patient->glMergedPatient;
                     $patients[$key]['same_branch'] = false;
                     $patients[$key]['same_org'] = true;
                 }
@@ -245,21 +248,21 @@ class PatientController extends ActiveController {
             $tenant_id = Yii::$app->user->identity->logged_tenant_id;
 
             $lists = PatPatient::find()
+                    ->joinWith(['glPatient b'])
                     ->andWhere([
                         'pat_patient.tenant_id' => $tenant_id,
                         'pat_patient.deleted_at' => '0000-00-00 00:00:00',
-                        'pat_global_patient.parent_id' => NULL
+                        'b.parent_id' => NULL
                     ])
-                    ->joinWith('patGlobalPatient')
                     ->andFilterWhere([
                         'or',
-                            ['like', 'pat_global_patient.patient_firstname', $text],
-                            ['like', 'pat_global_patient.patient_lastname', $text],
-                            ['like', 'pat_global_patient.patient_mobile', $text],
-                            ['like', 'pat_global_patient.patient_global_int_code', $text],
-                            ['like', 'pat_global_patient.casesheetno', $text],
+                            ['like', 'b.patient_firstname', $text],
+                            ['like', 'b.patient_lastname', $text],
+                            ['like', 'b.patient_mobile', $text],
+                            ['like', 'b.patient_global_int_code', $text],
+                            ['like', 'b.casesheetno', $text],
                     ])
-                    ->orWhere("pat_global_patient.parent_id = ''")
+                    ->orWhere("b.parent_id = ''")
                     ->limit($limit)
                     ->all();
 
@@ -274,17 +277,18 @@ class PatientController extends ActiveController {
             //Search from same ORG but different branch
             if (empty($patients)) {
                 $lists = PatPatient::find()
-                        ->joinWith('patGlobalPatient')
-                        ->andWhere("pat_patient.status = '1' AND pat_patient.tenant_id != {$tenant_id} AND pat_global_patient.parent_id IS NULL")
+                        //->joinWith('patGlobalPatient')
+                       ->joinWith(['glPatient b'])
+                        ->andWhere("pat_patient.status = '1' AND pat_patient.tenant_id != {$tenant_id} AND b.parent_id IS NULL")
                         ->andFilterWhere([
                             'or',
-                                ['like', 'pat_global_patient.patient_firstname', $text],
-                                ['like', 'pat_global_patient.patient_lastname', $text],
-                                ['like', 'pat_global_patient.patient_mobile', $text],
-                                ['like', 'pat_global_patient.patient_global_int_code', $text],
-                                ['like', 'pat_global_patient.casesheetno', $text],
+                                ['like', 'b.patient_firstname', $text],
+                                ['like', 'b.patient_lastname', $text],
+                                ['like', 'b.patient_mobile', $text],
+                                ['like', 'b.patient_global_int_code', $text],
+                                ['like', 'b.casesheetno', $text],
                         ])
-                        ->orWhere("pat_global_patient.parent_id = ''")
+                        ->orWhere("b.parent_id = ''")
                         ->limit($limit)
                         ->groupBy('pat_patient.patient_global_guid')
                         ->all();
@@ -603,7 +607,7 @@ class PatientController extends ActiveController {
     public function actionImportpatient() {
         $cond = Yii::$app->getRequest()->post();
         $tenant_id = Yii::$app->user->identity->logged_tenant_id;
-        return self::Addnewpatient($cond['patient_global_guid'],$tenant_id);
+        return self::Addnewpatient($cond['patient_global_guid'], $tenant_id);
     }
 
     public static function Addnewpatient($patient_global_guid, $tenant) {
@@ -702,16 +706,17 @@ class PatientController extends ActiveController {
                     ->andWhere([
                         'pat_patient.tenant_id' => $tenant_id,
                         'pat_patient.deleted_at' => '0000-00-00 00:00:00',
-                        'pat_global_patient.parent_id' => NULL
+                        'b.parent_id' => NULL
                     ])
-                    ->joinWith('patGlobalPatient')
+                    //->joinWith('patGlobalPatient')
+                    ->joinWith(['glPatient b'])
                     ->andFilterWhere([
                         'or',
-                            ['like', 'pat_global_patient.patient_firstname', $text],
-                            ['like', 'pat_global_patient.patient_lastname', $text],
-                            ['like', 'pat_global_patient.patient_mobile', $text],
-                            ['like', 'pat_global_patient.patient_global_int_code', $text],
-                            ['like', 'pat_global_patient.casesheetno', $text],
+                            ['like', 'b.patient_firstname', $text],
+                            ['like', 'b.patient_lastname', $text],
+                            ['like', 'b.patient_mobile', $text],
+                            ['like', 'b.patient_global_int_code', $text],
+                            ['like', 'b.casesheetno', $text],
                     ])
                     ->limit($limit)
                     ->all();
@@ -722,18 +727,20 @@ class PatientController extends ActiveController {
                         ->andWhere([
 //                            'pat_patient.tenant_id' => $tenant_id,
                             'pat_patient.deleted_at' => '0000-00-00 00:00:00',
-                            'pat_global_patient.parent_id' => NULL
+//                            'pat_global_patient.parent_id' => NULL
+                            'b.parent_id' => NULL //By Nad at 2018-03-10 5:47 PM
                         ])
-                        ->joinWith('patGlobalPatient')
+                        //->joinWith('patGlobalPatient')
+                        ->joinWith(['glPatient b'])
                         ->andFilterWhere([
                             'or',
-                                ['like', 'pat_global_patient.patient_firstname', $text],
-                                ['like', 'pat_global_patient.patient_lastname', $text],
-                                ['like', 'pat_global_patient.patient_mobile', $text],
-                                ['like', 'pat_global_patient.patient_global_int_code', $text],
-                                ['like', 'pat_global_patient.casesheetno', $text],
+                                ['like', 'b.patient_firstname', $text],
+                                ['like', 'b.patient_lastname', $text],
+                                ['like', 'b.patient_mobile', $text],
+                                ['like', 'b.patient_global_int_code', $text],
+                                ['like', 'b.casesheetno', $text],
                         ])
-                        ->groupBy('pat_global_patient.patient_global_int_code')
+                        ->groupBy('b.patient_global_int_code')
                         ->limit($limit)
                         ->all();
             }
@@ -772,8 +779,8 @@ class PatientController extends ActiveController {
             if ($parent_id != '' && !empty($childrens)) {
                 $user_id = Yii::$app->user->identity->user->user_id;
                 $children_ids = join("', '", $childrens);
-                PatGlobalPatient::updateAll(['parent_id' => $parent_id, 'migration_created_by' => $user_id], "patient_global_guid IN ('$children_ids')");
-                GlPatient::updateAll(['parent_id' => $parent_id], "patient_global_guid IN ('$children_ids')");
+                //PatGlobalPatient::updateAll(['parent_id' => $parent_id, 'migration_created_by' => $user_id], "patient_global_guid IN ('$children_ids')");
+                GlPatient::updateAll(['parent_id' => $parent_id, 'migration_created_by' => $user_id], "patient_global_guid IN ('$children_ids')");
 
                 $merge_patients = PatPatient::find()->andWhere("patient_global_guid IN ('$children_ids')")->active()->all();
 

@@ -41,7 +41,7 @@ class MyworkreportsController extends ActiveController {
                 ->joinWith('patAppointmentSeen')
                 ->joinWith("patAppointmentSeen.consultant")
                 ->joinWith("patient")
-                ->joinWith("patient.patGlobalPatient")
+                ->joinWith("patient.glPatient b")
                 ->joinWith("tenant")
                 ->andWhere('pat_encounter.deleted_at = "0000-00-00 00:00:00"');
 
@@ -58,9 +58,9 @@ class MyworkreportsController extends ActiveController {
         $encounters->addSelect(["pat_appointment.consultant_id as consultant_id"]);
         $encounters->addSelect(["co_tenant.tenant_name as branch_name"]);
         $encounters->addSelect(["CONCAT(co_user.title_code, '', co_user.name) as op_doctor_payment_consultant_name"]);
-        $encounters->addSelect(["CONCAT(pat_global_patient.patient_title_code, ' ', pat_global_patient.patient_firstname) as op_doctor_payment_patient_name"]);
-        $encounters->addSelect(["pat_global_patient.patient_global_int_code as op_doctor_payment_patient_global_int_code"]);
-        $encounters->addSelect(["pat_global_patient.patient_mobile as op_doctor_payment_patient_mobile"]);
+        $encounters->addSelect(["CONCAT(b.patient_title_code, ' ', b.patient_firstname) as op_doctor_payment_patient_name"]);
+        $encounters->addSelect(["b.patient_global_int_code as op_doctor_payment_patient_global_int_code"]);
+        $encounters->addSelect(["b.patient_mobile as op_doctor_payment_patient_mobile"]);
         $encounters->addSelect(["pat_appointment.amount as op_doctor_payment_amount"]);
         $encounters->addSelect(["pat_appointment.status_date as op_doctor_payment_seen_date"]);
         $encounters->addSelect(["pat_appointment.status_time as op_doctor_payment_seen_time"]);
@@ -180,7 +180,7 @@ class MyworkreportsController extends ActiveController {
 
         $consultants = PatConsultant::find()
                 ->joinWith("patient")
-                ->joinWith("patient.patGlobalPatient")
+                ->joinWith("patient.glPatient b")
                 ->joinWith("consultant")
                 ->joinWith("encounter")
                 ->joinWith("tenant")
@@ -203,14 +203,14 @@ class MyworkreportsController extends ActiveController {
         $consultants->addSelect(["co_tenant.tenant_name as branch_name"]);
         $consultants->addSelect(["pat_consultant.consultant_id as consultant_id"]);
         $consultants->addSelect(["CONCAT(co_user.title_code, '', co_user.name) as report_consultant_name"]);
-        $consultants->addSelect(["CONCAT(pat_global_patient.patient_title_code, ' ', pat_global_patient.patient_firstname) as report_patient_name"]);
-        $consultants->addSelect(["pat_global_patient.patient_global_int_code as report_patient_global_int_code"]);
+        $consultants->addSelect(["CONCAT(b.patient_title_code, ' ', b.patient_firstname) as report_patient_name"]);
+        $consultants->addSelect(["b.patient_global_int_code as report_patient_global_int_code"]);
         $consultants->addSelect(["COUNT(pat_consultant.charge_amount) as report_total_visit"]);
         $consultants->addSelect(["SUM(pat_consultant.charge_amount) as report_total_charge_amount"]);
         $consultants->addSelect(["GROUP_CONCAT(pat_encounter.encounter_id) as grouped_encounter_ids"]);
 
         $consultants->groupBy(["pat_consultant.consultant_id", "pat_consultant.patient_id"]);
-        $consultants->orderBy(["pat_global_patient.patient_firstname" => SORT_ASC]);
+        $consultants->orderBy(["b.patient_firstname" => SORT_ASC]);
 
         $consultants = $consultants->all();
 

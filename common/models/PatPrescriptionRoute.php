@@ -4,6 +4,7 @@ namespace common\models;
 
 use common\models\query\PatPrescriptionRouteQuery;
 use yii\db\ActiveQuery;
+use Yii;
 
 /**
  * This is the model class for table "pat_prescription_route".
@@ -27,7 +28,8 @@ class PatPrescriptionRoute extends PActiveRecord {
      * @inheritdoc
      */
     public static function tableName() {
-        return 'pat_prescription_route';
+        $dbname = Yii::$app->client_pharmacy->createCommand("SELECT DATABASE()")->queryScalar();
+        return $dbname.'.pat_prescription_route';
     }
 
     /**

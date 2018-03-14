@@ -77,7 +77,7 @@ class CoPatientGroupsPatients extends PActiveRecord {
         if ($insert) {
             $group = CoPatientGroup::find()->where(['patient_group_id' => $this->patient_group_id])->one();
             $patient = PatGlobalPatient::find()->where(['global_patient_id' => $this->global_patient_id])->one();
-            $activity = "$patient->patient_firstname Added $group->group_name Successfully";
+            $activity = "$patient->fullname Added $group->group_name Successfully";
             CoAuditLog::insertAuditLog(CoPatientGroupsPatients::tableName(), $this->group_patient_id, $activity);
         }
         parent::afterSave($insert, $changedAttributes);

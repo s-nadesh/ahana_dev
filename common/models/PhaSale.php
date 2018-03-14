@@ -256,7 +256,7 @@ class PhaSale extends PActiveRecord {
         $extend = [
             'bill_no_with_patient' => function ($model) {
                 $bill_no = (isset($model->bill_no) ? $model->bill_no : '-');
-                $bill_no .= (isset($model->patient_id) ? ' (' . $model->patient->patGlobalPatient->patient_global_int_code . ')' : '');
+                $bill_no .= (isset($model->patient_id) ? ' (' . $model->patient->glPatient->patient_global_int_code . ')' : '');
                 return $bill_no;
             },
             'patient' => function ($model) {

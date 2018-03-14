@@ -76,6 +76,7 @@ class PharmacyreportController extends ActiveController {
         $dbname=Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
         $post = Yii::$app->getRequest()->post();
         $tenant_id = Yii::$app->user->identity->logged_tenant_id;
+        $current_database = Yii::$app->db->createCommand("SELECT DATABASE()")->queryScalar();
         $sql = "SELECT
                     a.sale_id,a.bill_no,a.sale_date,
                     d.patient_global_int_code, a.patient_name,
@@ -89,7 +90,7 @@ class PharmacyreportController extends ActiveController {
                     ON `a`.`sale_id` = `b`.`sale_id`
                     LEFT JOIN ".$dbname.".pat_patient c
                     ON c.patient_id = a.patient_id
-                    LEFT JOIN ".$dbname.".pat_global_patient d
+                    LEFT JOIN $current_database.gl_patient d
                     ON c.patient_global_guid = d.patient_global_guid
                     WHERE ((`a`.`tenant_id` = '" . $tenant_id . "')
                     AND (a.sale_date BETWEEN '" . $post['from'] . "' AND '" . $post['to'] . "'))

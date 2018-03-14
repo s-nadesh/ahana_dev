@@ -91,13 +91,13 @@ class PatPatient extends RActiveRecord {
      * @inheritdoc
      */
     public static function tableName() {
-        $dbname=Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
-        return $dbname.'.pat_patient';
+        $current_database = Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
+        return "$current_database.pat_patient";
     }
 
     public function init() {
-        $global_fields = PatGlobalPatient::getTableSchema()->getColumnNames();
-        $unset_fields = ['status', 'created_by', 'created_at', 'modified_by', 'modified_at', 'deleted_at', 'global_patient_id'];
+        $global_fields = GlPatient::getTableSchema()->getColumnNames();
+        $unset_fields = ['status', 'created_by', 'created_at', 'modified_by', 'modified_at', 'deleted_at', 'patient_id', 'patient_guid'];
         $this->_global_fields = array_diff($global_fields, $unset_fields);
         return parent::init();
     }
@@ -261,9 +261,17 @@ class PatPatient extends RActiveRecord {
         return $this->hasOne(PatGlobalPatient::className(), ['patient_global_guid' => 'patient_global_guid']);
     }
 
-    public function getPatMergedGlobalPatient() {
-        return $this->hasOne(PatGlobalPatient::className(), ['patient_global_guid' => 'migration_id']);
+    public function getGlPatient() {
+        return $this->hasOne(GlPatient::className(), ['patient_global_guid' => 'patient_global_guid']);
     }
+
+    public function getGlMergedPatient() {
+        return $this->hasOne(GlPatient::className(), ['patient_global_guid' => 'migration_id']);
+    }
+
+//    public function getPatMergedGlobalPatient() {
+//        return $this->hasOne(PatGlobalPatient::className(), ['patient_global_guid' => 'migration_id']);
+//    }
 
     public function getPatatleastoneencounter() {
         $all_patient_id = PatPatient::find()
@@ -299,9 +307,11 @@ class PatPatient extends RActiveRecord {
         if (!empty($this->patGlobalPatient)) {
             $global_patient = $this->patGlobalPatient;
         }
-        foreach ($this->_global_fields as $global_field) {
-            $global_patient->$global_field = $this->$global_field;
-        }
+        $global_patient->patient_global_guid = $this->patient_global_guid;
+        $global_patient->patient_category_id = $this->patient_category_id;
+//            foreach ($this->_global_fields as $global_field) {
+//                $global_patient->$global_field = $this->$global_field;
+//            }
         $global_patient->save(false);
 
         return parent::beforeSave($insert);
@@ -678,13 +688,13 @@ class PatPatient extends RActiveRecord {
                 return $name;
             },
             'childrens_count' => function ($model) {
-                return $model->patGlobalPatient->patPatientChildrensCount;
+                return $model->glPatient->patPatientChildrensCount;
             },
             'childrens_global_ids' => function ($model) {
-                return implode(',', $model->patGlobalPatient->patPatientChildrensGlobalIds);
+                return implode(',', $model->glPatient->patPatientChildrensGlobalIds);
             },
             'migration_created_by' => function ($model) {
-                $global_record = $model->patGlobalPatient->getPatPatientChildrens()->one();
+                $global_record = $model->glPatient->getPatPatientChildrens()->one();
                 if (!empty($global_record)) {
                     $user = CoUser::find()->andWhere(['user_id' => $global_record->migration_created_by])->one();
                     if (!empty($user)) {
@@ -700,7 +710,7 @@ class PatPatient extends RActiveRecord {
 
         foreach ($this->_global_fields as $global_field) {
             $extend_glb = [$global_field => function($model, $global_field) {
-                    return $model->patGlobalPatient->$global_field;
+                    return $model->glPatient->$global_field;
                 }];
             $extend = array_merge($extend_glb, $extend);
         }
@@ -740,7 +750,7 @@ class PatPatient extends RActiveRecord {
             return true;
         } else if ($this->patPatientAddress->isIncompleteProfile()) {
             return true;
-        } else if ($this->patGlobalPatient->isIncompleteProfile()) {
+        } else if ($this->glPatient->isIncompleteProfile()) {
             return true;
         }
         return false;
@@ -924,7 +934,7 @@ class PatPatient extends RActiveRecord {
         $this->oldAttributes = $this->attributes;
 
         foreach ($this->_global_fields as $global_field) {
-            $this->$global_field = @$this->patGlobalPatient->$global_field;
+            $this->$global_field = @$this->glPatient->$global_field;
         }
 
         return parent::afterFind();

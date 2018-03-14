@@ -4,6 +4,8 @@ namespace common\models;
 
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
+use Yii;
 
 /**
  * This is the model class for table "pat_patient".
@@ -50,12 +52,22 @@ use yii\db\ActiveRecord;
  */
 class GlPatient extends ActiveRecord {
 
+    public $complete_profile_fields;
+
 //    public $parent_id;
     /**
      * @inheritdoc
      */
     public static function tableName() {
-        return 'gl_patient';
+        $current_database = Yii::$app->db->createCommand("SELECT DATABASE()")->queryScalar();
+        return "$current_database.gl_patient";
+    }
+
+    public function init() {
+        $global_attributes = self::getTableSchema()->getColumnNames();
+        $unset_fields = ['parent_id', 'migration_created_by', 'casesheetno', 'patient_global_int_code', 'patient_reg_date', 'patient_relation_code', 'patient_relation_name', 'patient_care_taker', 'patient_care_taker_name', 'patient_marital_status', 'patient_occupation', 'patient_blood_group', 'patient_email', 'patient_reg_mode', 'patient_type', 'patient_ref_hospital', 'patient_ref_doctor', 'patient_ref_id', 'patient_secondary_contact', 'patient_bill_type', 'patient_image', 'created_by', 'created_at', 'modified_by', 'modified_at', 'deleted_at'];
+        $this->complete_profile_fields = array_diff($global_attributes, $unset_fields);
+        return parent::init();
     }
 
 //    public function init() {
@@ -129,6 +141,28 @@ class GlPatient extends ActiveRecord {
      */
     public function getTenant() {
         return $this->hasOne(CoTenant::className(), ['tenant_id' => 'tenant_id']);
+    }
+
+    public function getPatPatientChildrens() {
+        return $this->hasMany(self::className(), ['parent_id' => 'patient_global_guid']);
+    }
+
+    public function getPatPatientChildrensCount() {
+        return $this->getPatPatientChildrens()->count();
+    }
+
+    public function getPatPatientChildrensGlobalIds() {
+        return ArrayHelper::map($this->getPatPatientChildrens()->all(), 'patient_global_guid', 'patient_global_int_code');
+    }
+
+    public function isIncompleteProfile() {
+        $global_fields = [];
+
+        foreach ($this->complete_profile_fields as $global_field) {
+            $global_fields[$global_field] = $this->$global_field;
+        }
+
+        return (in_array(null, $global_fields));
     }
 
     /**
