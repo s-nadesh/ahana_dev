@@ -109,7 +109,7 @@ class OrganizationController extends ActiveController {
             $pharmacy_structure = file_get_contents(Url::base(true) . '/pharmacy_structure.sql');
             $database = $post['org_database'];
             $pharmacy_structure = str_replace("REFERENCES `pha_ahana`", "REFERENCES `$database`", $pharmacy_structure);
-            
+
             $connection = new Connection([
                 'dsn' => "mysql:host={$post['org_db_host']};dbname={$post['org_database']}",
                 'username' => $post['org_db_username'],
@@ -122,12 +122,6 @@ class OrganizationController extends ActiveController {
             $command->execute();
 
             $command = $connection->createCommand($data);
-            $command->execute();
-
-            $command = $connection->createCommand($functions);
-            $command->execute();
-
-            $command = $connection->createCommand($sp);
             $command->execute();
 
             $command = $connection->createCommand($v_billing_advance_charges);
@@ -162,6 +156,12 @@ class OrganizationController extends ActiveController {
             $pharmacyConnection->open();
 
             $pharmacyCommand = $pharmacyConnection->createCommand($pharmacy_structure);
+            $pharmacyCommand->execute();
+
+            $pharmacyCommand = $pharmacyConnection->createCommand($functions);
+            $pharmacyCommand->execute();
+
+            $pharmacyCommand = $pharmacyConnection->createCommand($sp);
             $pharmacyCommand->execute();
 
             $pharmacyConnection->close();
