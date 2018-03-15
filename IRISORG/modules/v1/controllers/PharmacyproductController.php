@@ -545,6 +545,7 @@ class PharmacyproductController extends ActiveController {
 //        return $products;
 //    }
 
+    /*NOT NEED*/
     private function _getRoutes($products, $text_search, $tenant_id, $limit) {
         $post = Yii::$app->getRequest()->post();
         $routes = [];
@@ -604,6 +605,7 @@ class PharmacyproductController extends ActiveController {
         return $routes;
     }
 
+    /* NOT NEED*/
     private function _getFrequencies($text, $tenant_id, $limit) {
         $post = Yii::$app->getRequest()->post();
         $frequencies = [];
