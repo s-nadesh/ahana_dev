@@ -181,7 +181,7 @@ class PharmacysalereturnController extends ActiveController {
                     'or',
                         ['like', 'patient_name', $text],
                         ['like', 'bill_no', $text],
-                        ['like', 'pat_global_patient.patient_global_int_code', $text],
+                        ['like', 'gl_patient.patient_global_int_code', $text],
                 ];
             }
 
@@ -192,7 +192,7 @@ class PharmacysalereturnController extends ActiveController {
                 $data->andWhere($condition);
             }
             if ($searchCondition) {
-                $data->joinWith(['patient.patGlobalPatient']);
+                $data->joinWith(['patient.glPatient']);
                 $data->andFilterWhere($searchCondition);
             }
             $result = $data->offset($offset)->all();
@@ -202,7 +202,7 @@ class PharmacysalereturnController extends ActiveController {
                 $resultCount->andWhere($condition);
             }
             if ($searchCondition) {
-                $resultCount->joinWith(['patient.patGlobalPatient']);
+                $resultCount->joinWith(['patient.glPatient']);
                 $resultCount->andFilterWhere($searchCondition);
             }
             $totalCount = $resultCount->count();

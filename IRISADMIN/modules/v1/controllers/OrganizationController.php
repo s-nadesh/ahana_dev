@@ -108,7 +108,10 @@ class OrganizationController extends ActiveController {
             $v_encounter = file_get_contents(Url::base(true) . '/v_encounter.sql');
             $pharmacy_structure = file_get_contents(Url::base(true) . '/pharmacy_structure.sql');
             $database = $post['org_database'];
-            $pharmacy_structure = str_replace("REFERENCES `pha_ahana`", "REFERENCES `$database`", $pharmacy_structure);
+            $pharmacy_structure = str_replace("REFERENCES `ahana`", "REFERENCES `$database`", $pharmacy_structure);
+            
+            $pha_database = $post['org_db_pharmacy'];
+            $structure = str_replace("REFERENCES `ahana_pharmacy`", "REFERENCES `$pha_database`", $structure);
 
             $connection = new Connection([
                 'dsn' => "mysql:host={$post['org_db_host']};dbname={$post['org_database']}",
