@@ -93,6 +93,15 @@ class OrganizationController extends ActiveController {
 
     public function actionCreatedb() {
         $post = Yii::$app->request->post('Organization');
+        
+        $user_form_model = new CoUserForm();
+        $user_form_model->scenario = 'saveorg';
+        $user_form_model->attributes = Yii::$app->request->post('User');
+        $valid = $user_form_model->validate();
+        if(!$valid) {
+            return ['success' => false];
+        }
+        
         if (!empty($post)) {
             //Execute DB Structure to client DB Connection
             $structure = file_get_contents(Url::base(true) . '/structure.sql');
@@ -109,7 +118,7 @@ class OrganizationController extends ActiveController {
             $pharmacy_structure = file_get_contents(Url::base(true) . '/pharmacy_structure.sql');
             $database = $post['org_database'];
             $pharmacy_structure = str_replace("REFERENCES `ahana`", "REFERENCES `$database`", $pharmacy_structure);
-            
+
             $pha_database = $post['org_db_pharmacy'];
             $structure = str_replace("REFERENCES `ahana_pharmacy`", "REFERENCES `$pha_database`", $structure);
 
