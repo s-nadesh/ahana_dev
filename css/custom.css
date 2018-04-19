@@ -962,3 +962,16 @@ ul.dropdown-menu.curPrescFreq > li a:hover, ul.dropdown-menu.curPrescFreq > li a
 .sale-bill {
     background-color: #f7f7f7;
 }
+.ui-splitbar {
+    background-color:#191f36 !important;
+    z-index:99 !important;
+}
+.ui-layout-column > .ui-splitbar { 
+    background-image: url(../img/vertical_splitbar.png);
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.ng-camera-overlay {
+    width: 100%;
+}

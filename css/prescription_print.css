@@ -4,7 +4,7 @@
         size: auto;   /* auto is the initial value */
 
         /* this affects the margin in the printer settings */
-        margin-top: 46mm;
+/*        margin-top: 46mm;*/
         margin-bottom: 20mm; 
     } /* try 0 */
     

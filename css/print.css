@@ -758,4 +758,28 @@ div#printThis table {
     border:#bbbbbb solid 1px !important;
     letter-spacing: -1px;
 }
-
+#receipt_background {
+    position:absolute;
+    z-index:0;
+    background:white;
+    display:block;
+    min-height:50%; 
+    min-width:70%;
+    color:yellow;
+}
+#receipt_content {
+    position:absolute;
+    z-index:1;
+}
+#receipt_bg-text {
+    color: #000000;
+    font-size: 100px;
+    transform: rotate(300deg);
+    -webkit-transform: rotate(300deg);
+    width: 100%;
+    float: left;
+    position: absolute;
+    top: 25%;
+    opacity: 0.1;
+    text-align: center;
+}
