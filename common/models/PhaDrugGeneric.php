@@ -43,7 +43,7 @@ class PhaDrugGeneric extends PActiveRecord {
                 [['status'], 'string'],
                 [['created_at', 'modified_at', 'deleted_at'], 'safe'],
 //            [['drug_class_id'], 'unique', 'targetAttribute' => ['tenant_id', 'drug_class_id', 'deleted_at']],
-            [['generic_id'], 'unique', 'targetAttribute' => ['tenant_id', 'generic_id', 'deleted_at']],
+            [['generic_id'], 'unique', 'targetAttribute' => ['tenant_id', 'generic_id', 'deleted_at'], 'message' => 'The combination of Generic has already been taken.'],
 //            [['drug_class_id'], 'unique', 'targetAttribute' => ['tenant_id', 'drug_class_id', 'generic_id', 'deleted_at'], 'message' => 'The combination of Drug Class Name & Generic has already been taken.'],
         ];
     }

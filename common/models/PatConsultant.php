@@ -145,7 +145,7 @@ class PatConsultant extends RActiveRecord {
     public function getConsultant() {
         return $this->hasOne(CoUser::className(), ['user_id' => 'consultant_id']);
     }
-    
+
     public function getAdmission() {
         return $this->hasMany(PatAdmission::className(), ['encounter_id' => 'encounter_id']);
     }
@@ -187,7 +187,7 @@ class PatConsultant extends RActiveRecord {
                 return (isset($model->consultant->name)) ? $model->consultant->title_code . $model->consultant->name . $specname : '-';
             },
             'encounter_status' => function ($model) {
-                if($model->encounter) {
+                if ($model->encounter) {
                     return $model->encounter->isActiveEncounter();
                 } else {
                     return '';
@@ -206,8 +206,26 @@ class PatConsultant extends RActiveRecord {
                 return isset($model->patient) ? $model->patient->patient_global_int_code : '-';
             },
         ];
-        $fields = array_merge(parent::fields(), $extend);
-        return $fields;
+        $parent_fields = parent::fields();
+        $addt_keys = $extFields = [];
+        if ($addtField = Yii::$app->request->get('addtfields')) {
+            switch ($addtField):
+                case 'overall_income_report':
+                    $addt_keys = false;
+                    $parent_fields = [
+                        'consult_date' => 'consult_date',
+                        'charge_amount' => 'charge_amount',
+                    ];
+                    break;
+            endswitch;
+        }
+
+        if ($addt_keys !== false)
+            $extFields = ($addt_keys) ? array_intersect_key($extend, array_flip($addt_keys)) : $extend;
+
+        return array_merge($parent_fields, $extFields);
+//        $fields = array_merge(parent::fields(), $extend);
+//        return $fields;
     }
 
     public function beforeSave($insert) {

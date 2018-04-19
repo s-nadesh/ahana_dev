@@ -200,7 +200,7 @@ class CoUser extends RActiveRecord {
     }
 
     public function getInterval() {
-        return $this->hasOne(CoDoctorInterval::className(), ['user_id' => 'user_id']);
+        return $this->hasOne(CoDoctorInterval::className(), ['user_id' => 'user_id'])->andWhere(['tenant_id' => Yii::$app->user->identity->logged_tenant_id]);
     }
 
     public static function find() {

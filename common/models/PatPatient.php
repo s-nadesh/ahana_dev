@@ -97,7 +97,7 @@ class PatPatient extends RActiveRecord {
 
     public function init() {
         $global_fields = GlPatient::getTableSchema()->getColumnNames();
-        $unset_fields = ['status', 'created_by', 'created_at', 'modified_by', 'modified_at', 'deleted_at', 'patient_id', 'patient_guid'];
+        $unset_fields = ['status', 'created_by', 'created_at', 'modified_by', 'modified_at', 'deleted_at', 'patient_id', 'patient_guid', 'tenant_id', 'patient_int_code'];
         $this->_global_fields = array_diff($global_fields, $unset_fields);
         return parent::init();
     }
@@ -378,6 +378,11 @@ class PatPatient extends RActiveRecord {
         $unset_cols = ['patient_id', 'created_at', 'modified_at', 'status'];
         return array_combine($unset_cols, $unset_cols);
     }
+    
+    public function getUnsetupdatecols() {
+        $unset_cols = ['patient_id', 'created_at', 'modified_at', 'status', 'tenant_id', 'patient_int_code', 'patient_guid'];
+        return array_combine($unset_cols, $unset_cols);
+    }
 
     /* Use to prevent the save to HMS */
 
@@ -388,6 +393,7 @@ class PatPatient extends RActiveRecord {
     protected function savetoHms($insert) {
         if ($this->saveHms) {
             $unset_cols = $this->getUnsetcols();
+            $update_unset_cols = $this->getUnsetupdatecols();
 
             $patient = GlPatient::find()->where(['patient_global_guid' => $this->patient_global_guid])->one();
 
@@ -397,18 +403,19 @@ class PatPatient extends RActiveRecord {
                     $model = new GlPatient;
                     $save = true;
                     $gl_patient_insert = true;
+                    $attr = array_diff_key($this->attributes, $unset_cols);
                 }
             } else {
                 if (!empty($patient)) {
                     $model = $patient;
                     $save = true;
                     $gl_patient_insert = false;
+                    $attr = array_diff_key($this->attributes, $update_unset_cols);
                     $this->updateAllPatient($patient);
                 }
             }
 
             if ($save) {
-                $attr = array_diff_key($this->attributes, $unset_cols);
                 $model->attributes = $attr;
                 foreach ($this->_global_fields as $global_field) {
                     $model->$global_field = $this->$global_field;

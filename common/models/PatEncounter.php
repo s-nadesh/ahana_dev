@@ -269,6 +269,10 @@ class PatEncounter extends RActiveRecord {
     public function getPatAdmissionDischarge() {
         return $this->hasOne(PatAdmission::className(), ['encounter_id' => 'encounter_id'])->andWhere(['IN', 'admission_status', ['D', 'CD']])->orderBy(['created_at' => SORT_DESC]);
     }
+    
+    public function getPatAdmissionAdministrativeDischarge() {
+        return $this->hasOne(PatAdmission::className(), ['encounter_id' => 'encounter_id'])->andWhere(['IN', 'admission_status', ['D']])->orderBy(['created_at' => SORT_DESC]);
+    }
 
     public function getPatAdmissionClinicalDischarge() {
         return $this->hasOne(PatAdmission::className(), ['encounter_id' => 'encounter_id'])->andWhere(['IN', 'admission_status', ['CD']])->orderBy(['created_at' => SORT_DESC]);
@@ -335,7 +339,8 @@ class PatEncounter extends RActiveRecord {
                 return (isset($model->patAppointmentSeen) ? Yii::$app->hepler->convert_number_to_words((int) ($model->patAppointmentSeen->amount)) . ' Rupees Only' : '-');
             },
             'room_name' => function ($model) {
-                return (isset($model->patCurrentAdmission->room->bed_name) ? (int) $model->patCurrentAdmission->room->bed_name : '-');
+                // (int) - integer option removed. 
+                return (isset($model->patCurrentAdmission->room->bed_name) ?  $model->patCurrentAdmission->room->bed_name : '-');
             },
             'liveAppointmentConsultant' => function ($model) {
                 return (isset($model->patLiveAppointmentBooking->consultant) ? $model->patLiveAppointmentBooking->consultant : '-');
@@ -557,9 +562,10 @@ class PatEncounter extends RActiveRecord {
                     $addt_keys = ['liveAdmission', 'liveAppointmentBooking'];
                     break;
                 case 'shortcut':
-                    $addt_keys = ['apptPatientData'];
+                    $addt_keys = ['apptPatientData', 'room_name'];
                     $parent_fields = [
                         'encounter_id' => 'encounter_id',
+                        'encounter_date' => 'encounter_date',
                         'status' => 'status',
                         'encounter_type' => 'encounter_type'];
                     break;
@@ -642,7 +648,7 @@ class PatEncounter extends RActiveRecord {
 //            }
 
     public function getViewChargeCalculation() {
-        $total_charge = $total_concession = $total_paid = $balance = 0;
+        $total_charge = $total_concession = $total_paid = $balance = $total_pharmacy_concession = 0;
 
         if ($this->encounter_type == 'IP') {
             $recurring = VBillingRecurring::find()
@@ -693,12 +699,13 @@ class PatEncounter extends RActiveRecord {
                 $total_amount += $sale['bill_amount'];
                 //$pending_amount += $sale['bill_amount'] - $sale->phaSaleBillingsTotalPaidAmount;
                 $total_paid += $sale->phaSaleBillingsTotalPaidAmountPharmacySettlement;
+                $total_pharmacy_concession += $sale->phaSaleBillingsTotalConcessionAmount;
             }
 
             $row_total_charge = $recurring->total_charge + $procedure->total_charge + $professional->total_charge + $other_charge->total_charge;
             $extra_charge = $procedure->extra_amount + $professional->extra_amount + $other_charge->extra_amount;
             $total_charge = $row_total_charge + $extra_charge + $total_amount;
-            $total_concession = $this->concession_amount + $procedure->concession_amount + $professional->concession_amount + $other_charge->concession_amount;
+            $total_concession = $this->concession_amount + $procedure->concession_amount + $professional->concession_amount + $other_charge->concession_amount + $total_pharmacy_concession;
 
             $balance = $total_charge - $total_concession - $total_paid;
         } elseif ($this->encounter_type == 'OP') {

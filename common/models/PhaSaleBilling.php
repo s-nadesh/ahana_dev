@@ -3,6 +3,7 @@
 namespace common\models;
 
 use common\models\query\PhaSaleBillingQuery;
+use Yii;
 use yii\db\ActiveQuery;
 
 /**
@@ -157,8 +158,26 @@ class PhaSaleBilling extends PActiveRecord {
                 return (isset($model->saleReturn->bill_no) ? $model->saleReturn->bill_no : '');
             }
         ];
-        $fields = array_merge(parent::fields(), $extend);
-        return $fields;
+        $parent_fields = parent::fields();
+        $addt_keys = $extFields = [];
+        if ($addtField = Yii::$app->request->get('addtfields')) {
+            switch ($addtField):
+                case 'overall_income_report':
+                    $addt_keys = false;
+                    $parent_fields = [
+                        'paid_date' => 'paid_date',
+                        'paid_amount' => 'paid_amount',
+                    ];
+                    break;
+            endswitch;
+        }
+
+        if ($addt_keys !== false)
+            $extFields = ($addt_keys) ? array_intersect_key($extend, array_flip($addt_keys)) : $extend;
+
+        return array_merge($parent_fields, $extFields);
+//        $fields = array_merge(parent::fields(), $extend);
+//        return $fields;
     }
 
 }

@@ -65,6 +65,10 @@ class PatPastMedical extends RActiveRecord {
         ];
     }
 
+    public function getPatDocuments() {
+        return $this->hasOne(PatDocuments::className(), ['doc_id' => 'doc_id']);
+    }
+    
     public static function find() {
         return new PatPastMedicalQuery(get_called_class());
     }

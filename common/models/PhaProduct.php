@@ -64,14 +64,14 @@ class PhaProduct extends PActiveRecord {
      */
     public function rules() {
         return [
-                [['product_name', 'product_description_id', 'product_reorder_min', 'product_reorder_max', 'brand_id', 'purchase_vat_id'], 'required'],
-                [['product_name', 'product_unit', 'product_unit_count', 'product_description_id', 'product_reorder_min', 'product_reorder_max', 'brand_id', 'division_id', 'generic_id', 'purchase_vat_id'], 'required', 'on' => 'savepresproduct'],
+                [['product_name', 'product_description_id', 'product_reorder_min', 'product_reorder_max', 'brand_id', 'purchase_vat_id', 'generic_id', 'drug_class_id'], 'required'],
+                [['product_name', 'product_unit', 'product_unit_count', 'product_description_id', 'product_reorder_min', 'product_reorder_max', 'brand_id', 'division_id', 'generic_id', 'purchase_vat_id', 'drug_class_id'], 'required', 'on' => 'savepresproduct'],
                 [['tenant_id', 'product_description_id', 'product_reorder_min', 'product_reorder_max', 'brand_id', 'division_id', 'generic_id', 'drug_class_id', 'purchase_vat_id', 'purchase_package_id', 'sales_vat_id', 'hsn_id', 'sales_package_id', 'created_by', 'modified_by'], 'integer'],
                 [['product_price'], 'number'],
                 [['status'], 'string'],
                 [['product_reorder_max'], 'validateReorderchck'],
             //[['supplier_ids'], 'validateSupplieronetime'],
-            [['supplier_id_1', 'supplier_id_2', 'supplier_id_3'], 'validateSupplieronetime'],
+                [['supplier_id_1', 'supplier_id_2', 'supplier_id_3'], 'validateSupplieronetime'],
                 [['created_at', 'modified_at', 'deleted_at', 'supplier_id_1', 'supplier_id_2', 'supplier_id_3', 'supplier_ids','sales_gst_id'], 'safe'],
                 [['product_code'], 'string', 'max' => 50],
                 [['product_name', 'product_location'], 'string', 'max' => 255],

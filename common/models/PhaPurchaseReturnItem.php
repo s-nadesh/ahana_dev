@@ -197,6 +197,7 @@ class PhaPurchaseReturnItem extends PActiveRecord {
                         'vat_percent' => 'vat_percent',
                         'vat_amount' => 'vat_amount',
                         'package_name' => 'package_name',
+                        'package_unit' => 'package_unit',
                         'total_amount' => 'total_amount',
                     ];
                     break;

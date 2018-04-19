@@ -156,7 +156,12 @@ class CoLogin extends ActiveRecord implements IdentityInterface {
     }
 
     public static function findByUsernameAndTenant($username, $tenant) {
-        return static::find()->joinWith(['user'])->where(['username' => $username, 'co_user.tenant_id' => $tenant])->orWhere(['username' => $username, 'co_user.tenant_id' => 0])->one();
+        return static::find()
+                ->joinWith(['user', 'user.usersBranches'])
+                ->where(['username' => $username, 'co_user.tenant_id' => $tenant])
+                ->orWhere(['username' => $username, 'co_user.tenant_id' => 0])
+                ->orWhere(['username' => $username, 'co_users_branches.branch_id' => $tenant]) //Task - Branch Login
+                ->one();
     }
 
     /**

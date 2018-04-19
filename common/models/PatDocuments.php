@@ -130,8 +130,8 @@ class PatDocuments extends RActiveRecord {
                 [['patient_id', 'doc_type_id', 'encounter_id'], 'required'],
                 [['name', 'age', 'gender', 'address', 'education', 'martial_status', 'relationship'], 'required', 'on' => 'CH'],
                 [['name', 'age', 'gender', 'address', 'education', 'martial_status', 'relationship', 'information', 'information_adequacy'], 'required', 'on' => 'MCH'],
-                //[['name'], 'required', 'on' => 'MCH'],
-                [['information', 'information_adequacy', 'total_duration', 'mode_of_onset', 'course_type', 'nature'], 'required', 'on' => 'CH'],
+            //[['name'], 'required', 'on' => 'MCH'],
+            [['information', 'information_adequacy', 'total_duration', 'mode_of_onset', 'course_type', 'nature'], 'required', 'on' => 'CH'],
                 [['tenant_id', 'patient_id', 'doc_type_id', 'encounter_id', 'created_by', 'modified_by'], 'integer'],
                 [['document_xml', 'status', 'xml_path'], 'string'],
                 [['rb_pb_treatmenthistory'], 'required', 'when' => function($model) {
@@ -290,7 +290,10 @@ class PatDocuments extends RActiveRecord {
             },
             'created_user' => function ($model) {
                 return $model->createdUser->title_code . ' ' . $model->createdUser->name;
-            }
+            },
+            'document_details' => function ($model) {
+                return $this->getDocumentFulldetails($model);
+            },
         ];
         $fields = array_merge(parent::fields(), $extend);
         return $fields;
@@ -343,6 +346,10 @@ class PatDocuments extends RActiveRecord {
             }
         }
         return parent::afterSave($insert, $changedAttributes);
+    }
+    
+    public function getDocumentFulldetails($model) {
+        return ucwords("{$this->encounter_id} [" . date('d/m/Y', strtotime($this->created_at)) . " | {$model->tenant->tenant_name}]");
     }
 
 }
