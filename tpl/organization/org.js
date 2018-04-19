@@ -203,7 +203,7 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
                         $scope.loadbar('hide');
                         $scope.form_status = '';
                         if (response.data.success === true) {
-                            
+
                             if (mode !== 'add') {
                                 $scope.successMessage = mode + " updated successfully";
                                 $timeout(function () {

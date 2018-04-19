@@ -173,8 +173,8 @@ function run($rootScope, $state, $stateParams, $location, $cookieStore, $http, $
         serviceUrl = 'http://demo.arkinfotec.in/ahana/demo/api/IRISADMIN/web/v1';
     } else if ($location.host() == 'hms.ark') {
         serviceUrl = 'http://hms.ark/api/IRISADMIN/web/v1';
-    } else if ($location.host() == 'medizura.ark') {
-        serviceUrl = 'http://medizura.ark/api/IRISADMIN/web/v1';
+    } else if ($location.host() == 'medizura.com') {
+        serviceUrl = 'http://medizura.com/api/IRISADMIN/web/v1';
     } else {
         productOwner = false; // Organizations
         serviceUrl = 'http://hms.ark/api/IRISADMIN/web/v1';
