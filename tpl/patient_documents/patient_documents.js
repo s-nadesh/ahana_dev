@@ -501,6 +501,23 @@ app.controller('DocumentsController', ['$rootScope', '$scope', '$timeout', '$htt
                     });
         }
 
+        $scope.updatePastmedical = function ($data, past_medical_id) {
+            angular.extend($data, {
+                pat_past_medical_id: past_medical_id,
+            });
+            $http({
+                method: 'POST',
+                url: $rootScope.IRISOrgServiceUrl + '/patientprescription/updatepastmedical',
+                data: $data,
+            }).success(
+                    function (response) {
+                        $timeout(function () {
+                            $state.go($state.current, {}, {reload: true});
+                        }, 1000)
+                    }
+            );
+        }
+
         $("body").on("click", ".MCHaddMore", function () {
             if (!jQuery.isEmptyObject($scope.encounter)) {
                 $scope.spinnerbar('show');
@@ -1259,10 +1276,12 @@ app.controller('DocumentsController', ['$rootScope', '$scope', '$timeout', '$htt
         });
 
         $scope.openModel = function (size, ctrlr, tmpl, update_col, doc_id, doc_name, encounter_id, date_time) {
+            $scope.popupLoading = true;
             $http.get($rootScope.IRISOrgServiceUrl + "/patientscanneddocuments/getscanneddocument?id=" + doc_id + "&doc_name=" + doc_name + "&encounter_id=" + encounter_id + "&date_time=" + date_time)
                     .success(function (response) {
                         if (response.success === true) {
                             $scope.scan_document = response.result;
+                            $scope.popupLoading = false;
                         } else {
                             $scope.errorData = response.message;
                         }

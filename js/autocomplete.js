@@ -212,11 +212,43 @@
                         KEYCODE.MAC_COMMAND_RIGHT
                     ].indexOf(keyCode) !== -1;
                 }
+                
+                //Custom function by Nad.
+                function _validKeyCode(keyCode) {
+                    return [
+                        VALIDKEYCODE.ZERO,
+                        VALIDKEYCODE.ONE,
+                        VALIDKEYCODE.TWO,
+                        VALIDKEYCODE.THREE,
+                        VALIDKEYCODE.FOUR,
+                        VALIDKEYCODE.FIVE,
+                        VALIDKEYCODE.SIX,
+                        VALIDKEYCODE.SEVEN,
+                        VALIDKEYCODE.EIGHT,
+                        VALIDKEYCODE.NINE,
+                        VALIDKEYCODE.NU_ZERO,
+                        VALIDKEYCODE.NU_ONE,
+                        VALIDKEYCODE.NU_TWO,
+                        VALIDKEYCODE.NU_THREE,
+                        VALIDKEYCODE.NU_FOUR,
+                        VALIDKEYCODE.NU_FIVE,
+                        VALIDKEYCODE.NU_SIX,
+                        VALIDKEYCODE.NU_SEVEN,
+                        VALIDKEYCODE.NU_EIGHT,
+                        VALIDKEYCODE.NU_NINE,
+                    ].indexOf(keyCode) !== -1;
+                }
 
                 function _elementKeyDown(event) {
                     var keyCode = event.charCode || event.keyCode || 0;
 
                     if (_ignoreKeyCode(keyCode)) {
+                        return;
+                    }
+                    
+                    //Custom code by Nad.
+                    if (_validKeyCode(keyCode)) {
+                        ctrl.hide();
                         return;
                     }
 
@@ -817,6 +849,30 @@
         DOWNARROW: 40,
         MAC_COMMAND_LEFT: 91,
         MAC_COMMAND_RIGHT: 93
+    };
+    
+    //Custom code by Nad.
+    var VALIDKEYCODE = {
+        ZERO: 48,
+        ONE: 49,
+        TWO: 50,
+        THREE: 51,
+        FOUR: 52,
+        FIVE: 53,
+        SIX: 54,
+        SEVEN: 55,
+        EIGHT: 56,
+        NINE: 57,
+        NU_ZERO: 96,
+        NU_ONE: 97,
+        NU_TWO: 98,
+        NU_THREE: 99,
+        NU_FOUR: 100,
+        NU_FIVE: 101,
+        NU_SIX: 102,
+        NU_SEVEN: 103,
+        NU_EIGHT: 104,
+        NU_NINE: 105,
     };
 
     var defaultOptions = {

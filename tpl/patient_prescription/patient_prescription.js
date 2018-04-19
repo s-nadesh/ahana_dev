@@ -225,12 +225,38 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
                     editableValue.scope.$data = $scope.data.prescriptionItems[key].qty;
                 }
             });
+
+            //Bc-179 Dropdown - Qty 
+            angular.forEach(tableform.$editables, function (editableValue, editableKey) {
+                if (editableValue.attrs.eIndex == key && editableValue.attrs.eName == 'product_id') {
+                    var options = editableValue.inputEl[0].childNodes;
+                    angular.forEach(options, function (optionValue, optionKey) {
+                        if (parseFloat(optionValue.dataset.availablequantity) < parseFloat($scope.data.prescriptionItems[key].qty))
+                            optionValue.className = 'out-of-stock';
+                        else
+                            optionValue.className = 'in-stock';
+                    });
+                }
+            });
         };
         $scope.qtyChange = function (qty, item, key, tableform) {
             if (typeof qty != 'undefined') {
                 $scope.data.prescriptionItems[key].total = $scope.calculate_price(qty, item.price);
                 $scope.data.prescriptionItems[key].in_stock = (parseInt(item.available_quantity) >= parseInt(qty));
             }
+
+            //Bc-179 Dropdown - Qty 
+            angular.forEach(tableform.$editables, function (editableValue, editableKey) {
+                if (editableValue.attrs.eIndex == key && editableValue.attrs.eName == 'product_id') {
+                    var options = editableValue.inputEl[0].childNodes;
+                    angular.forEach(options, function (optionValue, optionKey) {
+                        if (parseFloat(optionValue.dataset.availablequantity) < parseFloat(qty))
+                            optionValue.className = 'out-of-stock';
+                        else
+                            optionValue.className = 'in-stock';
+                    });
+                }
+            });
         };
 
         $scope.getFav = function () {
@@ -246,6 +272,7 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
 //For Form
         $scope.initForm = function () {
             $scope.loadPrevPrescriptionsList();
+            $scope.getFav();
             if (localStorage.getItem("Show_available_medicine") === null) {
                 $scope.available_medicine = '0';
                 localStorage.setItem("Show_available_medicine", '0');
@@ -714,10 +741,14 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
                     'freqType': value.freqType
                 };
                 var fav = $filter('filter')($scope.child.favourites, {product_id: value.product_id});
-                if (fav.length > 0) {
+                if (fav && fav.length > 0) {
                     angular.extend(items, {is_favourite: 1});
                 }
-                PrescriptionService.addPrescriptionItem(items);
+                //In Master table product, changed geneic and drug glass remove the product   
+                var chkProduct = $filter('filter')(items.all_products, {product_id: items.product_id}, true);
+                if (chkProduct.length != 0) {
+                    PrescriptionService.addPrescriptionItem(items);
+                }
             });
         }
         $scope.addToCurrentPrescription = function () {
@@ -743,8 +774,9 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
                 });
                 $scope.pres_status = 'current';
                 $("#current_prescription").focus();
-                toaster.clear();
-                toaster.pop('success', '', 'Medicine has been added to the current prescription');
+                //toaster.clear();
+                //toaster.pop('success', '', 'Medicine has been added to the current prescription');
+                $scope.msg.successMessage = "Medicine has been added to the current prescription";
             }
         }
 
@@ -768,8 +800,9 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
                 });
                 $scope.pres_status = 'current';
                 $("#current_prescription").focus();
-                toaster.clear();
-                toaster.pop('success', '', 'Medicine has been added to the represcribe');
+                //toaster.clear();
+                //toaster.pop('success', '', 'Medicine has been added to the represcribe');
+                $scope.msg.successMessage = "Medicine has been added to the represcribe";
             }
         }
 
@@ -936,8 +969,9 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
                     $timeout(function () {
                         $scope.setFocus('route', $scope.data.prescriptionItems.length - 1);
                     });
-                    toaster.clear();
-                    toaster.pop('success', 'Favourite', 'Medicine has been added to the current prescription');
+                    //toaster.clear();
+                    //toaster.pop('success', 'Favourite', 'Medicine has been added to the current prescription');
+                    $scope.msg.successMessage = "Medicine has been added to the current prescription";
                 });
             }
         });
@@ -1369,7 +1403,10 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
 
                                                             //Multiple entries created, Check duplicate once again 
                                                             var chkDuplicate = $filter('filter')(PrescriptionService.getPrescriptionItems(), {product_id: items.product_id}, true);
-                                                            if (chkDuplicate.length == 0) {
+
+                                                            //In Master table product, changed geneic and drug glass remove the product   
+                                                            var chkProduct = $filter('filter')(items.all_products, {product_id: items.product_id}, true);
+                                                            if (chkDuplicate.length == 0 && chkProduct.length != 0) {
                                                                 PrescriptionService.addPrescriptionItem(items);
                                                             }
                                                             loop_start = parseFloat(loop_start) + parseFloat(1);
@@ -1644,7 +1681,12 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
 //Scroll dropdown when key up / down
                 $timeout(function () {
                     var selected_li = $('ul.search-patientcont-header li.selected');
-                    $('ul.search-patientcont-header')[0].scrollTop = selected_li.index() * selected_li.outerHeight();
+                    if (selected_li.index() < 12) {
+                        var selected_ind = 0;
+                    } else {
+                        var selected_ind = selected_li.index() - 12;
+                    }
+                    $('ul.search-patientcont-header')[0].scrollTop = selected_ind * selected_li.outerHeight();
                 });
                 var a = $("#prescriptioncont-header .selected a");
                 if (a.length > 0) {
@@ -2820,6 +2862,7 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
 
         $scope.initmedicalhistory = function () {
             $scope.getAllPastmedical();
+            $scope.getMCHdocument();
             $scope.getDocumentType(function (doc_type_response) {
                 if (doc_type_response.success == false) {
                     alert("Sorry, you can't create a document");
@@ -2846,6 +2889,45 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
                     }, true);
                 }
             });
+        }
+
+        $scope.getMCHdocument = function () {
+            $scope.data.current_mch_id = '';
+            $http.get($rootScope.IRISOrgServiceUrl + '/patientprescription/getmchdocument?patient_id=' + $state.params.id)
+                    .success(function (pastmedical) {
+                        $scope.MCHdocument = pastmedical.result;
+                    })
+                    .error(function () {
+                        $scope.errorData = "An Error has occured while loading patient medical history!";
+                    });
+        }
+
+        $scope.getdocumentdetails = function () {
+            $scope.view_xml = '';
+            if ($scope.data.current_mch_id) {
+                $scope.getDocumentType(function (doc_type_response) {
+                    if (doc_type_response.success == false) {
+                        $scope.isLoading = false;
+                        alert("Sorry, you can't view a document");
+                        $state.go("patient.document", {id: $state.params.id});
+                    } else {
+                        $scope.viewxslt = doc_type_response.result.document_out_xslt;
+                        $scope.getDocument($scope.data.current_mch_id, function (pat_doc_response) {
+                            $scope.encounter = {encounter_id: pat_doc_response.result.encounter_id};
+                            $scope.test_view_xml = pat_doc_response.result.document_xml;
+                            $scope.loadResultFromDatabase($scope.test_view_xml, function (resultxml) {
+                                $scope.loadVitalsFromDatabase(resultxml, false, function (newxml) {
+                                    $scope.view_xml = newxml;
+                                    $timeout(function () {
+                                        $scope.setRefferedBy();
+                                        $scope.checkmedicalcaseemptyrow('print_medical_case');
+                                    }, 100);
+                                });
+                            });
+                        });
+                    }
+                });
+            }
         }
 
         $scope.getAllPastmedical = function () {
@@ -2973,6 +3055,7 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
 
         $scope.Updatemedicaldocument = function (doc_id) {
             $scope.getAllPastmedical();
+            $scope.getMCHdocument();
             $scope.getDocumentType(function (doc_type_response) {
                 if (doc_type_response.success == false) {
                     $scope.isLoading = false;
@@ -3296,6 +3379,17 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
                 $('#date_name').html(output);
                 $('#time').html(time);
             }, 100);
+        }
+
+        $scope.updatePastmedical = function ($data, past_medical_id) {
+            angular.extend($data, {
+                pat_past_medical_id: past_medical_id,
+            });
+            $http({
+                method: 'POST',
+                url: $rootScope.IRISOrgServiceUrl + '/patientprescription/updatepastmedical',
+                data: $data,
+            });
         }
 
 // Prescription - Frequency Tab Navigation.

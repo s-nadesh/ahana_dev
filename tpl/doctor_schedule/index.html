@@ -49,11 +49,10 @@
                 <tr ng-repeat-end ng-show="expanded" data-value="{{row.name}}">
                     <td data-value="{{row.name}}"></td>
                     <td colspan="2" data-value="{{row.name}}">
-                        <div class="row"  ng-repeat="day in row.days| orderBy: dayname">
+                        <div class="row">
                             <div class="col-sm-6">
-
                                 <div class="panel panel-default inner-panel">
-                                    <div class="panel-heading">
+                                    <div class="panel-heading bg-primary">
                                         <b> Interval </b>
                                     </div>
                                     <div class="panel-body doc-timing">
@@ -82,10 +81,14 @@
                                         </table>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row"  ng-repeat="day in row.days| orderBy: dayname">
+                            <div class="col-sm-6">
 
                                 <div class="panel panel-default inner-panel">
 
-                                    <div class="panel-heading">
+                                    <div class="panel-heading bg-info">
                                         <b> {{day.dayname}} </b>
                                     </div>
 

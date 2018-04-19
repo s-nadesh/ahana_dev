@@ -447,6 +447,7 @@ app.controller('PatientAppointmentController', ['$rootScope', '$scope', '$timeou
 
         $scope.printBillData = {};
         $scope.save_success = function (date, amount, amount_in_words, bill_no, encounter_id, payment_mode) {
+            $scope.updatePrintcreatedby('PatEncounter', encounter_id);
             $scope.printBillData.doctor = $scope.patientObj.consultant_name;
             $scope.printBillData.op_amount = amount;
             $scope.printBillData.op_amount_inwords = amount_in_words;

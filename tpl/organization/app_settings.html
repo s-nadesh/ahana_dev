@@ -339,12 +339,52 @@
                                     <label class="col-sm-3 control-label">Print</label>
                                     <div class="col-sm-9">
                                         <div ng-repeat="print_data in config_print_data| orderBy: key">
-                                            <div ng-if="((print_data.code != 'PID') && (print_data.code != 'PIB') && (print_data.code != 'PIA'))">
+                                            <div ng-if="((print_data.code == 'SA') || (print_data.code == 'SD'))">
                                                 <label class="i-checks "> 
                                                     <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="print_data.value" ng-change='updateSetting(print_data.value, print_data.config_id)'> 
                                                     <i></i> 
                                                 </label>
                                                 <label for='{{print_data.key}}'>{{print_data.key}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Margin Top</label>
+                                    <div class="col-sm-9">
+                                        <div ng-repeat="print_data in config_print_data| orderBy: key">
+                                            <div ng-if="((print_data.code == 'PMT'))">
+                                                <table st-table="displayedCollection"  st-safe-src="rowCollection" class="table table-striped b-t b-light">
+                                                    <tr>
+                                                        <td class="v-middle">
+                                                            <span editable-text="print_data.value" e-name="value" e-form="rowform" onbeforesave="checkValue($data)" e-required>
+                                                                {{ print_data.value || 'empty' }}
+                                                            </span>
+                                                            <span>
+                                                                {{ print_data.notes || 'empty' }}
+                                                            </span>
+                                                        </td>
+                                                        <td style="white-space: nowrap">
+                                                            <!-- form -->
+                                                            <form editable-form name="rowform" onbeforesave="updateSetting($data, print_data.config_id)" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == print_data">
+                                                                <button type="submit" ng-disabled="rowform.$waiting" class="btn m-b-xs btn-info save-btn">
+                                                                    Save
+                                                                </button>
+                                                                <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn m-b-xs btn-default">
+                                                                    Cancel
+                                                                </button>
+                                                            </form>
+                                                            <div class="buttons" ng-show="!rowform.$visible">
+                                                                <button class="btn m-b-xs  btn-primary " ng-click="rowform.$show()"> <i class="fa fa-pencil"></i> Edit</button> 
+                                                            </div>  
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <!--                                                <label class="i-checks "> 
+                                                                                                    <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="print_data.value" ng-change='updateSetting(print_data.value, print_data.config_id)'> 
+                                                                                                    <i></i> 
+                                                                                                </label>
+                                                                                                <label for='{{print_data.key}}'>{{print_data.key}}</label>-->
                                             </div>
                                         </div>
                                     </div>
@@ -388,7 +428,8 @@
                     <div class="col-sm-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <b>User Interval</b> 
+                                <b>User Interval</b>
+                                <div class="pull-right"><a class="label bg-primary" ng-click="updateTimeout('0')">Reset</a></div>
                             </div>
                             <div class="panel-body">
                                 <div class="form-group">
@@ -402,6 +443,55 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <b>OP Bill Setting</b> 
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Page Size</label>
+                                <div class="col-sm-9">
+                                    <div>
+                                        <label class="i-checks">
+                                            <input type="radio" checked="" value="A4" name="OpBill.PS" ng-model="OpBill.PS" ng-change="updateOpBill('PS', 'A4')">
+                                            <i></i>
+                                            A4&nbsp; &nbsp;
+                                        </label>
+                                        <label class="i-checks">
+                                            <input type="radio" checked="" value="A5" name="OpBill.PS" ng-model="OpBill.PS" ng-change="updateOpBill('PS', 'A5')">
+                                            <i></i>
+                                            A5&nbsp; &nbsp;
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Page Layout</label>
+                                <div class="col-sm-9">
+                                    <div>
+                                        <label class="i-checks">
+                                            <input type="radio" checked="" value="Portrait" name="OpBill.PL" ng-model="OpBill.PL" ng-change="updateOpBill('PL', 'Portrait')">
+                                            <i></i>
+                                            Portrait&nbsp; &nbsp;
+                                        </label>
+                                        <label class="i-checks">
+                                            <input type="radio" checked="" value="landscape" name="OpBill.PL" ng-model="OpBill.PL" ng-change="updateOpBill('PL', 'landscape')">
+                                            <i></i>
+                                            Landscape&nbsp; &nbsp;
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -153,7 +153,7 @@
                                     <td>{{row.currentAdmission.consultant_name}}</td>
                                     <td data-type="Number">{{row.viewChargeCalculation.total_charge - row.viewChargeCalculation.total_concession| number:2 }}</td>
                                     <td data-type="Number">
-                                        <span class="label {{(row.total_charge - row.total_concession - row.paid < 0) ? 'bg-danger' : 'bg-success'}}">
+                                        <span class="label {{(parseFloat(row.viewChargeCalculation.balance) < 0) ? 'bg-danger' : 'bg-success'}}">
                                             {{row.viewChargeCalculation.balance| number:2}}
                                         </span>
                                     </td>

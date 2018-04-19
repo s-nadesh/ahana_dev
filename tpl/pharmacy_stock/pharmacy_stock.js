@@ -178,7 +178,7 @@ app.controller('stockController', ['$rootScope', '$scope', '$timeout', '$http', 
                         $scope.errorData = "An Error has occured while loading products!";
                     });
         }
-        $scope.pageChanged = function () {
+        $scope.pagebatchChanged = function () {
             $scope.loadBatch();
         };
 

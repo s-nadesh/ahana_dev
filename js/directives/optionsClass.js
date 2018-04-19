@@ -20,6 +20,9 @@ angular.module('app').directive('optionsClass', function ($parse) {
                             // by looking for the option with the appropriate index in the
                             // value attribute.
                             option = elem.find('option[value=' + index + ']');
+                            
+                    //Bc-179 Dropdown - Qty
+                    angular.element(option).attr('data-availableQuantity', item.availableQuantity);
 
                     // now loop through the key/value pairs in the mapping object
                     // and apply the classes that evaluated to be truthy.

@@ -12,12 +12,15 @@
                     <div class="modal-body wrapper-lg">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <div class="form-group" ng-repeat="value in scan_document">
+                                <div class="form-group" ng-hide="popupLoading" ng-repeat="value in scan_document">
                                     <label class="col-sm-6 control-label">{{value.data.file_org_name}}</label>
                                     <div class="col-sm-6">
-                                        <a ng-if="value.data.file_type == 'application/pdf'" class="btn m-b-xs btn-dark" ng-href="{{value.file_url}}" target="'_new'"><i class="fa fa-eye"></i></a>
+                                        <a ng-if="value.data.file_type == 'application/pdf' || value.data.file_type == 'image/png' || value.data.file_type == 'image/jpg' || value.data.file_type == 'image/jpeg' || value.data.file_type == 'text/plain'" class="btn m-b-xs btn-dark" ng-href="{{value.file_url}}" target="'_new'"><i class="fa fa-eye"></i></a>
                                         <button class="btn m-b-xs btn-dark" ng-click="singleFileDownload(value)"><i class="fa fa-download"></i></button>
                                     </div>
+                                </div>
+                                <div class="form-group text-center" ng-show="popupLoading">
+                                    <i class="fa fa-spin fa-refresh"></i>
                                 </div>
                             </div>
                             <footer class="panel-footer text-right bg-light lter">

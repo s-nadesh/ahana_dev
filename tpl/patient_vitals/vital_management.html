@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="btn-group op-btn-group">
-                    <button class="btn btn-info IP-op-patient" ng-click="loadIpVitals('IP')">
+                    <button class="btn btn-info IP-op-patient" ng-show="checkAccess('patient.inPatients')" ng-click="loadIpVitals('IP')">
                         <i class="fa fa-user-md"></i>&nbsp;&nbsp;In Patient
                     </button>
                     <button class="btn btn-info OP-op-patient" ng-click="loadIpVitals('OP')">

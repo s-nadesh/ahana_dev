@@ -1,6 +1,7 @@
 app.controller('ScandocumentModalInstanceCtrl', ['scope', '$scope', '$modalInstance', '$rootScope', '$timeout', '$http', function (scope, $scope, $modalInstance, $rootScope, $timeout, $http) {
 
         $scope.scan_document = scope.scan_document;
+        $scope.popupLoading = scope.popupLoading;
 
         $scope.singleFileDownload = function (value) {
             var link = document.createElement('a');

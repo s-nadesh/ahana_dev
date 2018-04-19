@@ -35,6 +35,8 @@ angular.module('app', [
     'angularLazyImg',
     'infinite-scroll',
     'autoCompleteModule',
+    'ngIdle',
+    'ui.layout'
 //    'restangular'
 //    'LocalStorageModule',
 ]);

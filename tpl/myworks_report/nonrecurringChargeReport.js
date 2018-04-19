@@ -20,7 +20,7 @@ app.controller('nonRecuringreportController', ['$rootScope', '$scope', '$timeout
             $scope.data = {};
             $scope.data.tenant_id = '';
             $scope.data.to = moment().format('YYYY-MM-DD');
-            $scope.data.from = moment($scope.data.to).add(-30, 'days').format('YYYY-MM-DD');
+            $scope.data.from = moment($scope.data.to).add(-31, 'days').format('YYYY-MM-DD');
             $scope.fromMaxDate = new Date($scope.data.to);
             $scope.toMinDate = new Date($scope.data.from);
             $scope.deselectAll('branch_wise');
@@ -32,8 +32,8 @@ app.controller('nonRecuringreportController', ['$rootScope', '$scope', '$timeout
                 var from = moment($scope.data.from);
                 var to = moment($scope.data.to);
                 var difference = to.diff(from, 'days') + 1;
-                if (difference > 31) {
-                    $scope.data.to = moment($scope.data.from).add(+30, 'days').format('YYYY-MM-DD');
+                if (difference > 32) {
+                    $scope.data.to = moment($scope.data.from).add(+31, 'days').format('YYYY-MM-DD');
                 }
             }
         }, true);
@@ -44,8 +44,8 @@ app.controller('nonRecuringreportController', ['$rootScope', '$scope', '$timeout
                 var from = moment($scope.data.from);
                 var to = moment($scope.data.to);
                 var difference = to.diff(from, 'days') + 1;
-                if (difference > 31) {
-                    $scope.data.from = moment($scope.data.to).add(-30, 'days').format('YYYY-MM-DD');
+                if (difference > 32) {
+                    $scope.data.from = moment($scope.data.to).add(-31, 'days').format('YYYY-MM-DD');
                 }
             }
         }, true);

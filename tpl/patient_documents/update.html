@@ -30,14 +30,34 @@
                                 <th>Encounter</th>
                                 <th>Past Medical Notes</th>
                                 <th>Created By</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="past in pastMedical">
                                 <td>{{past.created_at| moment:'DD/MM/YYYY - hh:mm A'}}</td>
                                 <td>{{past.encounter_id}}</td>
-                                <td>{{past.past_medical}}</td>
+                                <td class="v-middle">
+                                    <span editable-textarea="past.past_medical"  e-rows="3" e-cols="40" e-name="past_medical" e-form="pastmedicalform" onbeforesave="checkName($data)" e-required>
+                                        {{ past.past_medical || 'empty' }}
+                                    </span>
+                                </td>
+<!--                                <td>{{past.past_medical}}</td>-->
                                 <td>{{past.created_by}}</td>
+                                <td style="white-space: nowrap">
+                                    <!-- form -->
+                                    <form editable-form name="pastmedicalform" onbeforesave="updatePastmedical($data, past.pat_past_medical_id)" ng-show="pastmedicalform.$visible" class="form-buttons form-inline">
+                                        <button type="submit" ng-disabled="pastmedicalform.$waiting" class="btn m-b-xs btn-info save-btn">
+                                            Save
+                                        </button>
+                                        <button type="button" ng-disabled="pastmedicalform.$waiting" ng-click="pastmedicalform.$cancel()" class="btn m-b-xs btn-default">
+                                            Cancel
+                                        </button>
+                                    </form>
+                                    <div class="buttons" ng-show="!pastmedicalform.$visible">
+                                        <button class="btn m-b-xs  btn-primary " ng-click="pastmedicalform.$show()"> <i class="fa fa-pencil"></i> Edit</button> 
+                                    </div>  
+                                </td>
                             </tr>
                         </tbody>
                     </table>

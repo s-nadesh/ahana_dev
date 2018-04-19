@@ -3,7 +3,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">Doctor *</label>
             <div class="col-sm-9">
-                <select class="form-control selectpicker" data-live-search="true" ng-model="data.user_id" ng-options="user.user_id as user.fullname for user in doctors | orderBy: 'name'">
+                <select class="form-control selectpicker" data-live-search="true" ng-model="data.user_id" ng-options="user.user_id as user.fullname for user in doctors | orderBy: 'name'" ng-change="getDoctorInterval();">
                     <option value="">Select Doctor</option>
                 </select>
             </div>

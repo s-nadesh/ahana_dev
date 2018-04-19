@@ -7,6 +7,7 @@ function CommonService($http, $rootScope, $window, $q, $filter, $localStorage, A
     var service = {};
 
     service.ChangeStatus = ChangeStatus;
+    service.UpdatePrintUser = UpdatePrintUser;
     service.GetCountryList = GetCountryList;
     service.GetStateList = GetStateList;
     service.GetCityList = GetCityList;
@@ -154,6 +155,17 @@ function CommonService($http, $rootScope, $window, $q, $filter, $localStorage, A
         $http.post($rootScope.IRISOrgServiceUrl + '/country/change-status', {model: modelName, id: primaryKey})
                 .success(function (response) {
                     $('.butterbar').removeClass('active').addClass('hide');
+                    callback(response);
+                }, function (x) {
+                    response = {success: false, message: 'Server Error'};
+                    callback(response);
+                });
+    }
+    
+    function UpdatePrintUser(modelName, primaryKey, callback) {
+        var response;
+        $http.post($rootScope.IRISOrgServiceUrl + '/country/update-printoption', {model: modelName, id: primaryKey})
+                .success(function (response) {
                     callback(response);
                 }, function (x) {
                     response = {success: false, message: 'Server Error'};

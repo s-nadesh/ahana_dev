@@ -951,7 +951,8 @@ app.controller('SaleController', ['$rootScope', '$scope', '$timeout', '$http', '
             // Bill Amount = (Total Amount - Discount Amount) +- RoundOff
             var total_bill_amount = parseFloat(after_discount_item_amount) + parseFloat(welfare);
             bill_amount = Math.round(total_bill_amount);
-            roundoff_amount = Math.abs(bill_amount - total_bill_amount);
+            //roundoff_amount = Math.abs(bill_amount - total_bill_amount);
+            roundoff_amount = bill_amount - total_bill_amount;
 
             $scope.data.roundoff_amount = roundoff_amount.toFixed(2);
             $scope.data.bill_amount = bill_amount.toFixed(2);
@@ -1163,6 +1164,7 @@ app.controller('SaleController', ['$rootScope', '$scope', '$timeout', '$http', '
                     function (response) {
                         $scope.loadbar('hide');
                         $scope.data = response;
+                        $scope.data.payment_mode = response.billing_payment_mode;
 //                        $scope.data.patient_name = response.patient.fullname;
                         $scope.data.patient_guid = response.patient.patient_guid;
                         $scope.getConsultantDetail($scope.data.consultant_id);

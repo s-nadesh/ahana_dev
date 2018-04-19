@@ -14,6 +14,7 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
         $scope.procedures = scope.procedures;
         $scope.pharmacy_charge = scope.pharmacy_charge;
         $scope.pharmacy_bill = scope.pharmacy_bill;
+        $scope.pharmacy_concession = scope.pharmacy_concession;
         $scope.consultants = scope.consultants;
         $scope.other_charges = scope.other_charges;
         $scope.advances = scope.advances;
@@ -267,7 +268,7 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
                 var pharmacy_paid = 0;
                 angular.forEach($scope.pharmacy_charge, function (row, key) {
                     pharmacy_charge += $scope.parseFloatIgnoreCommas(row.bill_amount);
-                    pharmacy_paid += $scope.parseFloatIgnoreCommas(row.billings_total_paid_amount);
+                    pharmacy_paid += $scope.parseFloatIgnoreCommas(row.billings_total_paid_amount_using_pharmacy);
                 });
                 bill.push([
                     {text: 'Pharmacy charges', style: 'rows', colSpan: 5},
@@ -325,7 +326,7 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
                 '',
             ]);
             if ($scope.billing.discount > 0) {
-                var discount = parseFloat($scope.billing.total.concession) + parseFloat($scope.enc.selected.concession_amount);
+                var discount = parseFloat($scope.billing.total.other_discount) + parseFloat($scope.enc.selected.concession_amount);
                 bill.push([
                     {
                         text: 'Discount : ' + discount.toFixed(2).toString(),
@@ -344,7 +345,7 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
             }
             bill.push([
                 {
-                    text: 'Net Total : ' + ((parseFloat(price) + parseFloat($scope.recurr_billing.total.recurring_total) + parseFloat(pharmacy)) - parseFloat(advance_charge) - parseFloat($scope.enc.selected.concession_amount) - parseFloat(pharmacy_paid)).toFixed(2).toString(),
+                    text: 'Net Total : ' + ((parseFloat(price) + parseFloat($scope.recurr_billing.total.recurring_total) + parseFloat(pharmacy)) - parseFloat(advance_charge) - parseFloat($scope.enc.selected.concession_amount) - parseFloat(pharmacy_paid) - parseFloat($scope.recurr_billing.total_pharmacy.recurring_total_concession)).toFixed(2).toString(),
                     fillColor: '#eeeeee',
                     bold: true,
                     margin: [0, 10, 2, 0],
@@ -384,6 +385,8 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
                     advance_total: '0',
                     net_step_5_total: '0',
                     proc_concession_net_total: '0',
+                    net_step_51_total: '0',
+                    pharmacy_concession_net_total: '0',
                     net_step_6_total: '0',
                     cons_concession_net_total: '0',
                 }
@@ -642,6 +645,7 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
                 angular.forEach($scope.pharmacy_bill, function (row, key) {
                     detailed_billing.total.net_step_42_total = detailed_billing.total.pharmacy_net_total;
                     var row_total = parseFloat(row.paid_amount);
+                    var row_total_using_pharmacy = parseFloat(row.sale_details.billings_total_paid_amount_using_pharmacy);
                     var net_total = parseFloat(detailed_billing.total.net_step_42_total) - parseFloat(row.net_amount);
                     var payment_date = moment(row.paid_date).format('DD/MM/YYYY');
                     if (row.sale_return_bill_no) {
@@ -655,12 +659,12 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
                         {text: return_bill_no, colSpan: 2, style: 'rows'},
                         '',
                         '',
-                        {text: parseInt(row.paid_amount).toString(), style: 'rows', alignment: 'right'},
+                        {text: parseInt(row_total_using_pharmacy).toString(), style: 'rows', alignment: 'right'},
                         {text: net_total.toString(), style: 'rows', alignment: 'right'}
                     ]);
 
                     detailed_non_billing.total.pharmacy_adv_charge = parseFloat(detailed_non_billing.total.pharmacy_adv_charge) + row_total;
-                    detailed_billing.total.pharmacy_bill_total = parseFloat(detailed_billing.total.pharmacy_bill_total) + row_total;
+                    detailed_billing.total.pharmacy_bill_total = parseFloat(detailed_billing.total.pharmacy_bill_total) + row_total_using_pharmacy;
                     detailed_billing.total.pharmacy_bill_net_total = parseFloat(detailed_billing.total.pharmacy_net_total) - parseFloat(row.net_amount);
                 });
                 bill.push([
@@ -729,11 +733,34 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
                     {},
                     {}
                 ]);
+                //Pharmacy Discount Start
+                detailed_billing.total.net_step_51_total = detailed_billing.total.advance_net_total;
+                if ($scope.pharmacy_concession.length > 0) {
+                    angular.forEach($scope.pharmacy_concession, function (row, key) {
+                        var paid_date = moment(row.paid_date).format('DD/MM/YYYY');
+                        var net_total = parseFloat(detailed_billing.total.net_step_51_total) - parseFloat(row.net_amount)
+                        bill.push([
+                            {text: paid_date, style: 'rows'},
+                            {text: 'Bill No > ' + row.bill_no, colSpan: 2, style: 'rows'},
+                            '',
+                            '',
+                            {text: row.paid_amount, style: 'rows', alignment: 'right'},
+                            {text: net_total.toString(), style: 'rows', alignment: 'right'}
+                        ]);
+                        detailed_billing.total.pharmacy_concession_net_total = detailed_billing.total.advance_net_total - parseFloat(row.net_amount);
+
+                    });
+                }
+                if (detailed_billing.total.pharmacy_concession_net_total == '0') {
+                    detailed_billing.total.pharmacy_concession_net_total = detailed_billing.total.net_step_51_total;
+                }
+
+                //Pharmacy Discount end
 
                 angular.forEach($scope.procedures, function (row, key) {
                     if (row.concession_amount > 0.00) {
                         var proce_date = moment(row.date).format('DD/MM/YYYY');
-                        detailed_billing.total.net_step_5_total = detailed_billing.total.advance_net_total;
+                        detailed_billing.total.net_step_5_total = detailed_billing.total.pharmacy_concession_net_total;
                         var net_total = parseFloat(detailed_billing.total.net_step_5_total) - parseFloat(row.concession_net_amount)
                         bill.push([
                             {text: proce_date, style: 'rows'},
@@ -743,11 +770,11 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
                             {text: row.concession_amount, style: 'rows', alignment: 'right'},
                             {text: net_total.toString(), style: 'rows', alignment: 'right'}
                         ]);
-                        detailed_billing.total.proc_concession_net_total = detailed_billing.total.advance_net_total - parseFloat(row.concession_net_amount);
+                        detailed_billing.total.proc_concession_net_total = detailed_billing.total.pharmacy_concession_net_total - parseFloat(row.concession_net_amount);
                     }
                 });
                 if (detailed_billing.total.proc_concession_net_total == '0') {
-                    detailed_billing.total.proc_concession_net_total = detailed_billing.total.advance_net_total;
+                    detailed_billing.total.proc_concession_net_total = detailed_billing.total.pharmacy_concession_net_total;
                 }
 
                 angular.forEach($scope.consultants, function (row, key) {
@@ -831,7 +858,7 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
             ]);
             bill.push([
                 {
-                    text: 'Discount : ' + (parseFloat((typeof $scope.enc.selected.concession_amount == 'undefined') ? '0.00' : $scope.enc.selected.concession_amount) + parseFloat(disconcession)).toString(),
+                    text: 'Discount : ' + (parseFloat((typeof $scope.enc.selected.concession_amount == 'undefined') ? '0.00' : $scope.enc.selected.concession_amount) + parseFloat(disconcession) + parseFloat($scope.recurr_billing.total_pharmacy.recurring_total_concession)).toString(),
                     fillColor: '#eeeeee',
                     bold: true,
                     margin: [0, 10, 2, 0],
@@ -876,7 +903,7 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
 //            ]);
             bill.push([
                 {
-                    text: 'Net Total : ' + ((parseFloat(price) + parseFloat($scope.recurr_billing.total.recurring_total) + parseFloat(pharmacy)) - parseFloat(advance_charge) - parseFloat($scope.enc.selected.concession_amount) - parseFloat(pharmacy_paid)).toString(),
+                    text: 'Net Total : ' + ((parseFloat(price) + parseFloat($scope.recurr_billing.total.recurring_total) + parseFloat(pharmacy)) - parseFloat(advance_charge) - parseFloat($scope.enc.selected.concession_amount) - parseFloat(pharmacy_paid) - parseFloat($scope.recurr_billing.total_pharmacy.recurring_total_concession)).toString(),
                     fillColor: '#eeeeee',
                     bold: true,
                     margin: [0, 10, 2, 0],

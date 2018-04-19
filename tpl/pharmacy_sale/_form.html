@@ -243,7 +243,7 @@
                                                 e-name="batch_details"
                                                 e-form="tableform"
                                                 onbeforesave="checkInput($data, key, $index)"
-                                                e-ng-options="batch.batch_details as batch.batch_details for batch in saleitem.product_batches | filter:$viewValue | limitTo:8"
+                                                e-ng-options="batch.batch_details as batch.batch_details for batch in saleitem.product_batches | filter:$viewValue"
                                                 e-ng-change="updateBatchRow($data, key, $index)">
                                                 {{ showBatch($data, key)}}
                                             </span>
@@ -386,7 +386,7 @@
         </div>
     </div>
     <div class="col-sm-6">
-        <div ng-if="formtype == 'add'" class="panel panel-default">
+        <div ng-if="data.payment_type== 'CA'" class="panel panel-default">
             <div class="panel-heading">
                 <b>Payment Details</b>
             </div>

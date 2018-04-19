@@ -6,8 +6,8 @@
 angular.module('app')
         .run(run)
         .config(config);
-config.$inject = ['$stateProvider', '$urlRouterProvider', '$httpProvider', 'ivhTreeviewOptionsProvider', 'JQ_CONFIG', 'hotkeysProvider', '$compileProvider'];
-function config($stateProvider, $urlRouterProvider, $httpProvider, ivhTreeviewOptionsProvider, JQ_CONFIG, hotkeysProvider, $compileProvider) {
+config.$inject = ['$stateProvider', '$urlRouterProvider', '$httpProvider', 'ivhTreeviewOptionsProvider', 'JQ_CONFIG', 'hotkeysProvider', '$compileProvider', 'KeepaliveProvider', 'IdleProvider'];
+function config($stateProvider, $urlRouterProvider, $httpProvider, ivhTreeviewOptionsProvider, JQ_CONFIG, hotkeysProvider, $compileProvider, KeepaliveProvider, IdleProvider) {
 
 //    hotkeysProvider.template = '<div class="my-own-cheatsheet">Hai</div>';
     $compileProvider.debugInfoEnabled(false);
@@ -17,6 +17,9 @@ function config($stateProvider, $urlRouterProvider, $httpProvider, ivhTreeviewOp
         twistieCollapsedTpl: '<i class="fa fa-caret-down"></i>',
         twistieLeafTpl: '',
     });
+    IdleProvider.idle(5);
+    IdleProvider.timeout(10);
+    KeepaliveProvider.interval(10);
 //    var newBaseUrl = "";
 //
 //    if (window.location.hostname == "localhost") {
@@ -2412,6 +2415,22 @@ function config($stateProvider, $urlRouterProvider, $httpProvider, ivhTreeviewOp
                 }
             })
 
+            //Patient Overall Report
+            .state('pharmacy.overallincome', {
+                url: '/overallincome',
+                templateUrl: 'tpl/pharmacy_report/overallincomeReport.html',
+                resolve: {
+                    deps: ['$ocLazyLoad',
+                        function ($ocLazyLoad) {
+                            return $ocLazyLoad.load(['smart-table']).then(
+                                    function () {
+                                        return $ocLazyLoad.load('tpl/pharmacy_report/overallincomeReport.js?v=' + APP_VERSION);
+                                    }
+                            );
+                        }]
+                }
+            })
+
             //PHARMACY PATIENT GROUP
             .state('configuration.patientgroupassign', {
                 url: '/patientgroupassign',
@@ -2582,6 +2601,18 @@ function config($stateProvider, $urlRouterProvider, $httpProvider, ivhTreeviewOp
                     deps: ['uiLoad',
                         function (uiLoad) {
                             return uiLoad.load(['tpl/patient_billing/patient_billing.js?v=' + APP_VERSION]);
+                        }]
+                }
+            })
+
+            //Patient Billing Room Concession
+            .state('patient.pharmacyConcession', {
+                url: '/pharmacyConcession/{id}/{enc_id}',
+                templateUrl: 'tpl/patient_billing/pharmacy_concession.html',
+                resolve: {
+                    deps: ['uiLoad',
+                        function (uiLoad) {
+                            return uiLoad.load(['tpl/patient_billing/pharmacy_concession.js?v=' + APP_VERSION]);
                         }]
                 }
             })
@@ -2832,12 +2863,15 @@ function config($stateProvider, $urlRouterProvider, $httpProvider, ivhTreeviewOp
                 url: '/editDocument/{id}/{doc_id}/{document}',
                 templateUrl: 'tpl/patient_documents/update.html',
                 resolve: {
-                    deps: ['uiLoad',
-                        function (uiLoad) {
-                            return uiLoad.load([
-                                'ckeditor/ckeditor.js?v=' + APP_VERSION,
-                                'tpl/patient_documents/patient_documents.js?v=' + APP_VERSION
-                            ]);
+                    deps: ['$ocLazyLoad',
+                        function ($ocLazyLoad) {
+                            return $ocLazyLoad.load(['xeditable', 'smart-table']).then(
+                                    function () {
+                                        return $ocLazyLoad.load([
+                                            'ckeditor/ckeditor.js?v=' + APP_VERSION,
+                                            'tpl/patient_documents/patient_documents.js?v=' + APP_VERSION]);
+                                    }
+                            );
                         }]
                 }
             })
@@ -3052,6 +3086,21 @@ function config($stateProvider, $urlRouterProvider, $httpProvider, ivhTreeviewOp
                         }]
                 }
             })
+            //Myworks Discharged Patient Dues
+            .state('myworks.dischargedPatientDues', {
+                url: '/dischargedPatientDues',
+                templateUrl: 'tpl/myworks_report/dischargedPatientDues.html',
+                resolve: {
+                    deps: ['$ocLazyLoad',
+                        function ($ocLazyLoad) {
+                            return $ocLazyLoad.load(['smart-table']).then(
+                                    function () {
+                                        return $ocLazyLoad.load('tpl/myworks_report/dischargedPatientDues.js?v=' + APP_VERSION);
+                                    }
+                            );
+                        }]
+                }
+            })
             //Myworks IP Doctors Pay
             .state('myworks.ipDoctorsPay', {
                 url: '/ipDoctorsPay',
@@ -3199,14 +3248,6 @@ function run($rootScope, $state, $stateParams, $location, $cookieStore, $http, $
         serviceUrl = 'http://medclinic.ark/api/IRISORG/web/v1'
         orgUrl = 'http://medclinic.ark/client';
         clientURL = 'http://medclinic.ark';
-    } else if ($location.host() == 'medizura.ark') {
-        serviceUrl = 'http://medizura.ark/api/IRISORG/web/v1'
-        orgUrl = 'http://medizura.ark/client';
-        clientURL = 'http://medizura.ark';
-    } else if ($location.host() == 'msctrf.ark') {
-        serviceUrl = 'http://msctrf.ark/api/IRISORG/web/v1'
-        orgUrl = 'http://msctrf.ark/client';
-        clientURL = 'http://msctrf.ark';
     } else {
         clientURL = orgUrl = $location.absUrl().split('#')[0].slice(0, -1);
 //        clientURL = orgUrl = $location.protocol() + '://' + $location.host();

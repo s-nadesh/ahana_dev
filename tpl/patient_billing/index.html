@@ -87,11 +87,12 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-5">  <b>Other Discount :</b>   </div>
-                                    <div class="col-sm-7"> <span class="label bg-light dk"> {{billing.total.concession|| "0" | number:2}} </span> </div>
+                                    <span ng-hide="true">{{billing.total.other_discount = billing.total.concession + recurr_billing.total_pharmacy.recurring_total_concession}}</span>
+                                    <div class="col-sm-7"> <span class="label bg-light dk"> {{billing.total.other_discount|| "0" | number:2}} </span> </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-5">  <b>Total Discount :</b>   </div>
-                                    <div class="col-sm-7"> <span class="label bg-light dk"> {{billing.discount = billing.total.concession + parseFloat(enc.selected.concession_amount) | number:2}} </span> </div>
+                                    <div class="col-sm-7"> <span class="label bg-light dk"> {{billing.discount = billing.total.other_discount + parseFloat(enc.selected.concession_amount) | number:2}} </span> </div>
                                 </div>
                             </div>
                         </div>
@@ -102,7 +103,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-5">  <b>Total Discount :</b>   </div>
-                                <div class="col-sm-7"> <span class="label bg-light dk"> {{billing.discount = billing.total.concession + parseFloat(enc.selected.concession_amount) | number:2}} </span> </div>
+                                <div class="col-sm-7"> <span class="label bg-light dk"> {{billing.discount = billing.total.other_discount + parseFloat(enc.selected.concession_amount) | number:2}} </span> </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-5">  <b>Amount Paid : </b>   </div>
@@ -325,8 +326,11 @@
                 <div class="panel-heading no-border bg-primary"> <i class="fa fa-medkit"></i> Pharmacy Charges</div>
                 <div class="panel-body" ng-init="pharmacy = {}">
                     <div class="form-group">
+                        <a class="btn btn-default" ng-if = "pharmacy.total != 0" ng-show="enc.selected.finalize == '0'" ng-click="$state.go('patient.pharmacyConcession', {id: $state.params.id,enc_id: enc.selected.encounter_id})">
+                            <i class="fa fa-plus-square"></i> &nbsp;Add concession amount
+                        </a>
                         <span class="pull-right"> <b> Total Pending Amount : </b><span class="label bg-danger"> {{pharmacy.total| number:2}} </span></span>
-<!--                        <span class="pull-right"> <b> Total Paid Amount : </b><span class="label bg-success"> {{pharmacy.total_paid| number:2}} </span></span>-->
+                        <!--                        <span class="pull-right"> <b> Total Paid Amount : </b><span class="label bg-success"> {{pharmacy.total_paid| number:2}} </span></span>-->
                     </div>
                     <div class="m-b-sm">
                     </div>
@@ -350,8 +354,10 @@
                             <td align="right" 
                                 ng-init="pharmacy.total = pharmacy.total + parseFloatIgnoreCommas(row.billings_total_balance_amount);
                                     pharmacy.total_paid = pharmacy.total_paid + parseFloatIgnoreCommas(row.billings_total_paid_amount_using_pharmacy);
+                                    pharmacy.total_concession = pharmacy.total_concession + parseFloatIgnoreCommas(row.billings_total_paid_amount_using_concession);
                                     recurr_billing.total_pharmacy.recurring_total = recurr_billing.total_pharmacy.recurring_total + parseFloatIgnoreCommas(row.bill_amount);
-                                    recurr_billing.total_pharmacy.recurring_total_paid = recurr_billing.total_pharmacy.recurring_total_paid + parseFloatIgnoreCommas(row.billings_total_paid_amount_using_pharmacy);"> 
+                                    recurr_billing.total_pharmacy.recurring_total_paid = recurr_billing.total_pharmacy.recurring_total_paid + parseFloatIgnoreCommas(row.billings_total_paid_amount_using_pharmacy);
+                                    recurr_billing.total_pharmacy.recurring_total_concession = recurr_billing.total_pharmacy.recurring_total_concession + parseFloatIgnoreCommas(row.billings_total_paid_amount_using_concession);"> 
                                 {{row.billings_total_balance_amount}} </td>
                         </tr>
                     </table>
@@ -365,6 +371,7 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <span class="pull-right"> <b> Total Paid Amount : </b><span class="label bg-success"> {{recurr_billing.total_pharmacy.recurring_total_paid| number:2}} </span></span>
+                        <span class="pull-right"> <b> Total Concession Amount : </b><span class="label bg-dark"> {{recurr_billing.total_pharmacy.recurring_total_concession| number:2}} </span></span>
                     </div>
                     <div class="m-b-sm">
                     </div>
@@ -449,7 +456,7 @@
                                     <div ng-show="row.trans_mode == 'Cash'"> - </div> 
                                 </td>
                                 <td>                             
-                                    <button class="btn btn-sm btn-primary" ng-click="setVoucher(row, 'voucherPrint')">
+                                    <button class="btn btn-sm btn-primary" ng-click="setVoucher(row, 'voucherPrint', 'PatBillingPayment', row.payment_id)">
                                         <i class="fa fa-print"></i>
                                     </button>
                                 </td>
@@ -517,7 +524,7 @@
                                     <div ng-show="refund.trans_mode == 'CA'"> - </div> 
                                 </td>
                                 <td>                             
-                                    <button class="btn btn-sm btn-primary" ng-click="setVoucher(refund, 'refundvoucherPrint'); increasePrintCount();">
+                                    <button class="btn btn-sm btn-primary" ng-click="setVoucher(refund, 'refundvoucherPrint', 'PatRefundPayment', refund.refund_payment_id); increasePrintCount();">
                                         <i class="fa fa-print"></i>
                                     </button>
                                 </td>

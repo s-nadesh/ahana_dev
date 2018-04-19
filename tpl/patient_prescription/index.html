@@ -301,6 +301,7 @@
                                                                                maxlength="4"
                                                                                auto-complete
                                                                                ac-options="autoCompleteOptions_3_0"
+                                                                               ng-keyup="$event.keyCode == 13 ? addGlobalForm() : null"
                                                                                />
                                                                         <input type="text"
                                                                                autocomplete="off" 
@@ -310,6 +311,7 @@
                                                                                maxlength="4"
                                                                                auto-complete
                                                                                ac-options="autoCompleteOptions_3_1"
+                                                                               ng-keyup="$event.keyCode == 13 ? addGlobalForm() : null"
                                                                                />
                                                                         <input type="text"
                                                                                autocomplete="off" 
@@ -331,6 +333,7 @@
                                                                                maxlength="4"
                                                                                auto-complete
                                                                                ac-options="autoCompleteOptions_4_0"
+                                                                               ng-keyup="$event.keyCode == 13 ? addGlobalForm() : null"
                                                                                />
                                                                         <input type="text"
                                                                                autocomplete="off" 
@@ -340,6 +343,7 @@
                                                                                maxlength="4"
                                                                                auto-complete
                                                                                ac-options="autoCompleteOptions_4_1"
+                                                                               ng-keyup="$event.keyCode == 13 ? addGlobalForm() : null"
                                                                                />
                                                                         <input type="text"
                                                                                autocomplete="off" 
@@ -349,6 +353,7 @@
                                                                                maxlength="4"
                                                                                auto-complete
                                                                                ac-options="autoCompleteOptions_4_2"
+                                                                               ng-keyup="$event.keyCode == 13 ? addGlobalForm() : null"
                                                                                />
                                                                         <input type="text"
                                                                                autocomplete="off" 
@@ -369,7 +374,6 @@
                                                                                ng-model="globalData.frequency_txt" 
                                                                                model-view-value="true" 
                                                                                class="form-control"
-                                                                               maxlength="4"
                                                                                ng-keyup="$event.keyCode == 13 ? addGlobalForm() : null" >
                                                                     </div>
 
@@ -904,9 +908,12 @@
                                                                                                 <i class="fa fa-check"></i> Save 
                                                                                             </button> &nbsp;
 
-                                                                                            <button class="btn btn-dark" id="clear" ng-click="clearPrescription()">  
+                                                                                            <!--                                                                                            <button class="btn btn-dark" id="clear" ng-click="clearPrescription()">  
+                                                                                                                                                                                            <i class="fa fa-times"></i> Clear 
+                                                                                                                                                                                        </button>-->
+                                                                                            <a class="btn btn-dark" id="clear" ng-click="clearPrescription()">  
                                                                                                 <i class="fa fa-times"></i> Clear 
-                                                                                            </button>
+                                                                                            </a>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -1011,6 +1018,7 @@
                                             <div ng-if="medical_history == 'form'">
                                                 <button class="pull-right btn m-b-xs btn-dark" style='margin-right: 16px;' ng-click="loadmedicalcasehistory()"> <i class="fa fa-arrow-left"></i> Back</button>
                                                 <div class="col-sm-12">
+                                                    <!-- Past medical history section start -->
                                                     <div class="panel-body" ng-show = "pastMedical.length > 0">
                                                         <div class="panel panel-default">
                                                             <div class="panel-heading bg-default">
@@ -1024,31 +1032,105 @@
                                                                             <th>Encounter</th>
                                                                             <th>Past Medical Notes</th>
                                                                             <th>Created By</th>
+                                                                            <th>Action</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                         <tr ng-repeat="past in pastMedical">
                                                                             <td>{{past.created_at| moment:'DD/MM/YYYY - hh:mm A'}}</td>
                                                                             <td>{{past.encounter_id}}</td>
-                                                                            <td>{{past.past_medical}}</td>
+                                                                            <td class="v-middle">
+                                                                                <span editable-textarea="past.past_medical"  e-rows="3" e-cols="40" e-name="past_medical" e-form="pastmedicalform" onbeforesave="checkName($data)" e-required>
+                                                                                    {{ past.past_medical || 'empty' }}
+                                                                                </span>
+                                                                            </td>
                                                                             <td>{{past.created_by}}</td>
+                                                                            <td style="white-space: nowrap">
+                                                                                <!-- form -->
+                                                                                <form editable-form name="pastmedicalform" onbeforesave="updatePastmedical($data, past.pat_past_medical_id)" ng-show="pastmedicalform.$visible" class="form-buttons form-inline">
+                                                                                    <button type="submit" ng-disabled="pastmedicalform.$waiting" class="btn m-b-xs btn-info save-btn">
+                                                                                        Save
+                                                                                    </button>
+                                                                                    <button type="button" ng-disabled="pastmedicalform.$waiting" ng-click="pastmedicalform.$cancel()" class="btn m-b-xs btn-default">
+                                                                                        Cancel
+                                                                                    </button>
+                                                                                </form>
+                                                                                <div class="buttons" ng-show="!pastmedicalform.$visible">
+                                                                                    <button class="btn m-b-xs  btn-primary " ng-click="pastmedicalform.$show()"> <i class="fa fa-pencil"></i> Edit</button> 
+                                                                                </div>  
+                                                                            </td>
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <!-- Past medical history section End -->
                                                     <div ng-include="'tpl/blocks/alert.html'">
                                                         {% include 'tpl/blocks/alert.html' %}
                                                     </div>
-                                                    <div class="panel-body">
-                                                        <div ng-bind-html="xml | xslt:xslt | sanitize"></div>
+                                                    <div class="clearfix"></div>
+                                                    
+                                                    
+                                                    <div class="panel-body" style="height:100vh; width:100%; float:left; position: relative;">
+                                                        <div style="width:100%; float: left;" ui-layout="" options="{flow:'column', minSizes:['99%', '1%'], maxSizes:['1%', '99%']}" class="stretch ui-layout-column">
+                                                            <div class=" a-back">  
+                                                                <div class="innerdragleft">
+                                                                    <div class="panel-body">
+                                                                        <div ng-bind-html="xml | xslt:xslt | sanitize"></div>
+                                                                    </div>
+
+                                                                    <footer class="panel-footer text-right bg-light lter">
+                                                                        <button class="btn m-b-xs  btn-success" ng-click="savemedicalForm()">Save</button>
+                                                                        &nbsp;
+                                                                        <button class="btn m-b-xs  btn-dark" ng-click="clearmedicalForm()"> <i class="fa fa-times"></i> Cancel</button>
+                                                                    </footer>
+                                                                </div>
+                                                            </div>
+                                                            <div class="b-back">
+                                                                <div class="col-sm-12 innerdragleft">
+                                                                    <select class="form-control" ng-model="data.current_mch_id" ng-options="MCHdocuments.doc_id as MCHdocuments.document_details for MCHdocuments in MCHdocument| orderBy: '-doc_id'" ng-change="getdocumentdetails()">
+                                                                        <option value="">Select Medical Case History</option>
+                                                                    </select>
+                                                                    <table id='print_medical_case' style="width:100%">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td colspan="3">
+                                                                                    <div ng-show="view_xml" ng-bind-html="view_xml | xslt:viewxslt | sanitize"></div> 
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <footer class="panel-footer text-right bg-light lter">
-                                                        <button class="btn m-b-xs  btn-success" ng-click="savemedicalForm()">Save</button>
-                                                        &nbsp;
-                                                        <button class="btn m-b-xs  btn-dark" ng-click="clearmedicalForm()"> <i class="fa fa-times"></i> Cancel</button>
-                                                    </footer> 
+<!--                                                    <div class="col-sm-6">
+                                                        <div class="panel-body">
+                                                            <div ng-bind-html="xml | xslt:xslt | sanitize"></div>
+                                                        </div>
+
+                                                        <footer class="panel-footer text-right bg-light lter">
+                                                            <button class="btn m-b-xs  btn-success" ng-click="savemedicalForm()">Save</button>
+                                                            &nbsp;
+                                                            <button class="btn m-b-xs  btn-dark" ng-click="clearmedicalForm()"> <i class="fa fa-times"></i> Cancel</button>
+                                                        </footer>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <select class="form-control" ng-model="data.current_mch_id" ng-options="MCHdocuments.doc_id as MCHdocuments.document_details for MCHdocuments in MCHdocument| orderBy: '-doc_id'" ng-change="getdocumentdetails()">
+                                                            <option value="">Select Medical Case History</option>
+                                                        </select>
+                                                        <table id='print_medical_case' style="width:100%">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td colspan="3">
+                                                                        <div ng-show="view_xml" ng-bind-html="view_xml | xslt:viewxslt | sanitize"></div> 
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>-->
                                                 </div>
                                             </div>
 
@@ -1198,8 +1280,8 @@
                                 </div>
 
                                 <div ng-show="tab == 3" class="vitals-tab">
-                                    <div class="row" ng-init="vitaldata           =           {}; 
-                                        vitaldata.formtype      =      'add'">
+                                    <div class="row" ng-init="vitaldata                                         =                                         {}; 
+                                        vitaldata.formtype                     =                     'add'">
                                         <div class="col-lg-12" ng-hide="isLoading"> 
                                             <!-- accordion -->
                                             <accordion close-others="oneAtATime">
@@ -1216,13 +1298,13 @@
                                                                 <div class="col-sm-2">
                                                                     <label>Encounter # :</label>
                                                                     {{enc.selected.encounter_id}} </div>
-                                                                <div class="col-sm-2">
+                                                                <div class="col-sm-3">
                                                                     <label>Date: </label>
                                                                     {{enc.selected.encounter_date}} </div>
-                                                                <div class="col-sm-8">
+                                                                <div class="col-sm-7">
                                                                     <label>&nbsp; </label>
                                                                     &nbsp;</div> 
-                                                                
+                                                                <div class="clearfix"></div>
 
                                                                 <div class="col-sm-1" ng-show="(vitalcong.Temperature == 1)">
                                                                     <label>Temperature </label>
@@ -1748,6 +1830,11 @@
                                                             <div class="col-sm-2">
                                                                 <label class="control-label"> Encounter #  </label>
                                                                 {{enc.selected.encounter_id}}
+                                                                <label class="control-label"> Privacy &nbsp;&nbsp;</label>
+                                                                <label class="i-checks "> 
+                                                                    <input type="checkbox" name="status" ng-true-value="'1'" ng-false-value="'0'" ng-model="consFormData.privacy"> 
+                                                                    <i></i> 
+                                                                </label>
                                                             </div>
                                                             <div class="col-sm-3">
                                                                 <label class="control-label">Date of Consultant Visit * </label>
@@ -1773,21 +1860,11 @@
                                                                 <label class="control-label">Notes  </label>
                                                                 <textarea placeholder="Notes" class="form-control" ng-model="consFormData.notes"></textarea>
                                                             </div>
-
                                                         </div>
 
                                                         <div class="form-group pull-in clearfix">
-                                                            <div class="col-sm-2">
-                                                                <label class="control-label"> Privacy &nbsp;&nbsp;</label>
-                                                                <label class="i-checks "> 
-                                                                    <input type="checkbox" name="status" ng-true-value="'1'" ng-false-value="'0'" ng-model="consFormData.privacy"> 
-                                                                    <i></i> 
-                                                                </label> &nbsp; &nbsp;
-                                                            </div>
-
-                                                            <div class="col-sm-3">
+                                                            <div class="col-sm-12 text-right">
                                                                 <label> </label>
-
                                                                 <button class="btn m-b-xs  btn-success save-btn" ng-disabled="vital_enable_count" ng-click="saveConsultantForm(consFormData.formtype)">Save</button>
                                                                 &nbsp;
                                                                 <button class="btn m-b-xs  btn-dark" ng-click="resetconsultantForm()">

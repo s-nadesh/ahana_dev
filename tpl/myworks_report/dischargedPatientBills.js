@@ -350,4 +350,8 @@ app.controller('dischargedPatientBillsController', ['$rootScope', '$scope', '$ti
                 }
             }, 1000);
         }
+        
+        $scope.parseFloat = function (row) {
+            return parseFloat(row);
+        }
     }]);

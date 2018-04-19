@@ -22,7 +22,7 @@
             <div class="col-sm-12">
                 <form name="patientProcform" class="form-horizontal form-validation" novalidate="">
                     <div class="row" ng-init="loadPatientsList('IP')">
-                        <div class="col-sm-3" style="height:70vh; overflow-y: auto; overflow-x: hidden;">
+                        <div class="col-sm-4" style="height:70vh; overflow-y: auto; overflow-x: hidden;">
                             <div class="panel panel-default">
                                 <div class="panel-heading font-bold">
                                     All Patient
@@ -49,11 +49,11 @@
                                                     </label>
                                                 </td>
                                                 <td>
-                                                    <img width="30" height="30" class="pull-left patient-image" src="img/man-icon.png" ng-attr-lazy-img="{{ row.apptPatientData.patient_img_url ? row.apptPatientData.patient_img_url : ($even ? 'img/man-icon.png' : 'img/man-icon2.png') }}" />
+                                                    <img width="40" height="40" class="pull-left patient-image" src="img/man-icon.png" ng-attr-lazy-img="{{ row.apptPatientData.patient_img_url ? row.apptPatientData.patient_img_url : ($even ? 'img/man-icon.png' : 'img/man-icon2.png') }}" />
                                                     <a ui-sref="patient.view({id: row.apptPatientData.patient_guid})" tooltip="{{row.apptPatientData.fullcurrentaddress}}">
                                                         {{row.apptPatientData.fullname}}
-                                                    </a>({{row.apptPatientData.patient_age_ym}})<br/>
-                                                    {{row.apptPatientData.patient_global_int_code}}
+                                                    </a>({{row.apptPatientData.patient_age_ym}}) {{row.apptPatientData.patient_global_int_code}} <br/>
+                                                    <b>Admission Date : </b>{{row.encounter_date | moment:'DD-MM-YYYY'}} <br/> <b>Room : </b>{{row.room_name || '-'}}
                                                 </td>
                                             </tr>
                                             <tr ng-if='rowCollection.length == 0'>
@@ -71,7 +71,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-9" ng-init="initForm()">
+                        <div class="col-sm-8" ng-init="initForm()">
                             <div class="panel panel-default">
                                 <div class="panel-heading font-bold">
                                     Procedure

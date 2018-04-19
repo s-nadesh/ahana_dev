@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="{{class2}}" ng-hide="isLoading">
-                    <button ng-if="activeEncounter == null" ng-click="$state.go('patient.admission', {id: $state.params.id})" class="btn btn-info"><i class="fa fa-plus"></i> New Admission </button>
+                    <button ng-if="activeEncounter == null" ng-show="checkAccess('patient.inPatients')" ng-click="$state.go('patient.admission', {id: $state.params.id})" class="btn btn-info"><i class="fa fa-plus"></i> New Admission </button>
                     <button ng-if="activeEncounter == null || activeIPEncounter.length == 0" ng-click="$state.go('patient.appointment', {id: $state.params.id})" class="btn btn-primary"><i class="fa fa-plus"></i> New Appointment </button>
                     <!--<button class="btn btn-default"><i class="fa fa-print"></i> Print</button>-->
                 </div>

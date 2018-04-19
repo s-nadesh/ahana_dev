@@ -81,6 +81,7 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
                         $scope.config_data = [];
                         $scope.config_share_data = [];
                         $scope.config_print_data = [];
+                        $scope.config_opbill_data = [];
 
                         angular.forEach(configurations, function (conf) {
                             var string = conf.key;
@@ -91,6 +92,8 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
 
                             if (conf.group == 'prescription_print') {
                                 $scope.config_print_data.push(conf);
+                            } else if (conf.group == 'op_bill_print') {
+                                $scope.config_opbill_data.push(conf);
                             } else {
                                 if (!conf.group) {
                                     if (string.indexOf(substring) > -1 == false) {
@@ -122,6 +125,7 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
                         $scope.isLoading = false;
                         $scope.rowCollection = $scope.config_data;
                         $scope.displayedCollection = [].concat($scope.rowCollection);
+                        $scope.initOpBillSetting();
                     })
                     .error(function () {
                         $scope.errorData = "An Error has occured while loading settings!";
@@ -140,6 +144,31 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
             $http({
                 method: 'PUT',
                 url: $rootScope.IRISOrgServiceUrl + '/appconfigurations/' + config_id,
+                data: $data,
+            }).success(
+                    function (response) {
+                        $scope.loadbar('hide');
+                        $scope.msg.successMessage = 'Updated successfully';
+                    }
+            ).error(function (data, status) {
+                $scope.loadbar('hide');
+                if (status == 422)
+                    $scope.errorData = $scope.errorSummary(data);
+                else
+                    $scope.errorData = data.message;
+            });
+        }
+
+        $scope.updateOpBill = function (code, value) {
+            $scope.errorData = "";
+            $scope.msg.successMessage = "";
+
+            $scope.loadbar('show');
+            $data = {code: code, value: value};
+
+            $http({
+                method: 'POST',
+                url: $rootScope.IRISOrgServiceUrl + '/appconfiguration/updateopbillsettings',
                 data: $data,
             }).success(
                     function (response) {
@@ -681,7 +710,7 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
             $scope.session_timeout = time_sess.toString();
         }
 
-        $scope.updateTimeout = function () {
+        $scope.updateTimeout = function (a) {
             var data = {};
             //$localStorage.user.credentials.user_timeout = $scope.session_timeout;
             $scope.errorData = "";
@@ -689,7 +718,9 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
 
             $scope.loadbar('show');
             data.user_session_timeout = $scope.session_timeout;
-
+            if (a) {
+                data.user_session_timeout = $scope.session_timeout = '';
+            }
             $http({
                 method: 'POST',
                 url: $rootScope.IRISOrgServiceUrl + '/user/changeusertimeout',
@@ -708,6 +739,14 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
                     $scope.errorData = $scope.errorSummary(data);
                 else
                     $scope.errorData = data.message;
+            });
+        }
+
+        $scope.initOpBillSetting = function () {
+            $scope.OpBill = {};
+            angular.forEach($scope.config_opbill_data, function (row) {
+                var listName = row.code;
+                $scope.OpBill[listName] = row.value;
             });
         }
 

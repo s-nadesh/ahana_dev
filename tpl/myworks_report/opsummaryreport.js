@@ -14,11 +14,12 @@ app.controller('opSummaryReportController', ['$rootScope', '$scope', '$timeout',
                     break;
             }
         };
-        
+
         //Expand table in Index page
         $scope.ctrl = {};
         $scope.ctrl.expandAll = function (expanded) {
             $scope.$broadcast('onExpandAll', {expanded: expanded});
+            $scope.expandAllRow(expanded);
         };
 
         $scope.clearReport = function () {
@@ -27,13 +28,33 @@ app.controller('opSummaryReportController', ['$rootScope', '$scope', '$timeout',
             $scope.data.consultant_id = '';
             $scope.data.tenant_id = '';
             $scope.data.to = moment().format('YYYY-MM-DD');
-            $scope.data.from = moment($scope.data.to).add(-30, 'days').format('YYYY-MM-DD');
+            $scope.data.from = moment($scope.data.to).add(-31, 'days').format('YYYY-MM-DD');
             $scope.fromMaxDate = new Date($scope.data.to);
             $scope.toMinDate = new Date($scope.data.from);
             $scope.deselectAll('branch_wise');
             $scope.deselectAll('consultant_wise');
         }
 
+        $scope.setRowExpanded = function (consultant_id, tenant_id, status_date, expand) {
+            if (expand) {
+                var docRow = $filter('filter')($scope.records, {consultant_id: consultant_id, tenant_id: tenant_id, status_date: status_date})[0];
+                docRow.rowLoading = true;
+                var data = {};
+                angular.extend(data, {consultant_id: consultant_id});
+                angular.extend(data, {tenant_id: tenant_id});
+                angular.extend(data, {status_date: status_date});
+                //Checking opsummary extend reports
+                $http.post($rootScope.IRISOrgServiceUrl + '/myworkreports/opsummaryreportexpand', data)
+                        .success(function (response) {
+                            docRow.reports = response;
+                            docRow.rowLoading = false;
+                            $scope.generated_on = moment().format('YYYY-MM-DD hh:mm A');
+                        })
+                        .error(function () {
+                            $scope.errorData = "An Error has occured";
+                        });
+            }
+        }
         $scope.initReport = function () {
             $scope.doctors = [];
             $rootScope.commonService.GetDoctorList('', '1', false, '1', function (response) {
@@ -73,8 +94,8 @@ app.controller('opSummaryReportController', ['$rootScope', '$scope', '$timeout',
                 var to = moment($scope.data.to);
                 var difference = to.diff(from, 'days') + 1;
 
-                if (difference > 31) {
-                    $scope.data.to = moment($scope.data.from).add(+30, 'days').format('YYYY-MM-DD');
+                if (difference > 32) {
+                    $scope.data.to = moment($scope.data.from).add(+31, 'days').format('YYYY-MM-DD');
                 }
             }
         }, true);
@@ -85,8 +106,8 @@ app.controller('opSummaryReportController', ['$rootScope', '$scope', '$timeout',
                 var to = moment($scope.data.to);
                 var difference = to.diff(from, 'days') + 1;
 
-                if (difference > 31) {
-                    $scope.data.from = moment($scope.data.to).add(-30, 'days').format('YYYY-MM-DD');
+                if (difference > 32) {
+                    $scope.data.from = moment($scope.data.to).add(-31, 'days').format('YYYY-MM-DD');
                 }
             }
         }, true);
@@ -475,4 +496,14 @@ app.controller('opSummaryReportController', ['$rootScope', '$scope', '$timeout',
                 }
             }, 1000);
         }
+
+        $scope.expandAllRow = function (expanded) {
+            angular.forEach($scope.records, function (row) {
+                if (expanded && row.expanded)
+                    return; // If already opened
+
+                row.expanded = expanded;
+                $scope.setRowExpanded(row.consultant_id, row.tenant_id, row.status_date, expanded);
+            });
+        };
     }]);

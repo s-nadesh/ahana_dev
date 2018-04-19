@@ -4,7 +4,7 @@
             <label class="col-sm-3 control-label">Mode</label>
             <div class="col-sm-9">
                 <label class="i-checks"><input type="radio" name="z" value="OP" checked="" disabled=""><i></i>OP&nbsp; &nbsp;</label>
-                <label class="i-checks"><input type="radio" name="z" value="IP" ng-click="loadbar('show');
+                <label ng-show="checkAccess('patient.inPatients')" class="i-checks"><input type="radio" name="z" value="IP" ng-click="loadbar('show');
                         $state.go('patient.admission', {id: $state.params.id})"><i></i>IP&nbsp; &nbsp;</label>
             </div>
         </div>

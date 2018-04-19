@@ -259,7 +259,11 @@ app.controller('PatientController', ['$rootScope', '$scope', '$timeout', '$http'
         $scope.getDOB = function () {
             var newValue = this.patdata.PatPatient.patient_age_year;
             var newValue2 = this.patdata.PatPatient.patient_age_month;
-            if (!isNaN(newValue) && !isNaN(newValue)) {
+            if (!isNaN(newValue) || !isNaN(newValue2)) {
+                if (!newValue)
+                    var newValue = 0;
+                if (!newValue2)
+                    var newValue2 = 0;
                 $http({
                     method: 'POST',
                     url: $rootScope.IRISOrgServiceUrl + '/patient/getdatefromage',

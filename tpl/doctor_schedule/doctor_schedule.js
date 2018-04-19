@@ -334,4 +334,27 @@ app.controller('DoctorSchedulesController', ['$rootScope', '$scope', '$timeout',
             $('.timepicker').timepicker();
         }
 
+        $scope.getDoctorInterval = function () {
+            post_method = 'GET';
+            post_url = $rootScope.IRISOrgServiceUrl + '/doctorinterval/getdoctorintervaltime?userid=' + $scope.data.user_id;
+            succ_msg = 'Doctorinterval Updated successfully';
+            $http({
+                method: post_method,
+                url: post_url
+            }).success(
+                    function (response) {
+                        if (response.success === true) {
+                            $scope.data.interval = response.interval;
+                            console.log($scope.data.interval);
+                        }
+                    }
+            ).error(function (data, status) {
+                $scope.loadbar('hide');
+                if (status == 422)
+                    $scope.errorData = $scope.errorSummary(data);
+                else
+                    $scope.errorData = data.message;
+            });
+        }
+
     }]);

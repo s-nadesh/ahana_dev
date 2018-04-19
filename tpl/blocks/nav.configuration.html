@@ -158,7 +158,10 @@
         <span>Vitals Management</span>
     </a>
 </li>
-<li class="ng-scope"> 
+<li class="ng-scope" ng-show="checkAccess('configuration.drugclass') || checkAccess('configuration.brandDivision') || checkAccess('configuration.genericName') 
+            || checkAccess('configuration.drugGeneric')  || checkAccess('configuration.routes') || checkAccess('configuration.prodesc') || checkAccess('configuration.vat')
+            || checkAccess('configuration.gst') || checkAccess('configuration.packingUnit') || checkAccess('configuration.brand') || checkAccess('configuration.brandrep')
+        || checkAccess('configuration.products') || checkAccess('configuration.supplier') || checkAccess('configuration.patientgroupassign') || checkAccess('configuration.hsn')">
     <a class="auto" href=""> 
         <span class="pull-right text-muted"> 
             <i class="fa fa-fw fa-angle-right text"></i> 
@@ -186,7 +189,9 @@
         <li class="ng-scope"> 
             <a check-access ui-sref="configuration.hsn"> <span>HSN Code</span> </a> 
         </li>
-        <li class="ng-scope"> 
+        <li class="ng-scope" ng-show="checkAccess('configuration.drugclass') || checkAccess('configuration.brandDivision') || checkAccess('configuration.genericName') 
+            || checkAccess('configuration.drugGeneric')  || checkAccess('configuration.routes') || checkAccess('configuration.prodesc') || checkAccess('configuration.vat')
+            || checkAccess('configuration.gst') || checkAccess('configuration.packingUnit')"> 
             <a class="auto" href=""> 
                 <span class="pull-right text-muted"> 
                     <i class="fa fa-fw fa-angle-right text"></i> 

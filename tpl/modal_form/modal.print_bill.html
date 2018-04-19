@@ -189,7 +189,7 @@
                                         <span ng-init="
                                                     row_total_balance = parseFloatIgnoreCommas(row.billings_total_balance_amount);
                                                     row_total_bill = parseFloatIgnoreCommas(row.bill_amount);
-                                                    row_total_bill_paid = parseFloatIgnoreCommas(row.billings_total_paid_amount);
+                                                    row_total_bill_paid = parseFloatIgnoreCommas(row.billings_total_paid_amount_using_pharmacy);
                                                     bill_summary.pharmacy_balance = bill_summary.pharmacy_balance + row_total_balance;
                                                     bill_summary.pharmacy_bill = bill_summary.pharmacy_bill + row_total_bill;
                                                     bill_summary.pharmacy_paid = bill_summary.pharmacy_paid + row_total_bill_paid;">    
@@ -232,12 +232,12 @@
                             <tr ng-if="billing.discount > 0">
                                 <td>Discount :</td>
                                 <td align="center">
-                                    {{billing.total.concession + parseFloat(enc.selected.concession_amount) | number:2}}
+                                    {{billing.discount | number:2}}
                                 </td>
                             </tr>
                             <tr>
                                 <td>NET TOTAL :</td>
-                                <td align="center">{{(billing.total.price + recurr_billing.total.recurring_total + bill_summary.pharmacy_bill) - billing_total_paid - enc.selected.concession_amount| number:2}}</td>
+                                <td align="center">{{(billing.total.price + recurr_billing.total.recurring_total + bill_summary.pharmacy_bill) - billing_total_paid - enc.selected.concession_amount - recurr_billing.total_pharmacy.recurring_total_concession | number:2}}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -551,9 +551,9 @@
                                 <td>{{row.bill_no}}<span ng-if="row.sale_return_bill_no"> (Sale Return Bill No [{{row.sale_return_bill_no}}]) </span></td>
                                 <td>&nbsp;</td>
                                 <td align="center" ng-init="
-                                            detailed_non_billing.total.pharmacy_adv_charge = detailed_non_billing.total.pharmacy_adv_charge + parseFloat(row.paid_amount);
+                                            detailed_non_billing.total.pharmacy_adv_charge = detailed_non_billing.total.pharmacy_adv_charge + parseFloatIgnoreCommas(row.sale_details.billings_total_paid_amount_using_pharmacy);
                                             detailed_billing.total.pharmacy_bill_net_total = detailed_billing.total.pharmacy_net_total - parseFloat(row.net_amount);
-                                    ">{{row.paid_amount| number:2}}</td>
+                                    ">{{row.sale_details.billings_total_paid_amount_using_pharmacy| number:2}}</td>
                                 <td align="center">
                                     {{(detailed_billing.total.net_step_42_total - row.net_amount)| number:2}}
                                 </td>
@@ -602,8 +602,26 @@
                             <tr ng-if="billing.discount > 0">
                                 <td colspan="5"><h3> Discount </h3></td>
                             </tr>
-                            <!-- Procedure Discount -->
-                            <tr ng-init="detailed_billing.total.net_step_5_total = detailed_billing.total.advance_net_total" ng-repeat="(key, row) in procedures | filter:greaterThan('concession_amount', 0.00)">
+                            
+                            <!-- Pharmacy Discount Start-->
+                            <tr ng-init="detailed_billing.total.net_step_51_total = detailed_billing.total.advance_net_total" ng-repeat="(key, row) in pharmacy_concession">
+                                <td>{{row.paid_date| moment:'DD-MMM-YYYY'}}</td>
+                                <td>Bill No > {{row.bill_no}}</td>
+                                <td align="center">&nbsp;</td>
+                                <td ng-init="detailed_billing.total.pharmacy_concession_net_total = detailed_billing.total.advance_net_total - parseFloat(row.net_amount)">
+                                    {{row.paid_amount| number:2}}
+                                </td>
+                                <td align="center">
+                                    {{(detailed_billing.total.net_step_51_total - row.net_amount)| number:2}}
+                                </td>
+                            </tr>
+                            <tr ng-if="!detailed_billing.total.pharmacy_concession_net_total" class="hide">
+                                <td colspan="5" ng-init="detailed_billing.total.pharmacy_concession_net_total = detailed_billing.total.advance_net_total"></td>
+                            </tr>
+                            <!-- Pharmacy Discount End-->
+                            
+                            <!-- Procedure Discount Start-->
+                            <tr ng-init="detailed_billing.total.net_step_5_total = detailed_billing.total.pharmacy_concession_net_total" ng-repeat="(key, row) in procedures | filter:greaterThan('concession_amount', 0.00)">
                                 <td>{{row.date| moment:'DD-MMM-YYYY'}}</td>
                                 <td>Procedure > {{row.headers}}</td>
                                 <td align="center">&nbsp;</td>
@@ -615,9 +633,11 @@
                                 </td>
                             </tr>
                             <tr ng-if="!detailed_billing.total.proc_concession_net_total" class="hide">
-                                <td colspan="5" ng-init="detailed_billing.total.proc_concession_net_total = detailed_billing.total.advance_net_total"></td>
+                                <td colspan="5" ng-init="detailed_billing.total.proc_concession_net_total = detailed_billing.total.pharmacy_concession_net_total"></td>
                             </tr>
-                            <!-- Professional Discount -->
+                            <!-- Procedure Discount End-->
+                            
+                            <!-- Professional Discount Start -->
                             <tr ng-init="detailed_billing.total.net_step_6_total = detailed_billing.total.proc_concession_net_total" ng-repeat="(key, row) in consultants | filter:greaterThan('concession_amount', 0.00)">
                                 <td>{{row.date| moment:'DD-MMM-YYYY'}}</td>
                                 <td>Professionals > {{row.headers}}</td>
@@ -632,7 +652,9 @@
                             <tr ng-if="!detailed_billing.total.profe_concession_net_total" class="hide">
                                 <td colspan="5" ng-init="detailed_billing.total.profe_concession_net_total = detailed_billing.total.proc_concession_net_total"></td>
                             </tr>
-                            <!-- Room Discount -->
+                            <!-- Professional Discount End -->
+                            
+                            <!-- Room Discount Start-->
                             <tr ng-if="enc.selected.concession_amount != '0.00'">
                                 <td>&nbsp;</td>
                                 <td>Room Discount</td>
@@ -644,6 +666,7 @@
                                     {{(detailed_billing.total.profe_concession_net_total - enc.selected.concession_amount)| number:2}}
                                 </td>
                             </tr>
+                            <!-- Room Discount End-->
 
                         </tbody>
                         <tfoot>
@@ -660,12 +683,13 @@
                             </tr>
                             <tr>
                                 <td colspan="4">Discount :</td>
-                                <td align="center">{{billing.total.concession + parseFloat(enc.selected.concession_amount) | number:2}}</td>
+                                <td align="center">{{billing.total.other_discount + parseFloat(enc.selected.concession_amount) | number:2}}</td>
+                                <!--<td align="center">{{recurr_billing.total_pharmacy.recurring_total_concession}}</td> -->
                             </tr>
                             <tr>
                                 <td colspan="4">NET TOTAL :</td>
                                 <td align="center">
-                                    {{(billing.total.price + recurr_billing.total.recurring_total + detailed_billing.total.pharmacy_total) - billing.total.advance_charge - enc.selected.concession_amount - detailed_non_billing.total.pharmacy_adv_charge | number:2}}
+                                    {{(billing.total.price + recurr_billing.total.recurring_total + detailed_billing.total.pharmacy_total) - billing.total.advance_charge - enc.selected.concession_amount - detailed_non_billing.total.pharmacy_adv_charge - recurr_billing.total_pharmacy.recurring_total_concession | number:2}}
                                 </td>
                             </tr>
                             <!--                            <tr>

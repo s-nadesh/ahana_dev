@@ -1,114 +1,120 @@
-<table width="100%" cellspacing="0" cellpadding="0" class="voucher-table">
-    <tbody>
-        <tr>
-            <td width="10px" class="orgimg" rowspan="2">
-                <img width="60" height="60" alt="AHANA HOSPITALS" src="{{app.org_document_logo}}">
-            </td>
-            <td>
-                <span style="display:inline-block;width:100%;" class="orgcss" id="lblOrganisation">{{app.org_name}}</span>
-            </td>
-            <td class="orgtable2" style="width: 25%">
-                <span style="display:inline-block;width:100%;" class="SplCss" id="lblvourcherno">
-                    Voucher No : <b>{{printVoucher.payment_id}}</b>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td class="orgtable" rowspan="1"> 
-                {{app.org_address}}<br>
-                {{app.org_city}} {{app.org_state}} {{app.org_country}}<br>
-                Ph : {{app.org_mobile}}
-            </td>
-            <td class="orgtable2"><span style="display:inline-block;width:100%;" class="DateCss" id="lblDate">
-                    <span class="SplCss">Date : </span>{{printVoucher.payment_date| moment:'DD/MM/YYYY'}}
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3" class="recived-details">
-                Received with thanks from 
-                <span> 
-                    <strong>
-                        {{patientObj.fullname}} 
-                        ({{patientObj.patient_age_ym}}) 
-                        ({{patientObj.patient_global_int_code}}) 
-                        <span ng-if="patientObj.current_room != '-'">
-                            ({{patientObj.current_room}})
-                        </span>
-                    </strong> 
-                </span> 
-                <br />
-                <br />
-                a sum of rupees <span><strong>{{printVoucher.total_charge}}</strong></span> through <span><strong>{{printVoucher.trans_mode}}</strong></span>
-                <br />
-                <br />
-                <span><strong>{{printVoucher.total_charge| words}}</strong></span> on account of <strong>{{printVoucher.category == 'Settlement Charge' ? 'Discharge' : 'Advance'}}</strong>
-                <br />
-                <br />
-                <br />
-                <div class="amount">{{printVoucher.total_charge}}</div>
-                <div class="sign">
-                    For {{app.org_name}} 
-                    <br/>
-                    <br/>
-                    <span> Authorised signatory</span> 
-                </div>
-                <br />
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div id="receipt_background">
+    <p ng-if="duplicate_copy" id="receipt_bg-text">DUPLICATE COPY</p>
+</div>
 
-<table width="100%" cellspacing="0" cellpadding="0" class="voucher-table">
-    <tbody>
-        <tr>
-            <td width="10px" class="orgimg" rowspan="2">
-                <img width="60" height="60" alt="AHANA HOSPITALS" src="{{app.org_document_logo}}">
-            </td>
-            <td>
-                <span style="display:inline-block;width:100%;" class="orgcss" id="lblOrganisation">{{app.org_name}}</span>
-            </td>
-            <td class="orgtable2" style="width: 25%">
-                <span style="display:inline-block;width:100%;" class="SplCss" id="lblvourcherno">
-                    Voucher No : <b>{{printVoucher.payment_id}}</b>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td class="orgtable" rowspan="1"> 
-                {{app.org_address}}<br>
-                {{app.org_city}} {{app.org_state}} {{app.org_country}}<br>
-                Ph : {{app.org_mobile}}
-            </td>
-            <td class="orgtable2"><span style="display:inline-block;width:100%;" class="DateCss" id="lblDate">
-                    <span class="SplCss">Date : </span>{{printVoucher.payment_date| moment:'DD/MM/YYYY'}}
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3" class="recived-details">Received with thanks from 
-                <span> 
-                    <strong>
-                        {{patientObj.fullname}} 
-                        ({{patientObj.patient_age_ym}}) 
-                        ({{patientObj.patient_global_int_code}}) 
-                        <span ng-if="patientObj.current_room != '-'">
-                            ({{patientObj.current_room}})
-                        </span>
-                    </strong> 
-                </span>
-                <br />
-                <br />
-                a sum of rupees <span><strong>{{printVoucher.total_charge}}</strong></span> through <span><strong>{{printVoucher.trans_mode}}</strong></span>
-                <br />
-                <br />
-                <span><strong>{{printVoucher.total_charge| words}}</strong></span> on account of <strong>{{printVoucher.category == 'Settlement Charge' ? 'Discharge' : 'Advance'}}</strong> <br />
-                <br />
-                <br />
-                <div class="amount">{{printVoucher.total_charge}}</div>
-                <div class="sign">For {{app.org_name}} <br/>
-                    <br/>
-                    <span> Authorised signatory</span> </div>
-                <br />
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div id="receipt_content">
+    <table width="100%" cellspacing="0" cellpadding="0" class="voucher-table">
+        <tbody>
+            <tr>
+                <td width="10px" class="orgimg" rowspan="2">
+                    <img width="60" height="60" alt="AHANA HOSPITALS" src="{{app.org_document_logo}}">
+                </td>
+                <td>
+                    <span style="display:inline-block;width:100%;" class="orgcss" id="lblOrganisation">{{app.org_name}}</span>
+                </td>
+                <td class="orgtable2" style="width: 25%">
+                    <span style="display:inline-block;width:100%;" class="SplCss" id="lblvourcherno">
+                        Voucher No : <b>{{printVoucher.payment_id}}</b>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="orgtable" rowspan="1"> 
+                    {{app.org_address}}<br>
+                    {{app.org_city}} {{app.org_state}} {{app.org_country}}<br>
+                    Ph : {{app.org_mobile}}
+                </td>
+                <td class="orgtable2"><span style="display:inline-block;width:100%;" class="DateCss" id="lblDate">
+                        <span class="SplCss">Date : </span>{{printVoucher.payment_date| moment:'DD/MM/YYYY'}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="recived-details">
+                    Received with thanks from 
+                    <span> 
+                        <strong>
+                            {{patientObj.fullname}} 
+                            ({{patientObj.patient_age_ym}}) 
+                            ({{patientObj.patient_global_int_code}}) 
+                            <span ng-if="patientObj.current_room != '-'">
+                                ({{patientObj.current_room}})
+                            </span>
+                        </strong> 
+                    </span> 
+                    <br />
+                    <br />
+                    a sum of rupees <span><strong>{{printVoucher.total_charge}}</strong></span> through <span><strong>{{printVoucher.trans_mode}}</strong></span>
+                    <br />
+                    <br />
+                    <span><strong>{{printVoucher.total_charge| words}}</strong></span> on account of <strong>{{printVoucher.category == 'Settlement Charge' ? 'Discharge' : 'Advance'}}</strong>
+                    <br />
+                    <br />
+                    <br />
+                    <div class="amount">{{printVoucher.total_charge}}</div>
+                    <div class="sign">
+                        For {{app.org_name}} 
+                        <br/>
+                        <br/>
+                        <span> Authorised signatory</span> 
+                    </div>
+                    <br />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table width="100%" cellspacing="0" cellpadding="0" class="voucher-table">
+        <tbody>
+            <tr>
+                <td width="10px" class="orgimg" rowspan="2">
+                    <img width="60" height="60" alt="AHANA HOSPITALS" src="{{app.org_document_logo}}">
+                </td>
+                <td>
+                    <span style="display:inline-block;width:100%;" class="orgcss" id="lblOrganisation">{{app.org_name}}</span>
+                </td>
+                <td class="orgtable2" style="width: 25%">
+                    <span style="display:inline-block;width:100%;" class="SplCss" id="lblvourcherno">
+                        Voucher No : <b>{{printVoucher.payment_id}}</b>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="orgtable" rowspan="1"> 
+                    {{app.org_address}}<br>
+                    {{app.org_city}} {{app.org_state}} {{app.org_country}}<br>
+                    Ph : {{app.org_mobile}}
+                </td>
+                <td class="orgtable2"><span style="display:inline-block;width:100%;" class="DateCss" id="lblDate">
+                        <span class="SplCss">Date : </span>{{printVoucher.payment_date| moment:'DD/MM/YYYY'}}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="recived-details">Received with thanks from 
+                    <span> 
+                        <strong>
+                            {{patientObj.fullname}} 
+                            ({{patientObj.patient_age_ym}}) 
+                            ({{patientObj.patient_global_int_code}}) 
+                            <span ng-if="patientObj.current_room != '-'">
+                                ({{patientObj.current_room}})
+                            </span>
+                        </strong> 
+                    </span>
+                    <br />
+                    <br />
+                    a sum of rupees <span><strong>{{printVoucher.total_charge}}</strong></span> through <span><strong>{{printVoucher.trans_mode}}</strong></span>
+                    <br />
+                    <br />
+                    <span><strong>{{printVoucher.total_charge| words}}</strong></span> on account of <strong>{{printVoucher.category == 'Settlement Charge' ? 'Discharge' : 'Advance'}}</strong> <br />
+                    <br />
+                    <br />
+                    <div class="amount">{{printVoucher.total_charge}}</div>
+                    <div class="sign">For {{app.org_name}} <br/>
+                        <br/>
+                        <span> Authorised signatory</span> </div>
+                    <br />
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+</div>

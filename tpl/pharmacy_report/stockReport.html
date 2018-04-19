@@ -104,6 +104,7 @@
                                 <th>S.No</th>
                                 <th>Product Name</th>
                                 <th>Batch</th>
+                                <th>Expiry Date</th>
                                 <th>Qty</th>
                                 <th>Amount</th>
                                 <th>Self Value</th>
@@ -113,12 +114,14 @@
                                 <td>{{key + 1}}</td>
                                 <td>{{record.product_name}}</td>
                                 <td>{{record.batch_no}}</td>
+                                <td>{{record.expiry_date | date:'MMM yyyy' }}</td>
                                 <td>{{record.stock}}</td>
                                 <td>{{record.purchase_rate}}</td>
                                 <td>{{record.self_value}}</td>
                                 <td ng-init="stock.total_amount = stock.total_amount + parseFloat(record.total_rate);">{{record.total_rate}}</td>
                             </tr>
                             <tr>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

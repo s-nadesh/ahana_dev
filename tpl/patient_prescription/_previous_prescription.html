@@ -102,6 +102,14 @@
     </tfoot>
 </table>
 <div id='print_previous_pres' ng-if="prescription_print_content" ng-hide="true">
+    <style parse-style>
+        @media print
+        {
+            @page  {
+                margin-top: ' + prescription_print.PMT + 'mm;
+            }
+        }
+    </style>
     <table class="invoice" align="center">
         <tbody>
             <tr>
@@ -116,7 +124,7 @@
                                 </td>
                                 <td width="48%" align="right">
                                     <table>
-                                        <tr align="right"><td><span style="font-size: 20px; margin-right: 37px;padding-bottom: 5px">{{today| date: "dd-MMMM-y" }}</span></td></tr>
+                                        <tr align="right"><td><span style="font-size: 20px; margin-right: 5px;padding-bottom: 5px">{{today| date: "dd-MMMM-y" }}</span></td></tr>
                                         <tr><td>&nbsp;</td></tr>
                                         <tr align="right"><td><io-barcode code="{{patientObj.patient_global_int_code}}" type="CODE128B" options="barcodeOptions" width="220px" height="70px"></io-barcode></td></tr>
                     </table>

@@ -4,7 +4,11 @@ app.controller('VitalmanagementController', ['$rootScope', '$scope', '$timeout',
         editableThemes.bs3.buttonsClass = 'btn-sm';
         editableOptions.theme = 'bs3';
         $scope.current_type = '';
-
+        
+        if(!$scope.checkAccess('patient.inPatients')) {
+            $scope.current_type = 'OP';
+        }
+        
         $scope.data = {};
 
         $scope.initSettings = function () {
