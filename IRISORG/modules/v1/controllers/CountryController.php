@@ -50,7 +50,7 @@ class CountryController extends ActiveController {
             'pagination' => false,
         ]);
     }
-    
+
     public function actionChangeStatus() {
         $post = Yii::$app->request->post();
         if (!empty($post)) {
@@ -61,6 +61,23 @@ class CountryController extends ActiveController {
             $model->status = 1 - $model->status;
             $model->save(false);
             return ['success' => "ok", 'sts' => $model->status];
+        }
+    }
+
+    public function actionUpdatePrintoption() {
+        $post = Yii::$app->request->post();
+        if (!empty($post)) {
+            $modelName = $post['model'];
+            $primaryKey = $post['id'];
+            $modelClass = "common\\models\\$modelName";
+            $model = $modelClass::findOne($primaryKey);
+            if (!empty($model) && $model->print_created_by == '0') {
+                $model->print_created_by = Yii::$app->user->identity->user->user_id;
+                $model->save(false);
+                return ['success' => true];
+            } else {
+                return ['success' => false];
+            }
         }
     }
 

@@ -474,7 +474,7 @@ class DefaultController extends Controller {
     }
 
     public function actionOpeningstockadjustlog() {
-        $connection = Yii::$app->client;
+        $connection = Yii::$app->client_pharmacy;
         $connection->open();
 
         $sql = "SELECT *

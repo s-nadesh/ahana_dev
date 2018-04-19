@@ -790,7 +790,7 @@ class XmlController extends Controller {
     }
 
     public function actionChangethvalue() {
-        $xpath = "/FIELDS/GROUP/PANELBODY//FIELD[@type='RadGrid' and @ADDButtonID='RGprevprescriptionadd']/HEADER";
+        $xpath = "/FIELDS/GROUP/PANELBODY//FIELD[@type='RadGrid' and @ADDButtonID='RGvitaladd']/HEADER";
         $insert = 'Response';
 
         $all_files = $this->getAllMCHFiles();
@@ -808,32 +808,24 @@ class XmlController extends Controller {
                     $targets = $xml->xpath($xpath);
                     if (!empty($targets)) {
                         foreach ($targets as $target) {
-                            print_r($files);
 //                            if ((isset($target->TH[0])) && (isset($target->TH[1]))) {
 //                                if ($target->TH[0] != 'Pres Date') {
 //                                    $target->TH[0] = 'Pres Date';
 //                                    $target->TH[1] = 'Product Name';
 //                                }
 //                            }
-                            if ((isset($target->TH[2])) && (isset($target->TH[3])) && (isset($target->TH[4]))) {
-                                if ($target->TH[2] == 'Generic Name') {
-                                    unset($target->TH[2]);
-                                }
-                                if ($target->TH[2] == 'Drug Name') {
-                                    unset($target->TH[2]);
-                                }
-                                if ($target->TH[2] == 'Route') {
-                                    unset($target->TH[2]);
+                            if (isset($target->TH[1])) {
+                                if ($target->TH[1] == 'Temperature') {
+                                    $target->TH[1] = 'Temp';
                                 }
                             }
-                            print_r($target); //die;
 //                            if ((isset($target->TH[1])) && (isset($target->TH[2]))) {
 //                                $target->TH[1] = $target->TH[2];
 //                                $target->TH[2] = $insert;
 //                            }
                         }
                     } //print_r($target); die;
-                    $xml->asXML($files);
+                    $xml->asXML($files); 
                 } //die;
             }
         }

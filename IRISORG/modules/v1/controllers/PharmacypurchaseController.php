@@ -251,7 +251,7 @@ class PharmacypurchaseController extends ActiveController {
 
     public function actionGetimporterrorlog() {
         $get = Yii::$app->getRequest()->get();
-        $connection = Yii::$app->client;
+        $connection = Yii::$app->client_pharmacy;
         $connection->open();
         $command = $connection->createCommand("SELECT * FROM test_purchase_import WHERE tenant_id = {$get['tenant_id']} AND status = '0' AND import_log = {$get['import_log']}");
         $result = $command->queryAll(PDO::FETCH_OBJ);
@@ -266,7 +266,7 @@ class PharmacypurchaseController extends ActiveController {
 
         if ($id <= $max_id) {
             $next_id = $id + 1;
-            $connection = Yii::$app->client;
+            $connection = Yii::$app->client_pharmacy;
             $connection->open();
             $command = $connection->createCommand("SELECT * FROM test_purchase_import WHERE id = {$id} AND import_log = $import_log");
             $result = $command->queryAll(PDO::FETCH_OBJ);
@@ -400,7 +400,7 @@ class PharmacypurchaseController extends ActiveController {
 //        }
         // read each data row in the file
         $import = [];
-        $connection = Yii::$app->client;
+        $connection = Yii::$app->client_pharmacy;
         $connection->open();
 //        $sql = "truncate table test_purchase_import";
 //        $command = $connection->createCommand($sql);

@@ -73,13 +73,15 @@ class PharmacysaleController extends ActiveController {
         $sales = PhaSale::find()
                 ->tenant()
                 ->active()
+                //By Nad at 2018-03-10 5:47 PM
                 ->joinWith(['patient.glPatient'])
-               // ->leftJoin($dbname.'.pat_patient', 'pha_sale.patient_id=pat_patient.patient_id')
-                //->leftJoin($dbname.'.pat_global_patient', 'pat_global_patient.patient_global_guid=pat_patient.patient_global_guid')
+//                ->leftJoin('pat_patient', 'pha_sale.patient_id=pat_patient.patient_id')
+//                ->leftJoin('pat_global_patient', 'pat_global_patient.patient_global_guid=pat_patient.patient_global_guid')
                 ->andFilterWhere([
                     'or',
                         ['like', 'bill_no', $text],
-                        ['like', 'gl_patient.patient_global_int_code', $text],
+//                        ['like', 'pat_global_patient.patient_global_int_code', $text],
+                    ['like', 'gl_patient.patient_global_int_code', $text],
                 ])
                 ->limit(100)
                 ->all();
@@ -288,10 +290,29 @@ class PharmacysaleController extends ActiveController {
         $billing = PhaSaleBilling::find()
                 ->joinWith('sale')
                 ->andWhere(['pha_sale.encounter_id' => $get['encounter_id']])
+                ->andWhere(['!=', 'pha_sale_billing.settlement', 'C'])
                 ->orderBy(['sale_billing_id' => SORT_ASC])
                 ->all();
 
-        return ['sale' => $sale, 'billing' => $billing, 'logged_tenant' => $logged_tenant];
+        $pharmacy_concession = PhaSaleBilling::find()
+                ->joinWith('sale')
+                ->andWhere(['pha_sale.encounter_id' => $get['encounter_id'],
+                    'pha_sale_billing.settlement' => 'C',
+                ])
+                ->orderBy(['sale_billing_id' => SORT_ASC])
+                ->all();
+
+        return ['sale' => $sale, 'billing' => $billing, 'logged_tenant' => $logged_tenant, 'pharmacy_concession' => $pharmacy_concession];
+    }
+
+    public function actionGetpendingsalebill() {
+        $get = Yii::$app->getRequest()->get();
+        $sale = PhaSale::find()
+                ->andWhere(['!=', 'payment_status', 'C'])
+                ->andWhere(['encounter_id' => $get['encounter_id']])
+                ->orderBy(['sale_id' => SORT_DESC])
+                ->all();
+        return ['sale' => $sale];
     }
 
 }

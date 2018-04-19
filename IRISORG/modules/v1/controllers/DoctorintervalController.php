@@ -64,5 +64,15 @@ class DoctorintervalController extends ActiveController {
         $new_interval->attributes = $interval_attr;
         $new_interval->save();
     }
+    
+    public function actionGetdoctorintervaltime() {
+        $get = Yii::$app->getRequest()->get();
+        $interval = CoDoctorInterval::find()->tenant()->active()->andWhere(['user_id' => $get['userid']])->one();
+        if(!empty($interval)) {
+            return ['success' => true, 'interval' => $interval['interval']];
+        } else {
+           return ['success' => false]; 
+        }
+    }
 
 }

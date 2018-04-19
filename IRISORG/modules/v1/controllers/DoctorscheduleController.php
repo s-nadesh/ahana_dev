@@ -166,7 +166,7 @@ class DoctorscheduleController extends ActiveController {
                         ->all();
 
                 $interval = CoDoctorInterval::find()->tenant()
-                        ->where('user_id = :doctor_id', [':doctor_id' => $doctor_id])
+                        ->andWhere('user_id = :doctor_id', [':doctor_id' => $doctor_id])
                         ->active()
                         ->one();
                 if (empty($interval))

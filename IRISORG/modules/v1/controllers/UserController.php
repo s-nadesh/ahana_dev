@@ -125,7 +125,7 @@ class UserController extends ActiveController {
     public function actionGetuserdata() {
 
         $get = Yii::$app->request->get();
-
+        $datas = [];
         $requestData = $_REQUEST;
         $modelClass = $this->modelClass;
         $totalAllData = $modelClass::find()->active()->exceptSuperUser();

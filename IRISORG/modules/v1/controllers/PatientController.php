@@ -127,6 +127,15 @@ class PatientController extends ActiveController {
 
                 $updated_patient = PatPatient::find()->where(['patient_id' => $model->patient_id])->one();
 
+                //Patient Image save - By Nad.
+                if (empty($updated_patient->patient_image) && !empty($post['PatPatient']['patient_img_url'])) {
+                    $filename = $this->convertBlobToFile($post['PatPatient']['patient_img_url'], $updated_patient);
+                    $updated_patient->patient_image = $filename;
+                    $updated_patient->save(false);
+                    $updated_patient->refresh();
+                }
+
+
                 return ['success' => true, 'patient_id' => $model->patient_id, 'patient_guid' => $model->patient_guid, 'patient' => $updated_patient];
             } else {
                 return ['success' => false, 'message' => Html::errorSummary([$model, $addr_model])];
@@ -148,6 +157,7 @@ class PatientController extends ActiveController {
             $lists = PatPatient::find()
                     ->andWhere([
                         'pat_patient.tenant_id' => $tenant_id,
+                        'pat_patient.status' => '1'
 //                        'pat_patient.deleted_at' => '0000-00-00 00:00:00',
 //                        'pat_global_patient.parent_id' => NULL
                     ])
@@ -278,7 +288,7 @@ class PatientController extends ActiveController {
             if (empty($patients)) {
                 $lists = PatPatient::find()
                         //->joinWith('patGlobalPatient')
-                       ->joinWith(['glPatient b'])
+                        ->joinWith(['glPatient b'])
                         ->andWhere("pat_patient.status = '1' AND pat_patient.tenant_id != {$tenant_id} AND b.parent_id IS NULL")
                         ->andFilterWhere([
                             'or',

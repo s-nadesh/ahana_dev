@@ -106,27 +106,39 @@ class MyworkreportsController extends ActiveController {
         if (isset($post['consultant_id']) && isset($post['tenant_id'])) {
             $consultant_ids = join("','", $post['consultant_id']);
             $tenant_ids = join("','", $post['tenant_id']);
-            $reports = PatAppointment::find()
-                    //->select(['sum(amount) as amount', 'status_date'])
+            $model = PatAppointment::find()
+                    ->select(['sum(amount) as amount', 'status_date', 'pat_appointment.tenant_id as tenant_id', 'pat_appointment.consultant_id as consultant_id'])
                     ->joinWith(['consultant', 'tenant'])
-                    //->addSelect(["co_tenant.tenant_name as tenant_name"])
-                    //->addSelect(["concat(co_user.title_code,co_user.name) as full_consultant_name"])
+                    ->addSelect(["co_tenant.tenant_name as tenant_name"])
+                    ->addSelect(["concat(co_user.title_code,co_user.name) as full_consultant_name"])
                     ->andWhere('pat_appointment.deleted_at = "0000-00-00 00:00:00"')
                     ->andWhere("status_date between '{$post['from']}' AND '{$post['to']}'")
                     ->andWhere("pat_appointment.consultant_id IN ( '$consultant_ids' )")
                     ->andWhere("pat_appointment.tenant_id IN ( '$tenant_ids' )")
                     ->andWhere("appt_status='S'")
-                    //->groupBy(['status_date', 'consultant_id'])
+                    ->groupBy(['status_date', 'consultant_id', 'tenant_id'])
                     ->all();
-            //$reports = [];
-//            foreach ($model as $key => $appoint) {
-//                $reports[$key]['amount'] = $appoint['amount'];
-//                $reports[$key]['status_date'] = $appoint['status_date'];
-//                $reports[$key]['tenant_name'] = $appoint['tenant_name'];
-//                $reports[$key]['full_consultant_name'] = $appoint['full_consultant_name'];
-//            }
+            $reports = [];
+            foreach ($model as $key => $appoint) {
+                $reports[$key]['amount'] = $appoint['amount'];
+                $reports[$key]['status_date'] = $appoint['status_date'];
+                $reports[$key]['tenant_name'] = $appoint['tenant_name'];
+                $reports[$key]['full_consultant_name'] = $appoint['full_consultant_name'];
+                $reports[$key]['tenant_id'] = $appoint['tenant_id'];
+                $reports[$key]['consultant_id'] = $appoint['consultant_id'];
+            }
             return ['report' => $reports];
         }
+    }
+    
+    public function actionOpsummaryreportexpand() {
+        $post = Yii::$app->getRequest()->post();
+        $model = PatAppointment::find()
+                    ->andWhere(['consultant_id' => $post['consultant_id']])
+                    ->andWhere(['tenant_id' => $post['tenant_id']])
+                    ->andWhere(['status_date' => $post['status_date']])
+                    ->all();
+        return $model;
     }
 
     public function actionIpbillstatus() {
@@ -166,6 +178,29 @@ class MyworkreportsController extends ActiveController {
             $encounters->andWhere("date(pat_encounter.finalize_date) between '{$post['from']}' AND '{$post['to']}'");
             $encounters->andWhere("pat_admission.consultant_id IN ( '$consultant_ids' )");
             $encounters->andWhere("pat_encounter.tenant_id IN ( '$tenant_ids' )");
+        }
+
+        $encounters->andWhere("pat_encounter.bill_no != ''");
+
+        $result = $encounters->all();
+
+        return $result;
+    }
+    
+    public function actionDischargedpatientdues() {
+        $post = Yii::$app->getRequest()->post();
+
+        $encounters = PatEncounter::find()
+                ->joinWith('patAdmissionAdministrativeDischarge')
+//                ->status()
+                ->encounterType("IP");
+                //->finalized();
+
+        if (isset($post['from']) && isset($post['to']) && isset($post['tenant_id'])) {
+            $encounters->andWhere("date(pat_admission.status_date) between '{$post['from']}' AND '{$post['to']}'");
+            //$tenant_ids = join("','", $post['tenant_id']);
+            //$encounters->andWhere("pat_encounter.tenant_id IN ( '$tenant_ids' )");
+            $encounters->andWhere(['pat_encounter.tenant_id' => $post['tenant_id']]);
         }
 
         $encounters->andWhere("pat_encounter.bill_no != ''");

@@ -189,20 +189,20 @@ class PharmacyproductController extends ActiveController {
 //        Count batch details value
         $count = $modelClass::find()->joinWith($relations)->tenant()->status();
         if ($condition) {
-            $count->andWhere(['pha_product_batch.batch_no'=>$condition]);
+            $count->andWhere(['pha_product_batch.batch_no' => $condition]);
         }
         if ($filters) {
             $count->andFilterWhere($filters);
         }
         $totalCount = $count->count();
-        
+
         //Fetch the batch details result
         $result = $modelClass::find()
                 ->joinWith($relations)
                 ->tenant()
                 ->status();
         if ($condition) {
-            $result->andWhere(['pha_product_batch.batch_no'=>$condition]);
+            $result->andWhere(['pha_product_batch.batch_no' => $condition]);
         }
         if ($filters) {
             $result->andFilterWhere($filters);
@@ -210,9 +210,9 @@ class PharmacyproductController extends ActiveController {
         $result->limit($get['pageSize'])
                 ->offset($offset);
 
-        
+
         $productLists = $result->all();
-        
+
         return ['success' => true, 'productLists' => $productLists, 'totalCount' => $totalCount];
     }
 
@@ -338,7 +338,7 @@ class PharmacyproductController extends ActiveController {
         $post = Yii::$app->getRequest()->post();
         $tenant_id = Yii::$app->user->identity->logged_tenant_id;
         $appConfiguration = AppConfiguration::find()
-                ->andWhere(['<>','value', '0'])
+                ->andWhere(['<>', 'value', '0'])
                 ->andWhere(['tenant_id' => $tenant_id, 'code' => 'PB'])
                 ->one();
         if (!empty($appConfiguration)) {
@@ -412,11 +412,12 @@ class PharmacyproductController extends ActiveController {
                     LEFT OUTER JOIN pha_drug_class c
                     ON c.drug_class_id = a.drug_class_id
                     WHERE a.tenant_id = :tenant_id
-                    AND a.product_id = :product_id AND a.status='1'
+                    AND a.product_id = :product_id AND a.status='1' AND a.drug_class_id IS NOT NULL
                     $filter_query
                     ORDER BY a.product_name
                     LIMIT 0,:limit", [':limit' => $limit, ':tenant_id' => $tenant_id, ':product_id' => $post['product_id']]
             );
+            $products = $command->queryAll();
         } else {
             //Retrieve (product || generic || drug)
             $command = $this->_connection->createCommand("
@@ -438,15 +439,43 @@ class PharmacyproductController extends ActiveController {
                     ON b.generic_id = a.generic_id
                     LEFT OUTER JOIN pha_drug_class c
                     ON c.drug_class_id = a.drug_class_id
-                    WHERE (a.tenant_id = :tenant_id AND a.status='1' AND CONCAT_WS(' ', TRIM(a.product_name), TRIM(a.product_unit_count), TRIM(a.product_unit)) LIKE :search_text)
-                    OR (b.tenant_id = :tenant_id AND b.generic_name LIKE :search_text)
-                    OR (c.tenant_id = :tenant_id AND c.drug_name LIKE :search_text)
+                    WHERE (a.tenant_id = :tenant_id AND a.status='1' AND a.drug_class_id IS NOT NULL AND CONCAT_WS(' ', TRIM(a.product_name), TRIM(a.product_unit_count), TRIM(a.product_unit)) LIKE :search_text)
+                    OR (b.tenant_id = :tenant_id AND a.drug_class_id IS NOT NULL AND b.generic_name LIKE :search_text)
+                    OR (c.tenant_id = :tenant_id AND a.drug_class_id IS NOT NULL AND c.drug_name LIKE :search_text)
                     $filter_query
                     ORDER BY a.product_name
                     LIMIT 0,:limit", [':search_text' => $like_text_search, ':limit' => $limit, ':tenant_id' => $tenant_id]
             );
+            $products = $command->queryAll();
+            if (empty($products)) {
+                $command = $this->_connection->createCommand("
+                    SELECT a.product_id, a.product_name, b.generic_id, b.generic_name, c.drug_class_id, c.drug_name,
+                    CONCAT(
+                        IF(b.generic_name IS NOT NULL, b.generic_name, ''),
+                        IF(a.product_name IS NOT NULL, CONCAT(' // ', a.product_name), ''),
+                        IF(a.product_unit_count IS NOT NULL, CONCAT(' ', a.product_unit_count), ''),
+                        IF(a.product_unit IS NOT NULL, CONCAT(' ', a.product_unit), '')
+                    ) AS prescription, '' as selected, a.product_description_id,
+                    (
+                        SELECT IF(SUM(d.available_qty) IS NOT NULL, SUM(d.available_qty), 0)
+                        FROM pha_product_batch d
+                        WHERE d.tenant_id = a.tenant_id
+                        AND d.product_id = a.product_id
+                    ) as available_quantity
+                    FROM pha_product a
+                    LEFT OUTER JOIN pha_generic b
+                    ON b.generic_id = a.generic_id
+                    LEFT OUTER JOIN pha_drug_class c
+                    ON c.drug_class_id = a.drug_class_id
+                    WHERE (a.tenant_id = :tenant_id AND a.drug_class_id IS NOT NULL AND a.status='1' AND SOUNDEX(a.product_name) LIKE SOUNDEX(:search_text))
+                    $filter_query
+                    ORDER BY a.product_name
+                    LIMIT 0,:limit", [':search_text' => $like_text_search, ':limit' => $limit, ':tenant_id' => $tenant_id]
+                );
+                $products = $command->queryAll();
+            }
         }
-        $products = $command->queryAll();
+
         return $products;
     }
 
@@ -545,7 +574,6 @@ class PharmacyproductController extends ActiveController {
 //        return $products;
 //    }
 
-    /*NOT NEED*/
     private function _getRoutes($products, $text_search, $tenant_id, $limit) {
         $post = Yii::$app->getRequest()->post();
         $routes = [];
@@ -605,7 +633,8 @@ class PharmacyproductController extends ActiveController {
         return $routes;
     }
 
-    /* NOT NEED*/
+    /* NOT NEED */
+
     private function _getFrequencies($text, $tenant_id, $limit) {
         $post = Yii::$app->getRequest()->post();
         $frequencies = [];
@@ -755,7 +784,7 @@ class PharmacyproductController extends ActiveController {
 
     public function actionGetbatchlists() {
         //$list = PhaProductBatch::find()->status()->active()->select('batch_no','expiry_date','available_qty')->distinct()->all();
-        $list = PhaProductBatch::find()->status()->active()->select(['batch_no','expiry_date','available_qty'])->distinct()->all();
+        $list = PhaProductBatch::find()->status()->active()->select(['batch_no', 'expiry_date', 'available_qty'])->distinct()->all();
         return $list;
 //        echo 'asdasa'; die;
     }
@@ -788,7 +817,7 @@ class PharmacyproductController extends ActiveController {
     }
 
     public function phamastersupdateimport($filename, $tenant_id, $log) {
-        $connection = Yii::$app->client;
+        $connection = Yii::$app->client_pharmacy;
         $connection->open();
 
         $row = 1;
@@ -818,7 +847,7 @@ class PharmacyproductController extends ActiveController {
     private $migrateTables;
 
     private function _getMigrationTable($table_name, $field_name, $org_id, $update_id) {
-        $connection = Yii::$app->client;
+        $connection = Yii::$app->client_pharmacy;
 
         $database = $connection->createCommand("SELECT DATABASE()")->queryScalar();
 
@@ -874,7 +903,7 @@ class PharmacyproductController extends ActiveController {
 
         if ($id <= $max_id) {
             $next_id = $id + 1;
-            $connection = Yii::$app->client;
+            $connection = Yii::$app->client_pharmacy;
             $connection->open();
             $command = $connection->createCommand("SELECT * FROM test_pha_masters_update WHERE id = {$id} AND import_log = $import_log");
             $result = $command->queryAll(PDO::FETCH_OBJ);
@@ -1036,7 +1065,7 @@ class PharmacyproductController extends ActiveController {
     }
 
     public function stockimport($filename, $tenant_id, $log) {
-        $connection = Yii::$app->client;
+        $connection = Yii::$app->client_pharmacy;
         $connection->open();
 
         $row = 1;
@@ -1107,7 +1136,7 @@ class PharmacyproductController extends ActiveController {
 
         if ($id <= $max_id) {
             $next_id = $id + 1;
-            $connection = Yii::$app->client;
+            $connection = Yii::$app->client_pharmacy;
             $connection->open();
             $command = $connection->createCommand("SELECT * FROM test_os_batch_wise WHERE id = {$id} AND import_log = $import_log");
             $result = $command->queryAll(PDO::FETCH_OBJ);
@@ -1231,7 +1260,7 @@ class PharmacyproductController extends ActiveController {
     }
 
     public function import($filename, $tenant_id, $log) {
-        $connection = Yii::$app->client;
+        $connection = Yii::$app->client_pharmacy;
         $connection->open();
 
         $row = 1;
@@ -1280,7 +1309,7 @@ class PharmacyproductController extends ActiveController {
 
         if ($id <= $max_id) {
             $next_id = $id + 1;
-            $connection = Yii::$app->client;
+            $connection = Yii::$app->client_pharmacy;
             $connection->open();
             $command = $connection->createCommand("SELECT * FROM test_product_import WHERE id = {$id} AND import_log = $import_log");
             $result = $command->queryAll(PDO::FETCH_OBJ);
@@ -1591,7 +1620,7 @@ class PharmacyproductController extends ActiveController {
     }
 
     public function productgstupdateimport($filename, $tenant_id, $log) {
-        $connection = Yii::$app->client;
+        $connection = Yii::$app->client_pharmacy;
         $connection->open();
 
         $row = 1;
@@ -1629,7 +1658,7 @@ class PharmacyproductController extends ActiveController {
 
         if ($id <= $max_id) {
             $next_id = $id + 1;
-            $connection = Yii::$app->client;
+            $connection = Yii::$app->client_pharmacy;
             $connection->open();
             $command = $connection->createCommand("SELECT * FROM test_product_gst_import WHERE id = {$id} AND import_log = $import_log");
             $result = $command->queryAll(PDO::FETCH_OBJ);
@@ -1715,7 +1744,7 @@ class PharmacyproductController extends ActiveController {
     }
 
     public function productpriceupdateimport($filename, $tenant_id, $log) {
-        $connection = Yii::$app->client;
+        $connection = Yii::$app->client_pharmacy;
         $connection->open();
 
         $row = 1;
@@ -1749,7 +1778,7 @@ class PharmacyproductController extends ActiveController {
 
         if ($id <= $max_id) {
             $next_id = $id + 1;
-            $connection = Yii::$app->client;
+            $connection = Yii::$app->client_pharmacy;
             $connection->open();
             $command = $connection->createCommand("SELECT * FROM test_product_price_import WHERE id = {$id} AND import_log = $import_log");
             $result = $command->queryAll(PDO::FETCH_OBJ);

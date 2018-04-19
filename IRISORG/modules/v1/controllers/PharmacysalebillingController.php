@@ -125,4 +125,47 @@ class PharmacysalebillingController extends ActiveController {
         return ['report' => $reports];
     }
 
+    public function actionConcessionpayment() {
+        $post = Yii::$app->getRequest()->post();
+
+        if (!empty($post['bill_details'])) {
+            foreach ($post['bill_details'] as $bill_details) {
+                $model = new PhaSaleBilling;
+                $model->sale_id = $bill_details['sale_id'];
+                $model->paid_date = date('Y-m-d');
+                $model->paid_amount = $bill_details['concession_amount'];
+                $model->settlement = 'C';
+                $model->save(false);
+            }
+            return ['success' => true];
+        } else {
+            return ['success' => false];
+        }
+    }
+
+    public function actionOverallincome() {
+        $post = Yii::$app->getRequest()->post();
+        if (!empty($post)) {
+            $sale = PhaSaleBilling::find()
+                    ->andWhere("paid_date between '{$post['from']}' AND '{$post['to']}'")
+                    ->andWhere(['tenant_id' => $post['tenant_id']])
+                    ->all();
+            $ip_income = \common\models\PatBillingPayment::find()
+                    ->active()
+                    ->andWhere("payment_date between '{$post['from']}' AND '{$post['to']}'")
+                    ->andWhere(['tenant_id' => $post['tenant_id']])
+                    ->all();
+            $op_income = \common\models\PatConsultant::find()
+                    ->active()
+                    ->joinWith(['encounter'])
+                    ->andWhere(["pat_encounter.encounter_type" => 'OP'])
+                    ->andWhere("consult_date between '{$post['from']}' AND '{$post['to']}'")
+                    ->andWhere(['pat_consultant.tenant_id' => $post['tenant_id']])
+                    ->all();
+            return ['sale' => $sale, 'ip_income' => $ip_income,'op_income'=> $op_income,'success' => true];
+        } else {
+            return ['success' => false];
+        }
+    }
+
 }

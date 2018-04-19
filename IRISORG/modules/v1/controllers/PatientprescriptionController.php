@@ -1355,4 +1355,54 @@ class PatientprescriptionController extends ActiveController {
         }
     }
 
+    public function actionUpdatepastmedical() {
+        $post = Yii::$app->getRequest()->post();
+        if (!empty($post)) {
+            $model = PatPastMedical::find()
+                    ->joinWith(['patDocuments'])
+                    ->where(['pat_past_medical_id' => $post['pat_past_medical_id']])
+                    ->one();
+            $model->past_medical = $post['past_medical'];
+            $model->save(FALSE);
+            $this->replaceTextareavalue($post['past_medical'], $model->patDocuments->xml_path);
+            return ['success' => true];
+        } else {
+            return ['success' => false];
+        }
+    }
+
+    protected function replaceTextareavalue($textareaValue, $file) {
+        $xpath = "/FIELDS/GROUP/PANELBODY//FIELD[@id='past_medical_notes']";
+        $xml = simplexml_load_file($file, null, LIBXML_NOERROR);
+        $targets = $xml->xpath($xpath);
+        if (!empty($targets)) {
+            foreach ($targets as $key => $value) {
+                unset($value->VALUE);
+                $value->addChild('VALUE');
+                $this->addCData($textareaValue, $value->VALUE);
+            }
+        }
+        $xml->asXML($file);
+    }
+
+    public function actionGetmchdocument() {
+        $get = Yii::$app->getRequest()->get();
+        if (isset($get['patient_id'])) {
+            $patient = PatPatient::getPatientByGuid($get['patient_id']);
+            $all_patient_id = PatPatient::find()
+                    ->select('GROUP_CONCAT(patient_id) AS allpatient')
+                    ->where(['patient_global_guid' => $patient->patient_global_guid])
+                    ->one();
+            $details = PatDocuments::find()
+                    ->joinWith(['docType'])
+                    ->andWhere("patient_id IN ($all_patient_id->allpatient)")
+                    ->andWhere(["pat_document_types.doc_type" => "MCH"])
+                    ->orderBy(['doc_id' => SORT_DESC])
+                    ->all();
+            return ['success' => true, 'result' => $details];
+        } else {
+            return ['success' => false, 'message' => 'Invalid Access'];
+        }
+    }
+
 }

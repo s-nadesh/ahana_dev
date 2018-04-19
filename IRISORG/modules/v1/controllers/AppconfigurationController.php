@@ -99,4 +99,16 @@ class AppconfigurationController extends ActiveController {
         return ['success' => true];
     }
 
+    public function actionUpdateopbillsettings() {
+        $post = Yii::$app->getRequest()->post();
+        $appConfig = $this->modelClass::find()
+                        ->tenant()
+                        ->andWhere([
+                            'code' => $post['code']
+                        ])->one();
+        $appConfig->value = $post['value'];
+        $appConfig->save(false);
+        return ['success' => true];
+    }
+
 }
