@@ -552,7 +552,7 @@
                 </PROPERTIES>
                 <HEADER>
                     <TH>Vital Time</TH>
-                    <TH>Temperature</TH>
+                    <TH>Temp</TH>
                     <TH>BP Systolic</TH>
                     <TH>BP Diastolic</TH>
                     <TH>Pulse</TH>
