@@ -409,7 +409,7 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 <div class="col-sm-9">
-                                    <div ng-repeat="branch in pha_branch">
+                                    <div ng-repeat="branch in tenant_details">
                                         <label class="i-checks">
                                             <input type="radio" checked="" value="{{branch.tenant_id}}" name="pharmacy_branch" ng-model="pharmacy_branch" ng-change="updateEmptypharmacy('{{branch.tenant_id}}')">
                                             <i></i>
