@@ -29,7 +29,33 @@ class PatPrescriptionRoute extends PActiveRecord {
      */
     public static function tableName() {
         $dbname = Yii::$app->client_pharmacy->createCommand("SELECT DATABASE()")->queryScalar();
-        return $dbname.'.pat_prescription_route';
+        $table_name = $dbname . '.pat_prescription_route';
+        $request = Yii::$app->request;
+        $get_path = $request->pathInfo;
+        $get_path = preg_replace('/[0-9]+/', '', $get_path);
+        $product_path = array("v/pharmacyproduct/getgenericlistbydrugclass", "v/pharmacyproduct/getdrugproductbygeneric", "v/pharmacyproduct/getproductlistbygeneric",
+            "v/pharmacyproduct", "v/pharmacydrugclass", "v/genericname", "v/patientprescription/getdiagnosis", "v/pharmacyproduct/getprescription", "v/pharmacyproducts/");
+
+        if (in_array("$get_path", $product_path)) {
+            $get_action = $request->get('page_action');
+            if ($get_action == 'branch_pharmacy') {
+                $tenant_id = Yii::$app->user->identity->logged_tenant_id;
+                $appConfiguration = AppConfiguration::find()
+                        ->andWhere(['<>', 'value', 0])
+                        ->andWhere(['tenant_id' => $tenant_id, 'code' => 'PB'])
+                        ->one();
+                if (!empty($appConfiguration)) {
+                    $tenant_id = $appConfiguration['value'];
+                    $organization = CoTenant::find()
+                            ->joinWith(['coOrganization'])
+                            ->andWhere(['tenant_id' => $tenant_id])
+                            ->one();
+                    $table_name = $organization->coOrganization->org_db_pharmacy . '.pat_prescription_route';
+                }
+            }
+        }
+        return $table_name;
+        //return 'pha_ahana_pharmacy.pat_prescription_route';  
     }
 
     /**

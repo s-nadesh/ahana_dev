@@ -8,9 +8,11 @@ use common\models\PhaProduct;
 use common\models\PhaProductBatch;
 use common\models\PhaProductDescription;
 use common\models\AppConfiguration;
+use common\models\CoTenant;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\mssql\PDO;
+use yii\db\Connection;
 use yii\db\BaseActiveRecord;
 use yii\filters\auth\QueryParamAuth;
 use yii\filters\ContentNegotiator;
@@ -337,13 +339,19 @@ class PharmacyproductController extends ActiveController {
     public function actionGetprescription() {
         $post = Yii::$app->getRequest()->post();
         $tenant_id = Yii::$app->user->identity->logged_tenant_id;
+        $organization = '';
         $appConfiguration = AppConfiguration::find()
                 ->andWhere(['<>', 'value', '0'])
                 ->andWhere(['tenant_id' => $tenant_id, 'code' => 'PB'])
                 ->one();
         if (!empty($appConfiguration)) {
             $tenant_id = $appConfiguration['value'];
+            $organization = CoTenant::find()
+                    ->joinWith(['coOrganization'])
+                    ->andWhere(['tenant_id' => $tenant_id])
+                    ->one();
         }
+
         $products = [];
         if (isset($post['search']) && !empty($post['search']) && strlen($post['search']) > 1) {
             $text = rtrim($post['search'], '-');
@@ -365,7 +373,7 @@ class PharmacyproductController extends ActiveController {
 
             //Get Products
 //            $products = $this->_getProducts($text_search, $tenant_id, $limit);
-            $products = $this->_getProducts($like_text_search, $tenant_id, $limit, $available_medicine);
+            $products = $this->_getProducts($like_text_search, $tenant_id, $limit, $available_medicine, $organization);
 
             //Get Routes
             //$routes = $this->_getRoutes($products, $text_search, $tenant_id, $limit);
@@ -382,7 +390,7 @@ class PharmacyproductController extends ActiveController {
         return ['prescription' => $products];
     }
 
-    private function _getProducts($like_text_search, $tenant_id, $limit, $available_medicine) {
+    private function _getProducts($like_text_search, $tenant_id, $limit, $available_medicine, $organization) {
         $post = Yii::$app->getRequest()->post();
         if ($available_medicine == '1') {
             $filter_query = "HAVING available_quantity > '0'";
@@ -390,9 +398,26 @@ class PharmacyproductController extends ActiveController {
             $filter_query = "HAVING (available_quantity >= '0' OR available_quantity < '0')";
         }
         $products = [];
+        $connection = $this->_connection;
+        if ($organization) {
+            $conn_dsn = "mysql:host={$organization->coOrganization->org_db_host};dbname={$organization->coOrganization->org_db_pharmacy}";
+            $conn_username = $organization->coOrganization->org_db_username;
+            $conn_password = $organization->coOrganization->org_db_password;
+
+            $connection = new Connection([
+                'dsn' => $conn_dsn,
+                'username' => $conn_username,
+                'password' => $conn_password,
+                'charset' => 'utf8'
+            ]);
+            $connection->open();
+//            $command = $connection->createCommand("select * from pha_hsn");
+//            $products = $command->queryAll();
+//            print_r($products); die;
+        }
         if (isset($post['product_id'])) {
             //Retrieve One product
-            $command = $this->_connection->createCommand("
+            $command = $connection->createCommand("
                     SELECT a.product_id, a.product_name, b.generic_id, b.generic_name, c.drug_class_id, c.drug_name,
                     CONCAT(
                         IF(b.generic_name IS NOT NULL, b.generic_name, ''),
@@ -420,7 +445,7 @@ class PharmacyproductController extends ActiveController {
             $products = $command->queryAll();
         } else {
             //Retrieve (product || generic || drug)
-            $command = $this->_connection->createCommand("
+            $command = $connection->createCommand("
                     SELECT a.product_id, a.product_name, b.generic_id, b.generic_name, c.drug_class_id, c.drug_name,
                     CONCAT(
                         IF(b.generic_name IS NOT NULL, b.generic_name, ''),
@@ -448,7 +473,7 @@ class PharmacyproductController extends ActiveController {
             );
             $products = $command->queryAll();
             if (empty($products)) {
-                $command = $this->_connection->createCommand("
+                $command = $connection->createCommand("
                     SELECT a.product_id, a.product_name, b.generic_id, b.generic_name, c.drug_class_id, c.drug_name,
                     CONCAT(
                         IF(b.generic_name IS NOT NULL, b.generic_name, ''),
@@ -1826,13 +1851,35 @@ class PharmacyproductController extends ActiveController {
                         ->andWhere([
                             'code' => 'PB'
                         ])->one();
+        $dbname = Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
+        $organization = \common\models\CoOrganization::find()->all();
+        foreach ($organization as $org) {
+            if ($org->org_db_pharmacy) {
+                $connection = new Connection([
+                    'dsn' => "mysql:host={$org->org_db_host};dbname={$org->org_db_pharmacy}",
+                    'username' => $org->org_db_username,
+                    'password' => $org->org_db_password,
+                ]);
+                $connection->open();
+                $command = $connection->createCommand("SELECT b.tenant_name, b.tenant_id FROM pha_product a LEFT JOIN $org->org_database.co_tenant b ON a.tenant_id= b.tenant_id WHERE `a`.`status`='1'  GROUP BY a.tenant_id");
+                $tenant = $command->queryAll();
+                $tenant_name [] = $tenant;
+                $connection->close();
+            }
+        }
+        $tenant_details = [];
+        foreach ($tenant_name as $ten) {
+            foreach ($ten as $te_name) {
+                array_push($tenant_details, array('tenant_name' => $te_name['tenant_name'], 'tenant_id' => $te_name['tenant_id']));
+            }
+        }
         $model = PhaProduct::find()
                 ->andWhere([
                     'pha_product.status' => '1'
                 ])
                 ->groupBy('pha_product.tenant_id')
                 ->all();
-        return ['model' => $model, 'appConfig' => $appConfig];
+        return ['model' => $model, 'appConfig' => $appConfig, 'organization' => $organization, 'tenant_details' => $tenant_details];
     }
 
     //Not used for data table model
