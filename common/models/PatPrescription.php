@@ -5,6 +5,7 @@ namespace common\models;
 use common\models\query\PatPrescriptionQuery;
 use Yii;
 use yii\db\ActiveQuery;
+use common\models\AppConfiguration;
 
 /**
  * This is the model class for table "pat_prescription".
@@ -47,7 +48,7 @@ class PatPrescription extends RActiveRecord {
         return [
                 [['encounter_id', 'patient_id', 'pres_date', 'consultant_id'], 'required'],
                 [['tenant_id', 'encounter_id', 'patient_id', 'consultant_id', 'number_of_days', 'created_by', 'modified_by'], 'integer'],
-                [['pres_date', 'next_visit', 'created_at', 'modified_at', 'deleted_at', 'diag_id'], 'safe'],
+                [['pres_date', 'next_visit', 'created_at', 'modified_at', 'deleted_at', 'diag_id', 'pharmacy_tenant_id'], 'safe'],
                 [['notes', 'status'], 'string']
         ];
     }
@@ -130,9 +131,22 @@ class PatPrescription extends RActiveRecord {
     }
 
     public function beforeSave($insert) {
-        if (!empty($this->number_of_days) && $insert) {
-            $this->next_visit = $this->patient->getPatientNextvisitDate($this->number_of_days);
+        if ($insert) {
+            if (!empty($this->number_of_days)) {
+                $this->next_visit = $this->patient->getPatientNextvisitDate($this->number_of_days);
+            }
+            $appConfiguration = AppConfiguration::find()
+                    ->tenant()
+                    ->andWhere(['<>', 'value', '0'])
+                    ->andWhere(['code' => 'PB'])
+                    ->one();
+            if(!empty($appConfiguration)) {
+                $this->pharmacy_tenant_id = $appConfiguration['value'];
+            } else {
+                $this->pharmacy_tenant_id = Yii::$app->user->identity->logged_tenant_id;
+            }
         }
+
         return parent::beforeSave($insert);
     }
 

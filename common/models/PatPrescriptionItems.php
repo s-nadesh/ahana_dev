@@ -5,6 +5,7 @@ namespace common\models;
 use common\models\query\PatPrescriptionItemsQuery;
 use Yii;
 use yii\db\ActiveQuery;
+use common\models\AppConfiguration;
 
 /**
  * This is the model class for table "pat_prescription_items".
@@ -61,7 +62,7 @@ class PatPrescriptionItems extends RActiveRecord {
                 [['route', 'frequency'], 'required', 'on' => 'saveform'],
                 [['tenant_id', 'pres_id', 'product_id', 'generic_id', 'drug_class_id', 'route_id', 'freq_id', 'number_of_days', 'created_by', 'modified_by'], 'integer'],
                 [['status'], 'string'],
-                [['created_at', 'modified_at', 'deleted_at', 'route', 'frequency', 'is_favourite', 'remarks', 'consultant_id', 'freqType', 'quantity', 'food_type'], 'safe'],
+                [['created_at', 'modified_at', 'deleted_at', 'route', 'frequency', 'is_favourite', 'remarks', 'consultant_id', 'freqType', 'quantity', 'food_type', 'pharmacy_tenant_id'], 'safe'],
                 [['product_name', 'generic_name', 'drug_name'], 'string', 'max' => 255]
         ];
     }
@@ -145,6 +146,22 @@ class PatPrescriptionItems extends RActiveRecord {
 
     public static function find() {
         return new PatPrescriptionItemsQuery(get_called_class());
+    }
+
+    public function beforeSave($insert) {
+        if ($insert) {
+            $appConfiguration = AppConfiguration::find()
+                    ->tenant()
+                    ->andWhere(['<>', 'value', '0'])
+                    ->andWhere(['code' => 'PB'])
+                    ->one();
+            if (!empty($appConfiguration)) {
+                $this->pharmacy_tenant_id = $appConfiguration['value'];
+            } else {
+                $this->pharmacy_tenant_id = Yii::$app->user->identity->logged_tenant_id;
+            }
+        }
+        return parent::beforeSave($insert);
     }
 
     public function setFrequencyId($item) {
