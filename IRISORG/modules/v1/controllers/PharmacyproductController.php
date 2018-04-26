@@ -1853,6 +1853,7 @@ class PharmacyproductController extends ActiveController {
                         ])->one();
         $dbname = Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
         $organization = \common\models\CoOrganization::find()->all();
+        $tenant_details = [];
         foreach ($organization as $org) {
             if ($org->org_db_pharmacy) {
                 $connection = new Connection([
@@ -1863,14 +1864,8 @@ class PharmacyproductController extends ActiveController {
                 $connection->open();
                 $command = $connection->createCommand("SELECT b.tenant_name, b.tenant_id FROM pha_product a LEFT JOIN $org->org_database.co_tenant b ON a.tenant_id= b.tenant_id WHERE `a`.`status`='1'  GROUP BY a.tenant_id");
                 $tenant = $command->queryAll();
-                $tenant_name [] = $tenant;
+                $tenant_details = array_merge($tenant_details, $tenant);
                 $connection->close();
-            }
-        }
-        $tenant_details = [];
-        foreach ($tenant_name as $ten) {
-            foreach ($ten as $te_name) {
-                array_push($tenant_details, array('tenant_name' => $te_name['tenant_name'], 'tenant_id' => $te_name['tenant_id']));
             }
         }
         $model = PhaProduct::find()
