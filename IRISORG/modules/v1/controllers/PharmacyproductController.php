@@ -342,7 +342,7 @@ class PharmacyproductController extends ActiveController {
         $organization = '';
         $appConfiguration = AppConfiguration::find()
                 ->andWhere(['<>', 'value', '0'])
-                ->andWhere(['tenant_id' => $tenant_id, 'code' => 'PB'])
+                ->andWhere(['tenant_id'=> $tenant_id,'code' => 'PB'])
                 ->one();
         if (!empty($appConfiguration)) {
             $tenant_id = $appConfiguration['value'];
@@ -399,7 +399,7 @@ class PharmacyproductController extends ActiveController {
         }
         $products = [];
         $connection = $this->_connection;
-        if ($organization) {
+        if ($organization && (Yii::$app->user->identity->user->org_id != $organization->coOrganization->org_id)) {
             $conn_dsn = "mysql:host={$organization->coOrganization->org_db_host};dbname={$organization->coOrganization->org_db_pharmacy}";
             $conn_username = $organization->coOrganization->org_db_username;
             $conn_password = $organization->coOrganization->org_db_password;
@@ -411,9 +411,6 @@ class PharmacyproductController extends ActiveController {
                 'charset' => 'utf8'
             ]);
             $connection->open();
-//            $command = $connection->createCommand("select * from pha_hsn");
-//            $products = $command->queryAll();
-//            print_r($products); die;
         }
         if (isset($post['product_id'])) {
             //Retrieve One product
@@ -1845,36 +1842,16 @@ class PharmacyproductController extends ActiveController {
         return $return;
     }
 
-    public function actionProductbranch() {
+    public function actionPharmacybranch() {
         $appConfig = AppConfiguration::find()
                         ->tenant()
                         ->andWhere([
                             'code' => 'PB'
                         ])->one();
-        $dbname = Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
-        $organization = \common\models\CoOrganization::find()->all();
-        $tenant_details = [];
-        foreach ($organization as $org) {
-            if ($org->org_db_pharmacy) {
-                $connection = new Connection([
-                    'dsn' => "mysql:host={$org->org_db_host};dbname={$org->org_db_pharmacy}",
-                    'username' => $org->org_db_username,
-                    'password' => $org->org_db_password,
-                ]);
-                $connection->open();
-                $command = $connection->createCommand("SELECT b.tenant_name, b.tenant_id FROM pha_product a LEFT JOIN $org->org_database.co_tenant b ON a.tenant_id= b.tenant_id WHERE `a`.`status`='1'  GROUP BY a.tenant_id");
-                $tenant = $command->queryAll();
-                $tenant_details = array_merge($tenant_details, $tenant);
-                $connection->close();
-            }
-        }
-        $model = PhaProduct::find()
-                ->andWhere([
-                    'pha_product.status' => '1'
-                ])
-                ->groupBy('pha_product.tenant_id')
-                ->all();
-        return ['model' => $model, 'appConfig' => $appConfig, 'organization' => $organization, 'tenant_details' => $tenant_details];
+        $tenant_details = CoTenant::find()->andWhere([
+                    'pharmacy_setup' => '1'
+                ])->all();
+        return ['appConfig' => $appConfig, 'tenant_details' => $tenant_details];
     }
 
     //Not used for data table model
