@@ -196,7 +196,7 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
 
             $http({
                 method: 'POST',
-                url: $rootScope.IRISOrgServiceUrl + '/appconfiguration/updateprescription',
+                url: $rootScope.IRISOrgServiceUrl + '/appconfiguration/updatepharmacybranch',
                 data: $data,
             }).success(
                     function (response) {
@@ -690,9 +690,8 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
         }
 
         $scope.initPharmacyBranch = function () {
-            $http.get($rootScope.IRISOrgServiceUrl + '/pharmacyproduct/productbranch?addtfields=app_setting_pharmacy')
+            $http.get($rootScope.IRISOrgServiceUrl + '/pharmacyproduct/pharmacybranch?addtfields=app_setting_pharmacy')
                     .success(function (response) {
-                        $scope.pha_branch = response.model;
                         $scope.tenant_details = response.tenant_details;
                         if (response.appConfig) {
                             $scope.pharmacy_branch = response.appConfig.value;
