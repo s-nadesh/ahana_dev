@@ -535,7 +535,7 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
                     .success(function (products) {
                         $scope.all_products = products;
                     });
-            $http.get($rootScope.IRISOrgServiceUrl + '/pharmacyproduct/getgenericlistbydrugclass?drug_class_id=' + drug.drug_class_id + '&addtfields=presc_search&page_action=branch_pharmacy&page_action=branch_pharmacy')
+            $http.get($rootScope.IRISOrgServiceUrl + '/pharmacyproduct/getgenericlistbydrugclass?drug_class_id=' + drug.drug_class_id + '&addtfields=presc_search&page_action=branch_pharmacy')
                     .success(function (response) {
                         $scope.generics = response.genericList;
                         //Set generic_id in dropdown list
@@ -2334,10 +2334,10 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
             $scope.vitaldisplayedCollection = [].concat($scope.vitalCollection); // displayed collection
 
             if (typeof date == 'undefined') {
-                url = $rootScope.IRISOrgServiceUrl + '/patientvitals/getpatientvitals?page_action=branch_pharmacy&addtfields=eprvitals&only=result,actenc&patient_id=' + $state.params.id;
+                url = $rootScope.IRISOrgServiceUrl + '/patientvitals/getpatientvitals?addtfields=eprvitals&only=result,actenc&patient_id=' + $state.params.id;
             } else {
                 date = moment(date).format('YYYY-MM-DD');
-                url = $rootScope.IRISOrgServiceUrl + '/patientvitals/getpatientvitals?page_action=branch_pharmacy&addtfields=eprvitals&only=result,actenc&patient_id=' + $state.params.id + '&date=' + date;
+                url = $rootScope.IRISOrgServiceUrl + '/patientvitals/getpatientvitals?addtfields=eprvitals&only=result,actenc&patient_id=' + $state.params.id + '&date=' + date;
             }
 
             $http.get(url)
@@ -2364,7 +2364,7 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
 
 //Set vitals graph value
         $scope.setvitalgraph = function () {
-            url = $rootScope.IRISOrgServiceUrl + '/patientvitals/getvitalsgraph?page_action=branch_pharmacy&addtfields=eprvitals&patient_id=' + $state.params.id;
+            url = $rootScope.IRISOrgServiceUrl + '/patientvitals/getvitalsgraph?addtfields=eprvitals&patient_id=' + $state.params.id;
             $http.get(url)
                     .success(function (vitals) {
 
