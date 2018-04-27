@@ -295,6 +295,11 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
                         $scope.presc_stock_status = response.value;
                     })
 
+            $http.get($rootScope.IRISOrgServiceUrl + '/appconfiguration/getpresstatusbycode?code=PB&addtfields=pres_configuration')
+                    .success(function (response) {
+                        $scope.pharmacy_tenant = response.value;
+                    })
+
             $http.get($rootScope.IRISOrgServiceUrl + '/appconfiguration/getpresstatusbygroup?group=prescription_tab&addtfields=pres_configuration')
                     .success(function (response) {
                         angular.forEach(response, function (row) {
@@ -785,24 +790,27 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
             if ($scope.represcribeSelected > 0) {
                 var loop_total = $scope.represcribeSelectedItems.length;
                 var loop_start = 0;
-                angular.forEach($scope.represcribeSelectedItems, function (value, key) {
-                    $scope.addToPrescriptionList(value);
-                    loop_start = parseFloat(loop_start) + parseFloat(1);
-                    if (loop_total == loop_start) {
-                        $timeout(function () {
-                            $scope.data.prescriptionItems = PrescriptionService.getPrescriptionItems();
-                        }, 1000);
-                        $timeout(function () {
-                            $scope.showOrhideFrequency();
-                            $scope.commonCheckAvailable();
-                        }, 2000);
-                    }
-                });
-                $scope.pres_status = 'current';
-                $("#current_prescription").focus();
-                //toaster.clear();
-                //toaster.pop('success', '', 'Medicine has been added to the represcribe');
-                $scope.msg.successMessage = "Medicine has been added to the represcribe";
+                if ($scope.pharmacy_tenant != $scope.represcribeSelectedItems[0].pharmacy_tenant_id) {
+                    $scope.msg.errorMessage = "Pharmacy branch mismatch";
+                } else {
+                    angular.forEach($scope.represcribeSelectedItems, function (value, key) {
+                        $scope.addToPrescriptionList(value);
+                        loop_start = parseFloat(loop_start) + parseFloat(1);
+                        if (loop_total == loop_start) {
+                            $timeout(function () {
+                                $scope.data.prescriptionItems = PrescriptionService.getPrescriptionItems();
+                            }, 1000);
+                            $timeout(function () {
+                                $scope.showOrhideFrequency();
+                                $scope.commonCheckAvailable();
+                            }, 2000);
+                        }
+                    });
+                    $scope.pres_status = 'current';
+                    $("#current_prescription").focus();
+                    $scope.msg.successMessage = "Medicine has been added to the represcribe";
+                }
+
             }
         }
 
