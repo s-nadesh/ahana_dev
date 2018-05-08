@@ -83,6 +83,13 @@ angular.module('app')
                         $scope.successMessage = 'Status changed successfully !!!';
                     });
                 }
+                
+                $scope.updatePharmacy = function (modelName, primaryKey, clientUrl) {
+                    $scope.service = CommonService;
+                    $scope.service.ChangePharmacy(modelName, primaryKey, clientUrl, function (response) {
+                        $scope.successMessage = 'Pharmacy changed successfully !!!';
+                    });
+                }
 
                 $scope.$watch('successMessage', function (newValue, oldValue) {
                     if (newValue != '') {

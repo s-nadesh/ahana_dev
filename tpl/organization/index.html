@@ -74,6 +74,7 @@
                                     <th>Country</th>
                                     <th>Email</th>
                                     <th>Status</th>
+                                    <th>Pharmacy</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -90,6 +91,12 @@
                                     <td>
                                         <label class="i-checks "> 
                                             <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="status" ng-model="tenant.status" ng-change='updateStatus("CoTenant", tenant.tenant_id, row.org_domain)'> 
+                                            <i></i>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label class="i-checks "> 
+                                            <input type="checkbox" checked="" ng-true-value="'1'" ng-false-value="'0'" name="pharmacy_setup" ng-model="tenant.pharmacy_setup" ng-change='updatePharmacy("CoTenant", tenant.tenant_id, row.org_domain)'> 
                                             <i></i>
                                         </label>
                                     </td>
