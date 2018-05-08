@@ -255,7 +255,7 @@
                                                                                                     <div class="col-sm-3">
                                                                                                         <label> </label>
                                                                                                         <br/>
-                                                                                                        <button class="btn m-b-xs  btn-dark" ng-click="reset()"> <i class="fa fa-repeat"></i> Reset</button>
+                                                                                                        <button class="btn m-b-xs  btn-dark" ng-click="reset()"> <i class="fa fa-repeat"></i> Reset </button>
                                                                                                         &nbsp;
                                                                                                     </div>
 
@@ -264,12 +264,12 @@
 
                                                                                                 <div class="form-group"> 
 
-                                                                                                    <div class="col-sm-12"> 
+                                                                                                    <div ng-show ="pharmacy_tenant == app.logged_tenant_id" class="col-sm-12"> 
                                                                                                         <script type="text/ng-template" id="ProductModalContent.html">
                                                                                                             <div ng-include="'tpl/modal_form/modal.product.html'"></div>
                                                                                                         </script>
                                                                                                         <button type="button" class="btn m-b-xs btn-primary" ng-click="openModel('lg', 'ProductModalInstanceCtrl', 'ProductModalContent.html', '')">
-                                                                                                            <i class="fa fa-plus text ng-scope"></i> Add Medicine
+                                                                                                            <i class="fa fa-plus text ng-scope"></i> Add Medicine 
                                                                                                         </button>
 
                                                                                                     </div>

@@ -645,7 +645,7 @@ app.controller('PrintBillController', ['scope', '$scope', '$modalInstance', '$ro
                 angular.forEach($scope.pharmacy_bill, function (row, key) {
                     detailed_billing.total.net_step_42_total = detailed_billing.total.pharmacy_net_total;
                     var row_total = parseFloat(row.paid_amount);
-                    var row_total_using_pharmacy = parseFloat(row.sale_details.billings_total_paid_amount_using_pharmacy);
+                    var row_total_using_pharmacy = parseFloat(row.paid_amount);
                     var net_total = parseFloat(detailed_billing.total.net_step_42_total) - parseFloat(row.net_amount);
                     var payment_date = moment(row.paid_date).format('DD/MM/YYYY');
                     if (row.sale_return_bill_no) {

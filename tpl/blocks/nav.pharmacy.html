@@ -2,7 +2,7 @@
     <i class="fa {{app.settings.asideFolded ? 'fa-indent' : 'fa-dedent'}} fa-fw"></i>
 </a> 
 <ul class="nav ng-scope">
-    
+
     <li class="ng-scope"> 
         <a class="auto" href=""> 
             <span class="pull-right text-muted"> 
@@ -93,6 +93,9 @@
             </li>
             <li ui-sref-active="active"> 
                 <a ui-sref="pharmacy.overallincome"> <span>Overall Income Report</span> </a> 
+            </li>
+            <li ui-sref-active="active"> 
+                <a check-access ui-sref="pharmacy.newPurchaseReport"> <span>New Purchase Report</span> </a> 
             </li>
         </ul>
     </li>

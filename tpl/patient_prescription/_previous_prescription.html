@@ -42,6 +42,9 @@
                 <button tooltip="Print Prescription"  class="label bg-primary dk" ng-click="printPres(value.pres_id)">
                     <i class="fa fa-print"></i>
                 </button>
+                <button tooltip="Edit Prescription"  class="label bg-dark dk" ng-click="prescriptionEdit(value)">
+                    <i class="fa fa-pencil"></i>
+                </button>
                 <a ng-if="value.tenant_id == app.logged_tenant_id" data-button="patient.prescriptionDelete" check-access-custom title="Delete Prescription" ng-click="removeRow(value.pres_id)" class="label bg-dark dk">
                     <i class="fa fa-trash"></i>
                 </a>

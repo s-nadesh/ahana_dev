@@ -187,6 +187,7 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
         $scope.updateEmptypharmacy = function ($data) {
             if ($data == '0') {
                 $('input[name=pharmacy_branch]').attr('checked', false);
+                $data = $scope.app.logged_tenant_id;
             }
             $scope.errorData = "";
             $scope.msg.successMessage = "";

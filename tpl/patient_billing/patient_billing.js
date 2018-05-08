@@ -415,7 +415,7 @@ app.controller('BillingController', ['$rootScope', '$scope', '$timeout', '$http'
                         });
                         var grandTotal = 0;
                         angular.forEach($scope.pharmacy_bill, function (obj) {
-                            grandTotal += $scope.parseFloatIgnoreCommas(obj.sale_details.billings_total_paid_amount_using_pharmacy);
+                            grandTotal += $scope.parseFloatIgnoreCommas(obj.paid_amount);
                             obj.net_amount = grandTotal;
                         });
                         var grandTotal = 0;

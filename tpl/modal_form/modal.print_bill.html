@@ -551,9 +551,13 @@
                                 <td>{{row.bill_no}}<span ng-if="row.sale_return_bill_no"> (Sale Return Bill No [{{row.sale_return_bill_no}}]) </span></td>
                                 <td>&nbsp;</td>
                                 <td align="center" ng-init="
+                                            detailed_non_billing.total.pharmacy_adv_charge = detailed_non_billing.total.pharmacy_adv_charge + parseFloatIgnoreCommas(row.paid_amount);
+                                            detailed_billing.total.pharmacy_bill_net_total = detailed_billing.total.pharmacy_net_total - parseFloat(row.net_amount);
+                                    ">{{row.paid_amount| number:2}}</td>
+<!--                                <td ng-if="!row.sale_return_bill_no" align="center" ng-init="
                                             detailed_non_billing.total.pharmacy_adv_charge = detailed_non_billing.total.pharmacy_adv_charge + parseFloatIgnoreCommas(row.sale_details.billings_total_paid_amount_using_pharmacy);
                                             detailed_billing.total.pharmacy_bill_net_total = detailed_billing.total.pharmacy_net_total - parseFloat(row.net_amount);
-                                    ">{{row.sale_details.billings_total_paid_amount_using_pharmacy| number:2}}</td>
+                                    ">{{row.sale_details.billings_total_paid_amount_using_pharmacy| number:2}}</td>-->
                                 <td align="center">
                                     {{(detailed_billing.total.net_step_42_total - row.net_amount)| number:2}}
                                 </td>
