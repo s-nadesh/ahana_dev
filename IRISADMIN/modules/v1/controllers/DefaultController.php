@@ -34,7 +34,7 @@ class DefaultController extends Controller {
 
     public function actionGetCountryList() {
         $list = array();
-        
+
         $data = CoCountry::getCountrylist();
         foreach ($data as $value => $label) {
             $list[] = array('value' => $value, 'label' => $label);
@@ -70,6 +70,19 @@ class DefaultController extends Controller {
             $model->status = 1 - $model->status;
             $model->save(false);
             return ['success' => "ok", 'sts' => $model->status];
+        }
+    }
+
+    public function actionChangePharmacy() {
+        $post = Yii::$app->request->post();
+        if (!empty($post)) {
+            $modelName = $post['model'];
+            $primaryKey = $post['id'];
+            $modelClass = "common\\models\\$modelName";
+            $model = $modelClass::findOne($primaryKey);
+            $model->pharmacy_setup = 1 - $model->pharmacy_setup;
+            $model->save(false);
+            return ['success' => "ok", 'sts' => $model->pharmacy_setup];
         }
     }
 

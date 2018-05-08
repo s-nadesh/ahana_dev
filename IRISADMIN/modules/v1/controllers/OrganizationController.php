@@ -187,7 +187,7 @@ class OrganizationController extends ActiveController {
             $model = new CoOrganization();
             $model->attributes = Yii::$app->request->post('Organization');
             $model->patient_UHID_prefix = Yii::$app->request->post('Organization')['patient_UHID_prefix'];
-
+            
             $model->is_decoded = true;
 
             $login_form_model = new CoLoginForm();
@@ -370,7 +370,7 @@ class OrganizationController extends ActiveController {
             if (isset($post['Organization'])) {
                 $model = new CoOrganization();
                 $model->attributes = Yii::$app->request->post('Organization');
-                if (isset(Yii::$app->request->post('Organization')['patient_UHID_prefix']) && Yii::$app->request->post('Organization')['patient_UHID_prefix']) {
+                if(isset(Yii::$app->request->post('Organization')['patient_UHID_prefix']) && Yii::$app->request->post('Organization')['patient_UHID_prefix']) {
                     $model->patient_UHID_prefix = Yii::$app->request->post('Organization')['patient_UHID_prefix'];
                 }
                 $model->scenario = 'Create';
