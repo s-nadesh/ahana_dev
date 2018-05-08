@@ -81,6 +81,7 @@ class PatPatient extends RActiveRecord {
     public $patient_secondary_contact;
     public $patient_bill_type;
     public $patient_category_id;
+    public $patient_aadhaar_no;
     public $patient_image;
     public $parent_id;
     public $migration_created_by;
@@ -127,6 +128,7 @@ class PatPatient extends RActiveRecord {
                 [['patient_blood_group'], 'string', 'max' => 5],
                 [['patient_ref_hospital', 'patient_ref_doctor'], 'string', 'max' => 255],
                 ['patient_mobile', 'match', 'pattern' => '/^[0-9]{10}$/', 'message' => 'Mobile must be 10 digits only'],
+                ['patient_aadhaar_no', 'match', 'pattern' => '/^[0-9]{12}$/', 'message' => 'Aadhaar number must be 12 digits only'],
                 ['patient_mobile', 'match', 'pattern' => '/^[789]\d{9}$/', 'message' => 'Invalid mobile number'],
                 ['patient_secondary_contact', 'match', 'pattern' => '/^[0-9]{10}$/', 'message' => 'Secondary contact must be 10 digits only'],
                 ['patient_secondary_contact', 'match', 'pattern' => '/^[789]\d{9}$/', 'message' => 'Invalid secondary contact'],
@@ -172,6 +174,7 @@ class PatPatient extends RActiveRecord {
             'patient_ref_doctor' => 'Ref Doctor',
             'patient_ref_id' => 'Ref ID',
             'patient_mobile' => 'Mobile',
+            'patient_aadhaar_no' => 'Aadhaar No',
             'status' => 'Status',
             'created_by' => 'Created By',
             'created_at' => 'Created At',

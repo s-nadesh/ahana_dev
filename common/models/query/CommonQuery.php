@@ -35,14 +35,7 @@ class CommonQuery extends ActiveQuery {
         if (in_array("$get_path", $product_path)) {
             $get_action = $request->get('page_action');
             if ($get_action == 'branch_pharmacy') {
-                $tenant_id = Yii::$app->user->identity->logged_tenant_id;
-                $appConfiguration = AppConfiguration::find()
-                         ->andWhere(['<>','value', 0])
-                        ->andWhere(['tenant_id' => $tenant_id, 'code' => 'PB'])
-                        ->one();
-                if (!empty($appConfiguration)) {
-                    $tenant_id = $appConfiguration['value'];
-                }
+                $tenant_id = Yii::$app->session['pharmacy_setup_tenant_id'];
             }
         }
         if ($tenant_id == null && empty($tenant_id))

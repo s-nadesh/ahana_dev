@@ -46,11 +46,13 @@ class PatPrescriptionRoute extends PActiveRecord {
                         ->one();
                 if (!empty($appConfiguration)) {
                     $tenant_id = $appConfiguration['value'];
-                    $organization = CoTenant::find()
-                            ->joinWith(['coOrganization'])
-                            ->andWhere(['tenant_id' => $tenant_id])
-                            ->one();
-                    $table_name = $organization->coOrganization->org_db_pharmacy . '.pat_prescription_route';
+                    if ($tenant_id != Yii::$app->user->identity->logged_tenant_id) {
+                        $organization = CoTenant::find()
+                                ->joinWith(['coOrganization'])
+                                ->andWhere(['tenant_id' => $tenant_id])
+                                ->one();
+                        $table_name = $organization->coOrganization->org_db_pharmacy . '.pat_prescription_route';
+                    }
                 }
             }
         }

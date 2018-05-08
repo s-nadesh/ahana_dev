@@ -4,6 +4,7 @@ namespace common\models;
 
 use common\models\query\PhaPurchaseItemQuery;
 use yii\db\ActiveQuery;
+use Yii;
 
 /**
  * This is the model class for table "pha_purchase_item".
@@ -182,10 +183,52 @@ class PhaPurchaseItem extends PActiveRecord {
             },
             'total_returned_quantity' => function($model) {
                 return (isset($model->phaPurchaseReturnItemsTotal) ? $model->phaPurchaseReturnItemsTotal : '0');
-            }
+            },
+            'invoice_date' => function($model) {
+                return (isset($model->purchase) ? $model->purchase->invoice_date : '-');
+            },
+            'invoice_no' => function($model) {
+                return (isset($model->purchase) ? $model->purchase->invoice_no : '-');
+            },
+            'supplier_name' => function($model) {
+                return (isset($model->purchase) ? $model->purchase->supplier->supplier_name : '-');
+            },
+            'gr_num' => function($model) {
+                return (isset($model->purchase) ? $model->purchase->gr_num : '-');
+            },
+            'purchase_created_by' => function ($model) {
+                return $model->createdUser->name;
+            },
         ];
-        $fields = array_merge(parent::fields(), $extend);
-        return $fields;
+
+        $parent_fields = parent::fields();
+        $addt_keys = [];
+        if ($addtField = Yii::$app->request->get('addtfields')) {
+            switch ($addtField):
+                case 'new_purchasereport':
+                    $addt_keys = ['invoice_date','invoice_no','supplier_name','gr_num', 'product', 'purchase_created_by'];
+                    $parent_fields = [
+                        'quantity' => 'quantity',
+                        'free_quantity' => 'free_quantity',
+                        'free_quantity_package_unit' => 'free_quantity_package_unit',
+                        'mrp' => 'mrp',
+                        'purchase_rate' => 'purchase_rate',
+                        'package_unit' => 'package_unit',
+                        'discount_percent' => 'discount_percent',
+                        'discount_amount' => 'discount_amount',
+                        'vat_amount' => 'vat_amount',
+                        'vat_percent' => 'vat_percent',
+                        'total_amount' => 'total_amount',
+                    ];
+                    break;
+            endswitch;
+        }
+
+        $extFields = ($addt_keys) ? array_intersect_key($extend, array_flip($addt_keys)) : $extend;
+
+        return array_merge($parent_fields, $extFields);
+        //$fields = array_merge(parent::fields(), $extend);
+        //return $fields;
     }
 
     public function beforeSave($insert) {

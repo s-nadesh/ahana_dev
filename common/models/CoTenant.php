@@ -50,7 +50,7 @@ class CoTenant extends GActiveRecord {
     public function rules() {
         return [
                 [['tenant_name', 'tenant_address', 'tenant_country_id', 'tenant_state_id', 'tenant_city_id', 'tenant_contact1', 'tenant_email'], 'required'],
-                [['tenant_city_id', 'tenant_state_id', 'tenant_country_id', 'created_by', 'modified_by', 'org_id'], 'integer'],
+                [['tenant_city_id', 'tenant_state_id', 'tenant_country_id', 'created_by', 'modified_by', 'org_id', 'pharmacy_setup'], 'integer'],
                 [['status'], 'string'],
                 [['tenant_email'], 'email', 'message' => 'Invalid Email Format'],
                 [['tenant_url'], 'url', 'message' => 'Invalid Website Format'],
@@ -82,6 +82,7 @@ class CoTenant extends GActiveRecord {
             'tenant_url' => 'Url',
             'slug' => 'Slug',
             'status' => 'Status',
+            'pharmacy_setup' => 'Pharmacy Setup',
             'created_by' => 'Created By',
             'created_at' => 'Created At',
             'modified_by' => 'Modified By',
@@ -168,11 +169,11 @@ class CoTenant extends GActiveRecord {
         $command = $connection->createCommand($sql);
         $command->execute();
         $connection->close();
-
+        
         Yii::$app->client->dsn = $conn_dsn;
         Yii::$app->client->username = $conn_username;
         Yii::$app->client->password = $conn_password;
-
+        
         if ($insert) {
             //Internal code.
             $code_types = CoInternalCode::getCodeTypes();

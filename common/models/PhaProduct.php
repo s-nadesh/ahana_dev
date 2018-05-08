@@ -71,8 +71,8 @@ class PhaProduct extends PActiveRecord {
                 [['status'], 'string'],
                 [['product_reorder_max'], 'validateReorderchck'],
             //[['supplier_ids'], 'validateSupplieronetime'],
-                [['supplier_id_1', 'supplier_id_2', 'supplier_id_3'], 'validateSupplieronetime'],
-                [['created_at', 'modified_at', 'deleted_at', 'supplier_id_1', 'supplier_id_2', 'supplier_id_3', 'supplier_ids','sales_gst_id'], 'safe'],
+            [['supplier_id_1', 'supplier_id_2', 'supplier_id_3'], 'validateSupplieronetime'],
+                [['created_at', 'modified_at', 'deleted_at', 'supplier_id_1', 'supplier_id_2', 'supplier_id_3', 'supplier_ids', 'sales_gst_id'], 'safe'],
                 [['product_code'], 'string', 'max' => 50],
                 [['product_name', 'product_location'], 'string', 'max' => 255],
                 [['product_unit', 'product_unit_count'], 'string', 'max' => 25],
@@ -466,6 +466,12 @@ class PhaProduct extends PActiveRecord {
                     $addt_keys = ['tenant_name'];
                     $parent_fields = [
                         'tenant_id' => 'tenant_id',
+                    ];
+                    break;
+                case 'new_purchasereport':
+                    $addt_keys = ['full_name'];
+                    $parent_fields = [
+                        'product_id' => 'product_id',
                     ];
                     break;
             endswitch;
