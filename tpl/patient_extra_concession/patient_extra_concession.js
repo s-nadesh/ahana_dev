@@ -25,8 +25,9 @@ app.controller('ExtraConcessionController', ['$rootScope', '$scope', '$timeout',
                     $scope.data = {};
                     $scope.data.formtype = 'add';
                     $scope.data.ec_type = $state.params.ec_type;
+                    $scope.data.tenant_id = $state.params.tenant;
 
-                    $scope.initCategory($state.params.enc_id, $scope.patientObj.patient_id, $state.params.link_id, $state.params.ec_type);
+                    $scope.initCategory($state.params.enc_id, $scope.patientObj.patient_id, $state.params.link_id, $state.params.ec_type, $state.params.tenant);
                 }
             });
         }
@@ -48,6 +49,7 @@ app.controller('ExtraConcessionController', ['$rootScope', '$scope', '$timeout',
                 angular.extend(_that.data, {
                     patient_id: $scope.patientObj.patient_id,
                     encounter_id: $scope.encounter.encounter_id,
+                    tenant_id:$scope.data.tenant_id,
                 });
                 post_url = $rootScope.IRISOrgServiceUrl + '/patientbillingextraconcession/addcharge';
                 method = 'POST';
@@ -109,7 +111,7 @@ app.controller('ExtraConcessionController', ['$rootScope', '$scope', '$timeout',
                             function (response) {
                                 $scope.loadbar('hide');
                                 $scope.data = response;
-                                $scope.initCategory(response.encounter_id, response.patient_id, response.link_id, response.ec_type);
+                                $scope.initCategory(response.encounter_id, response.patient_id, response.link_id, response.ec_type, response.tenant_id);
 
                             }
                     ).error(function (data, status) {
@@ -124,7 +126,7 @@ app.controller('ExtraConcessionController', ['$rootScope', '$scope', '$timeout',
         };
         
         //Init Category (Procedure or Consultant)
-        $scope.initCategory = function(enc_id, patient_id, category_id, mode){
+        $scope.initCategory = function(enc_id, patient_id, category_id, mode, tenant){
             if(mode == 'P'){
                 post_url = $rootScope.IRISOrgServiceUrl + '/encounter/getnonrecurringprocedures?encounter_id=' + enc_id;
             }else if(mode == 'C'){
@@ -132,6 +134,7 @@ app.controller('ExtraConcessionController', ['$rootScope', '$scope', '$timeout',
             }
             post_url += '&patient_id=' + patient_id;
             post_url += '&category_id=' + category_id;
+            post_url += '&tenant=' + tenant;
             method = 'GET';
 
             $scope.loadbar('show');

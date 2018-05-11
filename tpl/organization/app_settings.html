@@ -404,18 +404,19 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <b>Pharmacy Branch</b> 
-                            <div class="pull-right"><a class="label bg-primary" ng-click="updateEmptypharmacy('0')">Reset</a></div>
+                            <!--                            <div class="pull-right"><a class="label bg-primary" ng-click="updateEmptypharmacy('0')">Reset</a></div>-->
                         </div>
                         <div class="panel-body">
                             <div class="form-group">
                                 <div class="col-sm-9">
-                                    <div ng-repeat="branch in tenant_details">
-                                        <label class="i-checks">
-                                            <input type="radio" checked="" value="{{branch.tenant_id}}" name="pharmacy_branch" ng-model="pharmacy_branch" ng-change="updateEmptypharmacy('{{branch.tenant_id}}')">
-                                            <i></i>
-                                            {{branch.tenant_name}}&nbsp; &nbsp;
-                                        </label>
-                                    </div>
+                                    Pharmacy setup : {{tenant_details.tenant_name}} 
+                                    <!--                                    <div ng-repeat="branch in tenant_details">
+                                                                            <label class="i-checks">
+                                                                                <input type="radio" checked="" value="{{branch.tenant_id}}" name="pharmacy_branch" ng-model="pharmacy_branch" ng-change="updateEmptypharmacy('{{branch.tenant_id}}')">
+                                                                                <i></i>
+                                                                                {{branch.tenant_name}}&nbsp; &nbsp;
+                                                                            </label>
+                                                                        </div>-->
                                 </div>
                             </div>
                         </div>

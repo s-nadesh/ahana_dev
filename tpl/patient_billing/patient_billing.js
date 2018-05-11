@@ -455,7 +455,7 @@ app.controller('BillingController', ['$rootScope', '$scope', '$timeout', '$http'
             });
         }
 
-        $scope.moreOptions = function (key, type, pk_id, link_id, concession_amount, extra_amount, mode_id) {
+        $scope.moreOptions = function (key, type, pk_id, link_id, concession_amount, extra_amount, mode_id, tenant) {
             var row_id = '#enc_' + type + '_' + key;
             $scope.more_li = [];
             $scope.more_advance_li = [];
@@ -480,19 +480,19 @@ app.controller('BillingController', ['$rootScope', '$scope', '$timeout', '$http'
                         ec_type = 'C';
                     }
 
-                    if (extra_amount == '0.00') {
-                        $scope.more_li.push({href: 'patient.addExtraAmount({id: "' + $state.params.id + '", ec_type: "' + ec_type + '", link_id: "' + link_id + '", enc_id: "' + $scope.enc.selected.encounter_id + '"})', name: 'Add Extra Amount', mode: 'sref', i_class: 'fa fa-plus-square'});
+                    if (pk_id == '0') {
+                        $scope.more_li.push({href: 'patient.addExtraAmount({id: "' + $state.params.id + '", ec_type: "' + ec_type + '", link_id: "' + link_id + '", enc_id: "' + $scope.enc.selected.encounter_id + '", tenant: "' + tenant + '"})', name: 'Add Extra Amount', mode: 'sref', i_class: 'fa fa-plus-square'});
                     } else {
-                        $scope.more_li.push({href: 'patient.editExtraAmount({id: "' + $state.params.id + '", ec_id: "' + pk_id + '", enc_id: "' + $scope.enc.selected.encounter_id + '"})', name: 'Edit Extra Amount', mode: 'sref', i_class: 'fa fa-pencil'});
+                        $scope.more_li.push({href: 'patient.editExtraAmount({id: "' + $state.params.id + '", ec_id: "' + pk_id + '", enc_id: "' + $scope.enc.selected.encounter_id + '", tenant: "' + tenant + '"})', name: 'Edit Extra Amount', mode: 'sref', i_class: 'fa fa-pencil'});
                     }
 
-                    if (concession_amount == '0.00') {
+                    if (pk_id == '0') {
                         $scope.more_li.push(
-                                {href: 'patient.addConcessionAmount({id: "' + $state.params.id + '", ec_type: "' + ec_type + '", link_id: "' + link_id + '", enc_id: "' + $scope.enc.selected.encounter_id + '"})', name: 'Add Concession Amount', mode: 'sref', i_class: 'fa fa-plus-square'}
+                                {href: 'patient.addConcessionAmount({id: "' + $state.params.id + '", ec_type: "' + ec_type + '", link_id: "' + link_id + '", enc_id: "' + $scope.enc.selected.encounter_id + '", tenant: "' + tenant + '"})', name: 'Add Concession Amount', mode: 'sref', i_class: 'fa fa-plus-square'}
                         );
                     } else {
                         $scope.more_li.push(
-                                {href: 'patient.editConcessionAmount({id: "' + $state.params.id + '", ec_id: "' + pk_id + '", enc_id: "' + $scope.enc.selected.encounter_id + '"})', name: 'Edit Concession Amount', mode: 'sref', i_class: 'fa fa-pencil'}
+                                {href: 'patient.editConcessionAmount({id: "' + $state.params.id + '", ec_id: "' + pk_id + '", enc_id: "' + $scope.enc.selected.encounter_id + '", tenant: "' + tenant + '"})', name: 'Edit Concession Amount', mode: 'sref', i_class: 'fa fa-pencil'}
                         );
                     }
                 }

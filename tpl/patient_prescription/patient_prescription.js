@@ -1375,6 +1375,8 @@ app.controller('PrescriptionController', ['$rootScope', '$scope', '$anchorScroll
                         _data['product_id'] = $scope.lastSelected.product_id;
                         if (typeof $scope.lastSelected.route_id != 'undefined')
                             _data['route_id'] = $scope.lastSelected.route_id;
+                        if (typeof $scope.lastSelected.generic_id != 'undefined')
+                            _data['generic_id'] = $scope.lastSelected.generic_id;
                     }
                     if (typeof $scope.available_medicine != 'undefined')
                         _data['available_medicine'] = $scope.available_medicine;

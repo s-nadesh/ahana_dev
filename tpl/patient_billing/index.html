@@ -215,7 +215,7 @@
                                 <td align="center" valign="middle"></td>
                                 <td>
                                     <label class="i-checks m-b-none">
-                                        <input id="enc_procedure_{{key}}" class="enc_chk" type="checkbox" name="b[]" ng-click="moreOptions(key, 'procedure', row.ec_id, row.category_id, row.concession_amount, row.extra_amount)"><i></i>
+                                        <input id="enc_procedure_{{key}}" class="enc_chk" type="checkbox" name="b[]" ng-click="moreOptions(key, 'procedure', row.ec_id, row.category_id, row.concession_amount, row.extra_amount, '', row.tenant_id)"><i></i>
                                     </label>
                                 </td>
                                 <td>{{row.category}} </td>
@@ -253,10 +253,10 @@
                                 <td align="center" valign="middle"></td>
                                 <td>
                                     <label class="i-checks m-b-none">
-                                        <input id="enc_consultant_{{key}}" class="enc_chk" type="checkbox" name="b[]" ng-click="moreOptions(key, 'consultant', row.ec_id, row.category_id, row.concession_amount, row.extra_amount)"><i></i>
+                                        <input id="enc_consultant_{{key}}" class="enc_chk" type="checkbox" name="b[]" ng-click="moreOptions(key, 'consultant', row.ec_id, row.category_id, row.concession_amount, row.extra_amount, '', row.tenant_id)"><i></i>
                                     </label>
                                 </td>
-                                <td>{{row.category}} </td>
+                                <td>{{row.category}}</td>
                                 <td>{{row.tenant_name}}</td>
                                 <td> {{row.headers}} </td>
                                 <td> {{row.charge}} </td>
