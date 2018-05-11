@@ -6,6 +6,7 @@ use common\models\PhaProductBatch;
 use common\models\PhaPurchase;
 use common\models\PhaSale;
 use common\models\PhaSaleReturn;
+use common\models\PhaPurchaseItem;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
 use yii\filters\ContentNegotiator;
@@ -50,6 +51,21 @@ class PharmacyreportController extends ActiveController {
         return ['report' => $reports];
     }
 
+    public function actionNewpurchasereport() {
+        $post = Yii::$app->getRequest()->post();
+
+        $model = PhaPurchaseItem::find()
+                ->tenant()
+                ->joinWith(['purchase'])
+                ->andWhere("pha_purchase.invoice_date between '{$post['from']}' AND '{$post['to']}'");
+        if (isset($post['payment_type'])) {
+            $model->andWhere(['pha_purchase.payment_type' => $post['payment_type']]);
+        }
+        $reports = $model->all();
+
+        return ['report' => $reports];
+    }
+
     //Sale Report
     public function actionSalereport() {
         $post = Yii::$app->getRequest()->post();
@@ -73,7 +89,7 @@ class PharmacyreportController extends ActiveController {
 
     //Sale Vat Report
     public function actionSalevatreport() {
-        $dbname=Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
+        $dbname = Yii::$app->client->createCommand("SELECT DATABASE()")->queryScalar();
         $post = Yii::$app->getRequest()->post();
         $tenant_id = Yii::$app->user->identity->logged_tenant_id;
         $current_database = Yii::$app->db->createCommand("SELECT DATABASE()")->queryScalar();
@@ -88,7 +104,7 @@ class PharmacyreportController extends ActiveController {
                 FROM `pha_sale` `a`
                     LEFT JOIN `pha_sale_item` `b`
                     ON `a`.`sale_id` = `b`.`sale_id`
-                    LEFT JOIN ".$dbname.".pat_patient c
+                    LEFT JOIN " . $dbname . ".pat_patient c
                     ON c.patient_id = a.patient_id
                     LEFT JOIN $current_database.gl_patient d
                     ON c.patient_global_guid = d.patient_global_guid

@@ -93,15 +93,15 @@ class OrganizationController extends ActiveController {
 
     public function actionCreatedb() {
         $post = Yii::$app->request->post('Organization');
-        
+
         $user_form_model = new CoUserForm();
         $user_form_model->scenario = 'saveorg';
         $user_form_model->attributes = Yii::$app->request->post('User');
         $valid = $user_form_model->validate();
-        if(!$valid) {
+        if (!$valid) {
             return ['success' => false];
         }
-        
+
         if (!empty($post)) {
             //Execute DB Structure to client DB Connection
             $structure = file_get_contents(Url::base(true) . '/structure.sql');
@@ -187,7 +187,7 @@ class OrganizationController extends ActiveController {
             $model = new CoOrganization();
             $model->attributes = Yii::$app->request->post('Organization');
             $model->patient_UHID_prefix = Yii::$app->request->post('Organization')['patient_UHID_prefix'];
-            
+
             $model->is_decoded = true;
 
             $login_form_model = new CoLoginForm();
@@ -334,6 +334,11 @@ class OrganizationController extends ActiveController {
         }
     }
 
+    public function actionGetpharmacylist() {
+        $tenant_details = CoTenant::find()->andWhere(['pharmacy_setup' => '1'])->all();
+        return ['tenant_details' => $tenant_details];
+    }
+
     public function excludeColumns($attrs) {
         $exclude_cols = ['created_by', 'created_at', 'modified_by', 'modified_at', 'password_reset_token', 'auth_token', 'care_provider', 'speciality_id', 'Inactivation_date', 'activation_date'];
         foreach ($attrs as $col => $val) {
@@ -370,7 +375,7 @@ class OrganizationController extends ActiveController {
             if (isset($post['Organization'])) {
                 $model = new CoOrganization();
                 $model->attributes = Yii::$app->request->post('Organization');
-                if(isset(Yii::$app->request->post('Organization')['patient_UHID_prefix']) && Yii::$app->request->post('Organization')['patient_UHID_prefix']) {
+                if (isset(Yii::$app->request->post('Organization')['patient_UHID_prefix']) && Yii::$app->request->post('Organization')['patient_UHID_prefix']) {
                     $model->patient_UHID_prefix = Yii::$app->request->post('Organization')['patient_UHID_prefix'];
                 }
                 $model->scenario = 'Create';

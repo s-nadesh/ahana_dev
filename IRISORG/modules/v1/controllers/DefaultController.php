@@ -19,6 +19,7 @@ use common\models\PatDiagnosis;
 use common\models\PatDsmiv;
 use common\models\PatEncounter;
 use common\models\PatScheduleCharge;
+use common\models\AppConfiguration;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
 use yii\filters\ContentNegotiator;
@@ -62,15 +63,15 @@ class DefaultController extends Controller {
     public function actionGetStateList() {
         $list = array();
         $get = Yii::$app->request->get();
-        if(isset($get['country']))
-            $country_id=$get['country'];
-        else 
-            $country_id='';
-        if($country_id!='')
+        if (isset($get['country']))
+            $country_id = $get['country'];
+        else
+            $country_id = '';
+        if ($country_id != '')
             $datas = CoMasterState::find()->where(['country_id' => $country_id])->all();
         else
             $datas = CoMasterState::find()->all();
-        
+
         foreach ($datas as $data) {
             $list[] = array('value' => $data->state_id, 'label' => $data->state_name, 'countryId' => $data->country_id);
         }
@@ -79,12 +80,12 @@ class DefaultController extends Controller {
 
     public function actionGetCityList() {
         $list = array();
-         $get = Yii::$app->request->get();
-        if(isset($get['state']))
-            $state_id=$get['state'];
-        else 
-            $state_id='';
-       if($state_id!='')
+        $get = Yii::$app->request->get();
+        if (isset($get['state']))
+            $state_id = $get['state'];
+        else
+            $state_id = '';
+        if ($state_id != '')
             $datas = CoMasterCity::find()->Where(['state_id' => $state_id])->all();
         else
             $datas = CoMasterCity::find()->all();
@@ -345,11 +346,14 @@ class DefaultController extends Controller {
             $tenant_id = $post['branch_id'];
             $tenant = CoTenant::findOne(['tenant_id' => $tenant_id]);
 
+            UserController::Clearpharmacysetupsession();
+            UserController::Setuppharmacysession($tenant_id);
+            
             if (Yii::$app->user->identity->user->tenant_id == 0) {
                 $login_details = CoLogin::findOne(['login_id' => Yii::$app->user->identity->login_id]);
                 $login_details->logged_tenant_id = $tenant_id;
                 $login_details->save(false);
-                return ['success' => true, 'admin' => true, 'tenant' => $tenant];
+                return ['success' => true, 'admin' => true, 'tenant' => $tenant, 'db_name' => Yii::$app->session['pharmacy_setup_db_name']];
             } else {
                 $resources = [];
                 $user_id = Yii::$app->user->identity->user->user_id;
@@ -365,7 +369,7 @@ class DefaultController extends Controller {
                     $login_details->logged_tenant_id = $tenant_id;
                     $login_details->save(false);
                 }
-                return ['success' => true, 'resources' => $resources, 'admin' => false, 'tenant' => $tenant];
+                return ['success' => true, 'resources' => $resources, 'admin' => false, 'tenant' => $tenant, 'db_name' => Yii::$app->session['pharmacy_setup_db_name']];
             }
         }
     }

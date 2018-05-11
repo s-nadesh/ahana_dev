@@ -129,7 +129,7 @@ class PharmacyproductController extends ActiveController {
         $id = $get['generic_id'];
         $available = [];
         $outofstock = [];
-        $products = PhaProduct::find()->tenant()->status()->andWhere(['generic_id' => $id])->active()->orderBy(['product_name' => SORT_ASC])->all();
+        $products = PhaProduct::find()->tenant()->status()->andWhere(['generic_id' => $id])->active()->orderBy("product_name ASC, ABS(product_unit_count) ASC")->all();
         foreach ($products as $produ) {
             if ($produ->phaProductBatchesAvailableQty == 0) {
                 $outofstock[] = $produ;
@@ -340,18 +340,14 @@ class PharmacyproductController extends ActiveController {
         $post = Yii::$app->getRequest()->post();
         $tenant_id = Yii::$app->user->identity->logged_tenant_id;
         $organization = '';
-        $appConfiguration = AppConfiguration::find()
-                ->andWhere(['<>', 'value', '0'])
-                ->andWhere(['tenant_id'=> $tenant_id,'code' => 'PB'])
-                ->one();
-        if (!empty($appConfiguration)) {
-            $tenant_id = $appConfiguration['value'];
+
+        if (!empty(Yii::$app->session['pharmacy_setup_tenant_id'])) {
+            $tenant_id = Yii::$app->session['pharmacy_setup_tenant_id'];
             $organization = CoTenant::find()
                     ->joinWith(['coOrganization'])
                     ->andWhere(['tenant_id' => $tenant_id])
                     ->one();
         }
-
         $products = [];
         if (isset($post['search']) && !empty($post['search']) && strlen($post['search']) > 1) {
             $text = rtrim($post['search'], '-');
@@ -375,6 +371,12 @@ class PharmacyproductController extends ActiveController {
 //            $products = $this->_getProducts($text_search, $tenant_id, $limit);
             $products = $this->_getProducts($like_text_search, $tenant_id, $limit, $available_medicine, $organization);
 
+            //Get Generic
+            $generic = $this->_getGenerics($products, $text_search, $tenant_id, $limit, $available_medicine);
+            if (!empty($generic)) {
+                $products['products'] = $generic;
+            }
+
             //Get Routes
             //$routes = $this->_getRoutes($products, $text_search, $tenant_id, $limit);
 //            if (!empty($routes)) {
@@ -387,7 +389,7 @@ class PharmacyproductController extends ActiveController {
 //            }
         }
 
-        return ['prescription' => $products];
+        return ['prescription' => $products['products']];
     }
 
     private function _getProducts($like_text_search, $tenant_id, $limit, $available_medicine, $organization) {
@@ -426,7 +428,7 @@ class PharmacyproductController extends ActiveController {
                         SELECT IF(SUM(d.available_qty) IS NOT NULL, SUM(d.available_qty), 0)
                         FROM pha_product_batch d
                         WHERE d.tenant_id = a.tenant_id
-                        AND d.product_id = a.product_id
+                        AND d.product_id = a.product_id AND d.expiry_date >= '" . date('Y-m-d') . "'
                     ) as available_quantity
                     FROM pha_product a
                     LEFT OUTER JOIN pha_generic b
@@ -454,7 +456,7 @@ class PharmacyproductController extends ActiveController {
                         SELECT IF(SUM(d.available_qty) IS NOT NULL, SUM(d.available_qty), 0)
                         FROM pha_product_batch d
                         WHERE d.tenant_id = a.tenant_id
-                        AND d.product_id = a.product_id
+                        AND d.product_id = a.product_id AND d.expiry_date >= '" . date('Y-m-d') . "' 
                     ) as available_quantity
                     FROM pha_product a
                     LEFT OUTER JOIN pha_generic b
@@ -482,7 +484,7 @@ class PharmacyproductController extends ActiveController {
                         SELECT IF(SUM(d.available_qty) IS NOT NULL, SUM(d.available_qty), 0)
                         FROM pha_product_batch d
                         WHERE d.tenant_id = a.tenant_id
-                        AND d.product_id = a.product_id
+                        AND d.product_id = a.product_id AND d.expiry_date >= '" . date('Y-m-d') . "'
                     ) as available_quantity
                     FROM pha_product a
                     LEFT OUTER JOIN pha_generic b
@@ -498,7 +500,7 @@ class PharmacyproductController extends ActiveController {
             }
         }
 
-        return $products;
+        return ['products' => $products, 'connection' => $connection];
     }
 
     // Below function hide because - FullText Search issue when product name with hypen or Space
@@ -595,6 +597,47 @@ class PharmacyproductController extends ActiveController {
 //        }
 //        return $products;
 //    }
+
+    private function _getGenerics($products, $text_search, $tenant_id, $limit, $available_medicine) {
+        $post = Yii::$app->getRequest()->post();
+        $generic = [];
+
+        //If product has been selected
+        if (isset($post['product_id']) && !empty($products) && isset($post['generic_id'])) {
+            if ($available_medicine == '1') {
+                $filter_query = "HAVING available_quantity > '0'";
+            } else {
+                $filter_query = "HAVING (available_quantity >= '0' OR available_quantity < '0')";
+            }
+            $command = $products['connection']->createCommand("
+                    SELECT a.product_id, a.product_name, b.generic_id, b.generic_name, c.drug_class_id, c.drug_name,
+                    CONCAT(
+                        IF(b.generic_name IS NOT NULL, b.generic_name, ''),
+                        IF(a.product_name IS NOT NULL, CONCAT(' // ', a.product_name), ''),
+                        IF(a.product_unit_count IS NOT NULL, CONCAT(' ', a.product_unit_count), ''),
+                        IF(a.product_unit IS NOT NULL, CONCAT('', a.product_unit), '')
+                    ) AS prescription, '' as selected, a.product_description_id,
+                    (
+                        SELECT IF(SUM(d.available_qty) IS NOT NULL, SUM(d.available_qty), 0)
+                        FROM pha_product_batch d
+                        WHERE d.tenant_id = a.tenant_id
+                        AND d.product_id = a.product_id AND d.expiry_date >= '" . date('Y-m-d') . "'
+                    ) as available_quantity
+                    FROM pha_product a
+                    LEFT OUTER JOIN pha_generic b
+                    ON b.generic_id = a.generic_id
+                    LEFT OUTER JOIN pha_drug_class c
+                    ON c.drug_class_id = a.drug_class_id
+                    WHERE a.tenant_id = :tenant_id
+                    AND a.generic_id = :generic_id AND a.status='1' AND a.drug_class_id IS NOT NULL
+                    $filter_query
+                    ORDER BY a.product_name
+                    LIMIT 0,:limit", [':limit' => $limit, ':tenant_id' => $tenant_id, ':generic_id' => $post['generic_id']]
+            );
+            $generic = $command->queryAll();
+        }
+        return $generic;
+    }
 
     private function _getRoutes($products, $text_search, $tenant_id, $limit) {
         $post = Yii::$app->getRequest()->post();
@@ -1848,9 +1891,7 @@ class PharmacyproductController extends ActiveController {
                         ->andWhere([
                             'code' => 'PB'
                         ])->one();
-        $tenant_details = CoTenant::find()->andWhere([
-                    'pharmacy_setup' => '1'
-                ])->all();
+        $tenant_details = CoTenant::find()->andWhere(['tenant_id' => $appConfig['value']])->one();
         return ['appConfig' => $appConfig, 'tenant_details' => $tenant_details];
     }
 

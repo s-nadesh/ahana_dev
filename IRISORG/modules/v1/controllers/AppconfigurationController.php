@@ -93,9 +93,12 @@ class AppconfigurationController extends ActiveController {
         } else {
             $configuration = $appConfig;
         }
-        $configuration->value = $post['value'];
+        $val = $post['value'];
+        $configuration->value = "$val";
         $configuration->status = 1;
         $configuration->save();
+        UserController::Clearpharmacysetupsession();
+        UserController::Setuppharmacysession($tenant_id);
         return ['success' => true];
     }
 

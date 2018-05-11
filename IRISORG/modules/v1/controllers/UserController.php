@@ -16,6 +16,7 @@ use common\models\PatEncounter;
 use common\models\PatTimeline;
 use common\models\ResetPasswordForm;
 use common\models\CoAuditLog;
+use common\models\AppConfiguration;
 use IRISORG\models\ContactForm;
 use Yii;
 use yii\base\InvalidParamException;
@@ -236,9 +237,25 @@ class UserController extends ActiveController {
         return $resources;
     }
 
+    public static function Setuppharmacysession($tenant_id) {
+        $appConfiguration = AppConfiguration::find()
+                ->andWhere(['<>', 'value', 0])
+                ->andWhere(['tenant_id' => $tenant_id, 'code' => 'PB'])
+                ->one();
+        if (!empty($appConfiguration)) {
+            $pharmacy_tenant = CoTenant::findOne(['tenant_id' => $appConfiguration['value']]);
+            Yii::$app->session['pharmacy_setup_tenant_id'] = $appConfiguration['value'];
+            Yii::$app->session['pharmacy_setup_org_id'] = $pharmacy_tenant->coOrganization->org_id;
+            Yii::$app->session['pharmacy_setup_host_name'] = $pharmacy_tenant->coOrganization->org_db_host;
+            Yii::$app->session['pharmacy_setup_db_name'] = $pharmacy_tenant->coOrganization->org_db_pharmacy;
+            Yii::$app->session['pharmacy_setup_db_username'] = $pharmacy_tenant->coOrganization->org_db_username;
+            Yii::$app->session['pharmacy_setup_db_password'] = $pharmacy_tenant->coOrganization->org_db_password;
+        }
+    }
+
     public static function GetuserCredentials($tenant_id) {
         $tenant = CoTenant::findOne(['tenant_id' => $tenant_id]);
-
+        self::Setuppharmacysession($tenant_id);
         $credentials = [
             'logged_tenant_id' => Yii::$app->user->identity->logged_tenant_id,
             'org' => $tenant->tenant_name,
@@ -255,27 +272,40 @@ class UserController extends ActiveController {
         return $credentials;
     }
 
+    public static function Clearpharmacysetupsession() {
+        //$session = Yii::$app->session;
+        //$session->destroy();
+        unset(Yii::$app->session['pharmacy_setup_tenant_id']);
+        unset(Yii::$app->session['pharmacy_setup_org_id']);
+        unset(Yii::$app->session['pharmacy_setup_host_name']);
+        unset(Yii::$app->session['pharmacy_setup_db_name']);
+        unset(Yii::$app->session['pharmacy_setup_db_username']);
+        unset(Yii::$app->session['pharmacy_setup_db_password']);
+    }
+
     public function actionLogin() {
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->login()) {
             return ['success' => true, 'access_token' => Yii::$app->user->identity->getAuthKey(), 'resources' => self::Getuserrolesresources(), 'credentials' => self::GetuserCredentials(\Yii::$app->request->post('tenant_id'))];
         } elseif (!$model->validate()) {
-            return ['success' => false, 'message' => Html::errorSummary([$model])];
+            return ['success' => false, 'message' => Html::errorSummary([$model]), 'pharmacy_setup_db_name' => Yii::$app->session['pharmacy_setup_db_name']];
         }
     }
 
     public function actionLogout() {
         if (empty(Yii::$app->user->identity)) {
+            self::Clearpharmacysetupsession();
             return ['success' => true];
         }
 
         $model = CoLogin::findOne(['login_id' => Yii::$app->user->identity->login_id]);
         if (!empty($model)) {
             $model->attributes = ['authtoken' => '', 'logged_tenant_id' => ''];
-            if ($model->save(false))
+            if ($model->save(false)) {
+                self::Clearpharmacysetupsession();
                 return ['success' => true];
-            else
+            } else
                 return ['success' => false, 'message' => Html::errorSummary([$model])];
         } else {
             return ['success' => false, 'message' => 'Try again later'];
