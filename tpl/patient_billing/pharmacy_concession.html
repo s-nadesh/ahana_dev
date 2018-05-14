@@ -1,0 +1,67 @@
+<div ng-controller="PharmacyconcessionController" ng-init="initCanAddPharmacyCharge(); initForm()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Pharmacy Concession</h1>
+    </div>
+    <div class="wrapper-md">
+        <div ng-include="'tpl/blocks/alert.html'">
+            {% include 'tpl/blocks/alert.html' %}
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form name="pharmacy_concession" class="form-horizontal form-validation" novalidate="">
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Encounter # </label>
+                                <div class="col-sm-10">
+                                    {{data.encounter_id}}
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Concession Amount # </label>
+                                <div class="col-sm-10">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="table table-condensed table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>&nbsp;</th>
+                                                <th>Bill No</th>
+                                                <th>Bill Amount</th>
+                                                <th>Pending Amount</th>
+                                                <th>Concession Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="(key, row) in pharmacyBill | orderBy:'sale_id'">
+                                                <td>
+                                                    <label class="i-checks m-b-none">
+                                                        <input ng-model="row.selected" ng-checked="row.selected == '1'" id="pharmacy_{{key}}" class="pharmacy_{{key}}" name="status" type="checkbox"  ng-click="addPharmacycharge(key, row.bill_no)"><i></i>
+                                                    </label>
+                                                </td>
+                                                <td>{{row.bill_no}}</td>
+                                                <td>{{row.bill_amount}}</td>
+                                                <td>{{row.billings_total_balance_amount}}</td>
+                                                <td><input type="text-box" name="concession_{{key}}" id="concession_{{key}}" ng-model="data.concession_[row.bill_no]" class="form-control" readonly="true"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="line line-dashed b-b line-lg "></div>
+
+                        </form>
+                    </div>
+                    <footer class="panel-footer text-right bg-light lter">
+                        <button class="btn m-b-xs  btn-success save-btn" ng-click="saveConcessionForm(data.formtype)">Save</button>
+                        &nbsp;
+                        <button class="btn m-b-xs  btn-dark" ng-click="$state.go('patient.billing', {id: $state.params.id})"><i class="fa fa-times"></i> Cancel</button>
+                        &nbsp;
+                    </footer>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
