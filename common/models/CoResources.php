@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveQuery;
+use yii\db\Connection;
 
 /**
  * This is the model class for table "co_resources".
@@ -31,10 +33,10 @@ class CoResources extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['parent_id', 'created_by', 'modified_by'], 'integer'],
-            [['resource_name'], 'required'],
-            [['created_at', 'modified_at'], 'safe'],
-            [['resource_name'], 'string', 'max' => 50]
+                [['parent_id', 'created_by', 'modified_by'], 'integer'],
+                [['resource_name', 'resource_url', 'parent_id'], 'required'],
+                [['created_at', 'modified_at'], 'safe'],
+                [['resource_name'], 'string', 'max' => 50]
         ];
     }
 
@@ -46,6 +48,7 @@ class CoResources extends \yii\db\ActiveRecord {
             'resource_id' => 'Resource ID',
             'parent_id' => 'Parent ID',
             'resource_name' => 'Resource Name',
+            'resource_url' => 'Resource Url',
             'created_by' => 'Created By',
             'created_at' => 'Created At',
             'modified_by' => 'Modified By',
@@ -65,6 +68,27 @@ class CoResources extends \yii\db\ActiveRecord {
      */
     public function getChild() {
         return $this->hasMany(self::className(), ['parent_id' => 'resource_id']);
+    }
+
+    public function afterSave($insert, $changedAttributes) {
+        $organization = CoOrganization::find()->andWhere(['status' => '1'])->all();
+        foreach ($organization as $org) {
+            $conn_dsn = "mysql:host={$org->org_db_host};dbname={$org->org_database}";
+            $conn_username = $org->org_db_username;
+            $conn_password = $org->org_db_password;
+
+            $connection = new Connection([
+                'dsn' => $conn_dsn,
+                'username' => $conn_username,
+                'password' => $conn_password,
+            ]);
+            $connection->open();
+            $sql = "INSERT INTO co_resources VALUES({$this->resource_id},'{$this->parent_id}','{$this->resource_name}','{$this->resource_url}','-1','{$this->created_at}','{$this->modified_by}','{$this->modified_at}')";
+            $command = $connection->createCommand($sql);
+            $command->execute();
+            $connection->close();
+        }
+        return parent::afterSave($insert, $changedAttributes);
     }
 
 }
