@@ -1,0 +1,84 @@
+<div ng-controller="ResourceController" ng-init="load_resource()">
+    <div class="bg-light lter b-b wrapper-md">
+        <h1 class="m-n h3">Create Resource</h1>
+    </div>
+
+    <div class="wrapper-md">
+        <div class="row">
+            <form class="form-horizontal form-validation">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Parent resource *</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control" ng-model="data.parent_id" ng-options="parent.resource_id as parent.resource_name for parent in parent_resource| orderBy: resource_name" data-ng-change="updateChild();">
+                                                <option value="">Select Resource</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Child resource *</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control" ng-model="data.child_id" ng-options="child.resource_id as child.resource_name for child in child_resource| orderBy: resource_name" data-ng-change="updatesubChild();">
+                                                <option value="">Select Resource</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Sub Child resource *</label>
+                                        <div class="col-lg-8">
+                                            <select class="form-control" ng-model="data.sub_child_id" ng-options="sub_child.resource_id as sub_child.resource_name for sub_child in sub_child_resource| orderBy: resource_name">
+                                                <option value="">Select Resource</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Resource Name *</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" placeholder="Name" class="form-control" ng-model="data.resource_name" >
+                                        </div>
+                                    </div>
+
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <div class="form-group">
+                                        <label class="col-lg-4 control-label">Resource Url *</label>
+                                        <div class="col-lg-8">
+                                            <input type="text" placeholder="Name" class="form-control" ng-model="data.resource_url" >
+                                        </div>
+                                    </div>
+
+                                    <div class="line line-dashed b-b line-lg "></div>
+
+                                    <div class="form-group">
+                                        <footer class="panel-footer text-right bg-light lter">
+                                            <button class="btn m-b-xs  btn-success save-btn" ng-click="saveResource()">Save</button>
+                                            &nbsp;
+                                            <button class="btn m-b-xs  btn-dark" ng-click="$state.go('app.org_list')"><i class="fa fa-times"></i> Cancel</button>
+                                            &nbsp;
+                                        </footer>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>

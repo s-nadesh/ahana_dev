@@ -89,6 +89,16 @@ function config($stateProvider, $urlRouterProvider, JQ_CONFIG) {
                         }]
                 }
             })
+            .state('app.create_resource', {
+                url: '/createResource',
+                templateUrl: 'tpl/resource/add_resource.html',
+                resolve: {
+                    deps: ['uiLoad',
+                        function (uiLoad) {
+                            return uiLoad.load('tpl/resource/add_resource.js');
+                        }]
+                }
+            })
             .state('app.branch_add', {
                 url: '/branch_add/{org_id}',
                 templateUrl: 'tpl/organization/add_branch.html',
@@ -173,8 +183,8 @@ function run($rootScope, $state, $stateParams, $location, $cookieStore, $http, $
         serviceUrl = 'http://demo.arkinfotec.in/ahana/demo/api/IRISADMIN/web/v1';
     } else if ($location.host() == 'hms.ark') {
         serviceUrl = 'http://hms.ark/api/IRISADMIN/web/v1';
-    } else if ($location.host() == 'medizura.com') {
-        serviceUrl = 'http://medizura.com/api/IRISADMIN/web/v1';
+    } else if ($location.host() == 'medizura.ark') {
+        serviceUrl = 'http://medizura.ark/api/IRISADMIN/web/v1';
     } else {
         productOwner = false; // Organizations
         serviceUrl = 'http://hms.ark/api/IRISADMIN/web/v1';
