@@ -111,6 +111,7 @@ return [
                 ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/pharmacyproductunit']],
                 ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/patientresults']],
                 ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/patientrefundpayment']],
+                ['class' => 'yii\rest\UrlRule', 'controller' => ['v1/orgsetting']],
             ],
         ],
         'log' => [

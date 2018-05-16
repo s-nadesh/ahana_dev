@@ -6,6 +6,7 @@ use Exception;
 use Yii;
 use yii\db\ActiveQuery;
 use yii\db\Connection;
+use common\models\CoOrgSetting;
 
 /**
  * This is the model class for table "co_organization".
@@ -46,18 +47,18 @@ class CoOrganization extends GActiveRecord {
     public function rules() {
         return [
                 [['org_name', 'org_description', 'org_db_host', 'org_db_username', 'org_database', 'org_domain', 'org_db_pharmacy'], 'required'],
-            [['org_domain'], 'url'],
-            [['org_description', 'status'], 'string'],
-            [['created_by', 'modified_by'], 'integer'],
-            [['created_at', 'modified_at', 'deleted_at', 'status'], 'safe'],
-            [['org_name'], 'string', 'max' => 100],
+                [['org_domain'], 'url'],
+                [['org_description', 'status'], 'string'],
+                [['created_by', 'modified_by'], 'integer'],
+                [['created_at', 'modified_at', 'deleted_at', 'status'], 'safe'],
+                [['org_name'], 'string', 'max' => 100],
                 [['org_db_host', 'org_db_username', 'org_db_password', 'org_database', 'org_domain', 'org_db_pharmacy'], 'string', 'max' => 255],
-            [['org_name', 'org_database'], 'unique', 'on' => 'Create'],
+                [['org_name', 'org_database'], 'unique', 'on' => 'Create'],
                 [['patient_UHID_prefix'], 'required', 'on' => 'Create'],
-            [['org_domain'], 'unique', 'on' => 'Create'],
-            ['org_database', 'checkDB', 'on' => 'Create'],
+                [['org_domain'], 'unique', 'on' => 'Create'],
+                ['org_database', 'checkDB', 'on' => 'Create'],
                 ['org_db_pharmacy', 'checkDBPharmacy', 'on' => 'Create'],
-            ['patient_UHID_prefix', 'validateCodeprefix', 'on' => 'Create'],
+                ['patient_UHID_prefix', 'validateCodeprefix', 'on' => 'Create'],
         ];
     }
 
@@ -102,7 +103,7 @@ class CoOrganization extends GActiveRecord {
     public function getCoActiveTenants() {
         return $this->hasMany(CoTenant::className(), ['org_id' => 'org_id'])->andWhere(['status' => '1'])->orderBy(['created_at' => SORT_ASC]);
     }
-    
+
     public function getGlInternalCodes() {
         return $this->hasOne(GlInternalCode::className(), ['org_id' => 'org_id']);
     }
@@ -133,7 +134,7 @@ class CoOrganization extends GActiveRecord {
             $this->addError($attribute, $ex->getMessage());
         }
     }
-    
+
     public function checkDBPharmacy($attribute, $params) {
         try {
             $connection = new Connection([
@@ -170,7 +171,7 @@ class CoOrganization extends GActiveRecord {
             $this->org_database = base64_encode($this->org_database);
             $this->org_db_pharmacy = base64_encode($this->org_db_pharmacy);
         }
-        
+
         return parent::beforeSave($insert);
     }
 
@@ -195,7 +196,23 @@ class CoOrganization extends GActiveRecord {
         $connection->open();
 
         if ($insert) {
-             //Global Internal code.
+
+            //Insert Organization Configuration.
+            $org_settings = CoOrgSetting::getConfigurations();
+            foreach ($org_settings as $key => $org_setting) {
+                $org_configuration = new CoOrgSetting;
+                $org_configuration->org_id = $this->org_id;
+                $org_configuration->key = $key;
+                $org_configuration->code = $org_setting['code'];
+                $org_configuration->value = $org_setting['value'];
+                $org_configuration->notes = $org_setting['notes'];
+                if (isset($org_setting['group'])) {
+                    $org_configuration->group = $org_setting['group'];
+                }
+                $org_configuration->save(false);
+            }
+            
+            //Global Internal code.
             $internal_code = new GlInternalCode;
             $internal_code->org_id = $this->org_id;
             $internal_code->code_type = 'PG';
@@ -204,7 +221,7 @@ class CoOrganization extends GActiveRecord {
             $internal_code->code_prefix = $this->patient_UHID_prefix;
             $internal_code->code = '1';
             $internal_code->save(false);
-            
+
             $sql = "INSERT INTO co_organization VALUES({$this->org_id},'{$this->org_name}','{$this->org_description}','{$this->org_db_host}','{$this->org_db_username}','{$this->org_db_password}','{$this->org_database}','{$this->org_db_pharmacy}','{$this->org_domain}','','','','{$this->status}',{$this->created_by},'{$this->created_at}',{$this->modified_by},'{$this->modified_at}','{$this->deleted_at}')";
         } else {
             $sql = "UPDATE co_organization SET org_name = '{$this->org_name}', org_description = '{$this->org_description}', org_db_host = '{$this->org_db_host}', org_db_username = '{$this->org_db_username}', org_db_password = '{$this->org_db_password}', org_database = '{$this->org_database}', org_domain = '{$this->org_domain}', status = '{$this->status}', modified_by = '{$this->modified_by}', modified_at = '{$this->modified_at}', deleted_at = '{$this->deleted_at}' WHERE org_id={$this->org_id}";
@@ -212,7 +229,7 @@ class CoOrganization extends GActiveRecord {
         $command = $connection->createCommand($sql);
         $command->execute();
         $connection->close();
-        
+
         return parent::afterSave($insert, $changedAttributes);
     }
 
