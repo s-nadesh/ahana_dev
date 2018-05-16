@@ -3268,6 +3268,10 @@ function run($rootScope, $state, $stateParams, $location, $cookieStore, $http, $
         serviceUrl = 'http://msctrf.ark/api/IRISORG/web/v1'
         orgUrl = 'http://msctrf.ark/client';
         clientURL = 'http://msctrf.ark';
+    } else if ($location.host() == 'medizura.ark') {
+        serviceUrl = 'http://medizura.ark/api/IRISORG/web/v1'
+        orgUrl = 'http://medizura.ark/client';
+        clientURL = 'http://medizura.ark';
     } else {
         clientURL = orgUrl = $location.absUrl().split('#')[0].slice(0, -1);
 //        clientURL = orgUrl = $location.protocol() + '://' + $location.host();
