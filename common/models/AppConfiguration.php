@@ -66,51 +66,51 @@ class AppConfiguration extends RActiveRecord {
                 'value' => '3600',
                 'notes' => 'seconds',
             ],
-            'SHARE_ENCOUNTER' => [
-                'code' => 'ENCOUNTER',
-                'value' => '1',
-                'notes' => 'Share Encounter',
-            ],
-            'SHARE_NOTES' => [
-                'code' => 'NOTES',
-                'value' => '1',
-                'notes' => 'Share Notes',
-            ],
-            'SHARE_CONSULTANT' => [
-                'code' => 'CONSULTANT',
-                'value' => '1',
-                'notes' => 'Share Consultant',
-            ],
-            'SHARE_ALERT' => [
-                'code' => 'ALERT',
-                'value' => '1',
-                'notes' => 'Share Alert',
-            ],
-            'SHARE_VITALS' => [
-                'code' => 'VITALS',
-                'value' => '1',
-                'notes' => 'Share Vitals',
-            ],
-            'SHARE_PRESCRIPTION' => [
-                'code' => 'PRESCRIPTION',
-                'value' => '1',
-                'notes' => 'Share Prescription',
-            ],
-            'SHARE_BILLING' => [
-                'code' => 'BILLING',
-                'value' => '0',
-                'notes' => 'Share Billing',
-            ],
-            'SHARE_PROCEDURE' => [
-                'code' => 'PROCEDURE',
-                'value' => '1',
-                'notes' => 'Share Procedure',
-            ],
-            'SHARE_BASIC_DATA' => [
-                'code' => 'BASIC',
-                'value' => '1',
-                'notes' => 'Share Basic Data',
-            ],
+//            'SHARE_ENCOUNTER' => [
+//                'code' => 'ENCOUNTER',
+//                'value' => '1',
+//                'notes' => 'Share Encounter',
+//            ],
+//            'SHARE_NOTES' => [
+//                'code' => 'NOTES',
+//                'value' => '1',
+//                'notes' => 'Share Notes',
+//            ],
+//            'SHARE_CONSULTANT' => [
+//                'code' => 'CONSULTANT',
+//                'value' => '1',
+//                'notes' => 'Share Consultant',
+//            ],
+//            'SHARE_ALERT' => [
+//                'code' => 'ALERT',
+//                'value' => '1',
+//                'notes' => 'Share Alert',
+//            ],
+//            'SHARE_VITALS' => [
+//                'code' => 'VITALS',
+//                'value' => '1',
+//                'notes' => 'Share Vitals',
+//            ],
+//            'SHARE_PRESCRIPTION' => [
+//                'code' => 'PRESCRIPTION',
+//                'value' => '1',
+//                'notes' => 'Share Prescription',
+//            ],
+//            'SHARE_BILLING' => [
+//                'code' => 'BILLING',
+//                'value' => '0',
+//                'notes' => 'Share Billing',
+//            ],
+//            'SHARE_PROCEDURE' => [
+//                'code' => 'PROCEDURE',
+//                'value' => '1',
+//                'notes' => 'Share Procedure',
+//            ],
+//            'SHARE_BASIC_DATA' => [
+//                'code' => 'BASIC',
+//                'value' => '1',
+//                'notes' => 'Share Basic Data',
+//            ],
             'CHECK_STK_PRESC' => [
                 'code' => 'CSP',
                 'value' => '1',

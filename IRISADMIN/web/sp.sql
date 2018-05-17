@@ -81,6 +81,4 @@ AND DATE(a.adjust_date_time) <= report_date
 GROUP BY a.batch_id
 ) t1
 GROUP BY batch_id;
-    END$$
-
-DELIMITER ;
+    END

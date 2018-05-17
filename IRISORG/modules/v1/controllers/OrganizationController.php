@@ -12,6 +12,7 @@ use common\models\CoUsersRoles;
 use common\models\GlPatientShareResources;
 use common\models\GlPatientTenant;
 use common\models\PatPatient;
+use common\models\CoOrgSetting;
 use Yii;
 use yii\filters\auth\QueryParamAuth;
 use yii\filters\ContentNegotiator;
@@ -131,13 +132,13 @@ class OrganizationController extends ActiveController {
 
     public function actionUpdatesharing() {
         $post = Yii::$app->request->post();
-        $tenant_id = Yii::$app->user->identity->logged_tenant_id;
+        $org_id = Yii::$app->user->identity->user->org_id;
 
-        $unset_configs = AppConfiguration::updateAll(['value' => '0'], "tenant_id = {$tenant_id} AND `key` like '%SHARE_%'");
+        $unset_configs = CoOrgSetting::updateAll(['value' => '0'], "org_id = {$org_id} AND `key` like '%SHARE_%'");
 
         if (isset($post['share'])) {
             $share_resources = array_keys($post['share']);
-            $set_configs = AppConfiguration::updateAll(['value' => '1'], ['tenant_id' => $tenant_id, 'code' => $share_resources]);
+            $set_configs = CoOrgSetting::updateAll(['value' => '1'], ['org_id' => $org_id, 'code' => $share_resources]);
         }
         return ['success' => true];
     }
@@ -170,7 +171,7 @@ class OrganizationController extends ActiveController {
 
             $patient = PatPatient::find()->where(['patient_guid' => $get['patient_id']])->one();
             $pat_share_attr = [
-                'tenant_id' => $tenant_id,
+                //'tenant_id' => $tenant_id,
                 'org_id' => $org_id,
                 'patient_global_guid' => $patient->patient_global_guid
             ];
@@ -192,7 +193,7 @@ class OrganizationController extends ActiveController {
 
             $patient = PatPatient::find()->where(['patient_guid' => $post['patient_id']])->one();
             $pat_share_attr = [
-                'tenant_id' => $tenant_id,
+                //'tenant_id' => $tenant_id,
                 'org_id' => $org_id,
                 'patient_global_guid' => $patient->patient_global_guid
             ];
