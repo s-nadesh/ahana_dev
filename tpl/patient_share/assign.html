@@ -28,7 +28,7 @@
                                 <div class="col-sm-9">
                                     <div ng-repeat="share_data in config_share_data">
                                         <label class="i-checks">
-                                            <input type="checkbox" ng-disabled="share_data.code == 'BASIC'" ng-checked="checkBoxEnabled(share_data.code)" id="{{share_data.code}}" name="share[{{share_data.code}}]" ng-click="toggleSelection(share_data.code)"/> 
+                                            <input class="chk" type="checkbox" ng-checked="checkBoxEnabled(share_data.code)" id="{{share_data.code}}" name="share[{{share_data.code}}]" ng-click="toggleSelection(share_data.code); checkShare(share_data.code)"/> 
                                             <i></i> 
                                         </label> 
                                         <label for='{{share_data.code}}'>{{share_data.code}}</label>

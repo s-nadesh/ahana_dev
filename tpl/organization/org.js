@@ -71,38 +71,12 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
 //            $('.sb-toggle-right').trigger('click');
             $scope.isLoading = true;
             // pagination set up
-            $scope.rowCollection = [];  // base collection
-            $scope.itemsByPage = 10; // No.of records per page
-            $scope.displayedCollection = [].concat($scope.rowCollection);  // displayed collection
+            $scope.config_share_data = [];
 
             // Get data's from service
-            $http.get($rootScope.IRISOrgServiceUrl + '/appconfigurations')
+            $http.get($rootScope.IRISOrgServiceUrl + '/orgsettings')
                     .success(function (configurations) {
-                        $scope.config_data = [];
-                        $scope.config_share_data = [];
-                        $scope.config_print_data = [];
-
-                        angular.forEach(configurations, function (conf) {
-                            var string = conf.key;
-                            var code = conf.code;
-                            substring = "SHARE";
-
-                            if (code == 'SA' || code == 'SD')
-                            {
-                                $scope.config_print_data.push(conf);
-                            } else
-                            {
-                                if (string.indexOf(substring) > -1 == false) {
-                                    $scope.config_data.push(conf);
-                                } else {
-                                    $scope.config_share_data.push(conf);
-                                }
-                            }
-                        });
-
-                        $scope.isLoading = false;
-                        $scope.rowCollection = $scope.config_data;
-                        $scope.displayedCollection = [].concat($scope.rowCollection);
+                        $scope.config_share_data = configurations;
                     })
                     .error(function () {
                         $scope.errorData = "An Error has occured while loading settings!";
@@ -467,6 +441,26 @@ app.controller('OrganizationController', ['$rootScope', '$scope', '$timeout', '$
         //In-Progress
         $scope.showphaMastersUpdateErrorLog = function () {
 
+        }
+
+        $scope.checkShare = function (a) {
+            var share_arr = ["NOTES", "CONSULTANT", "ALERT", "VITALS", "PRESCRIPTION", "BILLING", "PROCEDURE"];
+            var isChecked = $('#' + a).is(':checked');
+            if (jQuery.inArray(a, share_arr) != -1) {
+                if (isChecked) {
+                    $('#ENCOUNTER').prop('checked', true);
+                    $('#BASIC').prop('checked', true);
+                }
+            } else if ((!isChecked) && (a == 'ENCOUNTER')) {
+                angular.forEach(share_arr, function (value, key) {
+                    $('#' + value).prop('checked', false);
+                });
+            } else if ((!isChecked) && (a == 'BASIC')) {
+                $(".chk").each(function () {
+                    this.checked = false;
+                })
+            }
+            return false;
         }
     }]);
 
