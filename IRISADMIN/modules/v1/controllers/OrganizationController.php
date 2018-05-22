@@ -435,4 +435,49 @@ class OrganizationController extends ActiveController {
         }
     }
 
+    public function actionGetsuperrole() {
+        $org_id = Yii::$app->request->get('id');
+        $tenant = CoTenant::find()->andWhere(['org_id' => $org_id])->orderBy('tenant_id asc')->one();
+        $roles = CoRole::find()->tenant($tenant->tenant_id)->active()->status()->where('created_by < 0')->all();
+        return ['success' => true, 'roles' => $roles];
+    }
+
+    public function actionGetorgmodulesbyrole() {
+        $post = Yii::$app->request->post();
+        if (!empty($post)) {
+            $role_id = Yii::$app->request->post('role_id');
+            $tenant_id = Yii::$app->request->post('tenant_id');
+            $modules = CoRolesResources::getOrgModuletreeByRole($tenant_id, $role_id, $role_id, $tenant_id, 'CRM');
+
+            return ['success' => true, 'modules' => $modules];
+        }
+    }
+    
+    public function actionUpdaterolerights() {
+        $post = Yii::$app->request->post();
+        if (!empty($post)) {
+            if (Yii::$app->request->post('Module')) {
+                if (!empty(Yii::$app->request->post('Module')['role_id'])) {
+                    $resource_id = Yii::$app->request->post('Module')['resource_ids'];
+                    $model = CoRole::findOne(['role_id' => Yii::$app->request->post('Module')['role_id']]);
+
+                    $resources = CoResources::find()->where(['in', 'resource_id', $resource_id])->all();
+
+                    // extra columns to be saved to the many to many table
+                    $extraColumns = ['tenant_id' =>Yii::$app->request->post('Module')['tenant_id'], 'created_by' => Yii::$app->user->identity->user_id, 'status' => '1', 'role_id' => Yii::$app->request->post('Module')['role_id']];
+
+                    $unlink = true; // unlink tags not in the list
+                    $delete = true; // delete unlinked tags
+                    $model->linkAll('resources', $resources, $extraColumns, $unlink, $delete);
+
+                    return ['success' => true];
+                } else {
+                    return ['success' => false, 'message' => "Please select role"];
+                }
+            }
+        } else {
+            return ['success' => false, 'message' => 'Please Fill the Form'];
+        }
+    }
+
 }
