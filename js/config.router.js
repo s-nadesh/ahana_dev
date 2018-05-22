@@ -89,6 +89,16 @@ function config($stateProvider, $urlRouterProvider, JQ_CONFIG) {
                         }]
                 }
             })
+            .state('app.role_resource_add', {
+                url: '/role_resource_add/{id}',
+                templateUrl: 'tpl/organization/role_resource_add.html',
+                resolve: {
+                    deps: ['uiLoad',
+                        function (uiLoad) {
+                            return uiLoad.load(['tpl/organization/role_resource_add.js']);
+                        }]
+                }
+            })
             .state('app.create_resource', {
                 url: '/createResource',
                 templateUrl: 'tpl/resource/add_resource.html',
@@ -202,7 +212,7 @@ function run($rootScope, $state, $stateParams, $location, $cookieStore, $http, $
             var url = "http://" + $location.host();
             $window.location.href = url;
         }
-        
+
         var restrictedPage = $.inArray($location.path(), ['/access/signin']) === -1;
         var loggedIn = Boolean($rootScope.globals.currentUser);
 

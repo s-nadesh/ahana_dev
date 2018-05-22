@@ -59,6 +59,7 @@
                     <td>
                         <a title="Add Brach" ui-sref="app.branch_add({org_id: '{{row.org_id}}'})"><i class="fa fa-plus-circle"></i></a>&nbsp;&nbsp;
                         <a title="Edit" ui-sref="app.org_edit({id: '{{row.org_id}}'})"><i class="fa fa-pencil"></i></a>
+                        <a title="Edit" ui-sref="app.role_resource_add({id: '{{row.org_id}}'})">Edit RR</a>
                     </td>
                 </tr>
                 <tr ng-repeat-end ng-show="expanded">
