@@ -61,6 +61,13 @@ app.controller('RolesResourceController', ['$rootScope', '$scope', '$timeout', '
                         $scope.loadbar('hide');
                         if (response.data.success === true) {
                             $scope.modules = response.data.modules;
+                            $timeout(function () {
+                                $(".ivh-treeview-checkbox").each(function () {
+                                    if ($(this).is(":checkbox:checked")) {
+                                        $(this).prop("disabled", true);
+                                    }
+                                });
+                            }, 1000);
                         } else {
                             $scope.errorData = response.data.message;
                         }
@@ -110,11 +117,11 @@ app.controller('RolesResourceController', ['$rootScope', '$scope', '$timeout', '
                         $scope.loadbar('hide');
                         $anchorScroll();
                         if (response.data.success === true) {
-                            $scope.msg.successMessage = "Role rights saved successfully";
-//                            $scope.data = {};
+                            $scope.successMessage = "Role rights saved successfully";
+                            $scope.data = {};
 //                            $scope.modules = {};
                             $timeout(function () {
-                                $state.go('configuration.roleRights');
+                                $state.go('app.org_list');
                             }, 1000)
                         } else {
                             $scope.errorData = response.data.message;
